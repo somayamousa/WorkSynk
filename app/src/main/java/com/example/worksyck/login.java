@@ -1,0 +1,180 @@
+package com.example.worksyck;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class login extends AppCompatActivity {
+    private EditText editTextUsername, editTextPassword;
+    private RequestQueue requestQueue;
+    private static final String TAG = "LoginActivity";
+    private static final String LOGIN_URL = "http://192.168.1.113/worksync/loginapi.php";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        editTextUsername = findViewById(R.id.inputEmail);
+        editTextPassword = findViewById(R.id.inputPassword);
+        Button btnLogin = findViewById(R.id.btnLogin);
+
+        requestQueue = Volley.newRequestQueue(this);
+
+        btnLogin.setOnClickListener(v -> userLogin());
+    }
+
+    private void userLogin() {
+        String email = editTextUsername.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Show progress indicator
+        Toast.makeText(this, "Logging in...", Toast.LENGTH_SHORT).show();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("username", email);
+        params.put("password", password);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                LOGIN_URL,
+                new JSONObject(params),
+                this::handleLoginResponse,
+                this::handleLoginError
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    if (response.data.length == 0) {
+                        return Response.error(new VolleyError("Empty response"));
+                    }
+
+                    String jsonString = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                    Log.d(TAG, "Raw response: " + jsonString);
+
+                    JSONObject jsonResponse = new JSONObject(jsonString);
+                    return Response.success(jsonResponse,
+                            HttpHeaderParser.parseCacheHeaders(response));
+                } catch (JSONException | UnsupportedEncodingException e) {
+                    Log.e(TAG, "Error parsing response: " + e.getMessage());
+                    Log.e(TAG, "Raw response data: " + new String(response.data));
+                    return Response.error(new VolleyError("Error parsing response: " + e.getMessage()));
+                }
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                15000, // 15 seconds timeout
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
+    }
+
+    private void handleLoginResponse(JSONObject response) {
+        try {
+            Log.d(TAG, "Response received: " + response.toString());
+
+            if (response.getString("status").equals("success")) {
+                JSONObject user = response.getJSONObject("data").getJSONObject("user");
+
+                // Store user data in variables
+                int userId = user.getInt("id");
+                String userEmail = user.getString("email");
+                String fullName = user.getString("fullname");
+                String role = user.getString("role");
+                boolean hasBiometric = user.getBoolean("has_biometric");
+
+                // Start appropriate activity
+                Intent intent;
+                if (role.equalsIgnoreCase("admin")) {
+                    // For now, use attendance for admin too
+                    intent = new Intent(this, QrDisplayActivity.class);
+                    Toast.makeText(this, "Logged in as Admin", Toast.LENGTH_SHORT).show();
+                } else {
+                    intent = new Intent(this, MainActivity.class);
+                    Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+                }
+
+                // Pass all user data to next activity
+                intent.putExtra("user_id", userId);
+                intent.putExtra("email", userEmail);
+                intent.putExtra("fullname", fullName);
+                intent.putExtra("role", role);
+                intent.putExtra("has_biometric", hasBiometric);
+
+                startActivity(intent);
+                finish();
+            } else {
+                String message = response.getString("message");
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        } catch (JSONException e) {
+            Toast.makeText(this, "Error processing response", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "JSON parsing error", e);
+        }
+    }
+
+    private void handleLoginError(VolleyError error) {
+        String errorMessage = "Login failed";
+
+        if (error.networkResponse != null) {
+            try {
+                // Convert error response to a string and log it
+                String errorBody = new String(error.networkResponse.data);
+                Log.e(TAG, "Error status code: " + error.networkResponse.statusCode);
+                Log.e(TAG, "Raw error response: " + errorBody);
+
+                // Try parsing the error as JSON (to get the message)
+                JSONObject errorObj = new JSONObject(errorBody);
+                if (errorObj.has("message")) {
+                    errorMessage = errorObj.getString("message");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error parsing error response", e);
+                errorMessage = "Server error. Please try again later.";
+            }
+        } else {
+            Log.e(TAG, "No network response or connection error", error);
+            errorMessage = "Network error. Please check your connection.";
+        }
+
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+    }
+}
