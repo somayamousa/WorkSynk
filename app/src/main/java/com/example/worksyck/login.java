@@ -30,7 +30,7 @@ public class login extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
     private RequestQueue requestQueue;
     private static final String TAG = "LoginActivity";
-    private static final String LOGIN_URL = "http://192.168.1.113/worksync/loginapi.php";
+    private static final String LOGIN_URL = "http://192.168.1.7/worksync/loginapi.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +119,7 @@ public class login extends AppCompatActivity {
                 String userEmail = user.getString("email");
                 String fullName = user.getString("fullname");
                 String role = user.getString("role");
-                boolean hasBiometric = user.getBoolean("has_biometric");
-
+                String macaddress=user.getString("mac_address");
                 // Start appropriate activity
                 Intent intent;
                 if (role.equalsIgnoreCase("admin")) {
@@ -137,7 +136,7 @@ public class login extends AppCompatActivity {
                 intent.putExtra("email", userEmail);
                 intent.putExtra("fullname", fullName);
                 intent.putExtra("role", role);
-                intent.putExtra("has_biometric", hasBiometric);
+                intent.putExtra("mac_address", macaddress);
 
                 startActivity(intent);
                 finish();

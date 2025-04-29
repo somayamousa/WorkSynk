@@ -20,7 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private LinearLayout homeLayout;
     private LinearLayout requestsLayout,check;
-    private String email,fullname;
+    private String email,fullname,role,macAdress;
+
     private int userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
+        role=getIntent().getStringExtra("role");
         userId = getIntent().getIntExtra("user_id", 0);
+        macAdress = getIntent().getStringExtra("mac_address");
+
         // Initialize UI elements
         dateText = findViewById(R.id.dateText);
         hoursText = findViewById(R.id.hoursText);
@@ -70,15 +74,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupNavigation() {
-        // Home button functionality.
-        homeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Reopen the same MainActivity.
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
 
         // Requests button functionality
         requestsLayout.setOnClickListener(new View.OnClickListener() {
@@ -94,9 +89,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Navigate to the RequestsActivity.
                 Intent intent = new Intent(MainActivity.this, attendance.class); // Corrected class name
+                // Pass all user data to next activity
                 intent.putExtra("user_id", userId);
                 intent.putExtra("email", email);
                 intent.putExtra("fullname", fullname);
+                intent.putExtra("role", role);
+                intent.putExtra("mac_address", macAdress);
                 startActivity(intent);
 
             }

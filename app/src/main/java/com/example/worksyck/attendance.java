@@ -1,63 +1,58 @@
 package com.example.worksyck;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import java.net.NetworkInterface;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.MessageDigest;
-import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.Executor;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String BIOMETRIC_API_URL = "http://192.168.1.113/worksync/biometric_api.php";
-    private static final String WORK_HOURS_API_URL = "http://192.168.1.113/worksync/attendence.php";
+    private static final String WORK_HOURS_API_URL = "http://192.168.1.7/worksync/attendence.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
@@ -72,17 +67,18 @@ public class attendance extends AppCompatActivity {
     private boolean isWorking = false;
     private long startTime = 0;
     private int userId;
-    private String email, userName;
+    private String email, fullname,role;
+    private String macAddress;
     private int biometricAttempts = 0;
     private boolean isAuthenticationInProgress = false;
 
     // Network
     private RequestQueue requestQueue;
+    private LinearLayout homeLayout;
 
     // Biometric
     private BiometricPrompt biometricPrompt;
     private KeyStore keyStore;
-    private Cipher cipher;
 
     // QR Code
     private final ActivityResultLauncher<Intent> qrLauncher = registerForActivityResult(
@@ -109,6 +105,7 @@ public class attendance extends AppCompatActivity {
         selectedAddressText = findViewById(R.id.selectedAddressText);
         checkInTimeText = findViewById(R.id.checkInTime);
         checkOutTimeText = findViewById(R.id.checkOutTime);
+        homeLayout = findViewById(R.id.homeLayout);
 
         // Set current date
         currentDateText.setText(new SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(new Date()));
@@ -118,7 +115,20 @@ public class attendance extends AppCompatActivity {
                 checkBiometricSupport(false);
             }
         });
-
+        homeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Reopen the same MainActivity.
+                Intent intent = new Intent(attendance.this, MainActivity.class);
+                // Pass all user data to next activity
+                intent.putExtra("user_id", userId);
+                intent.putExtra("email", email);
+                intent.putExtra("fullname", fullname);
+                intent.putExtra("role", role);
+                intent.putExtra("mac_address", macAddress);
+                startActivity(intent);
+            }
+        });
         stopButton.setOnClickListener(v -> {
             if (isWorking && !isAuthenticationInProgress) {
                 checkBiometricSupport(true);
@@ -128,24 +138,100 @@ public class attendance extends AppCompatActivity {
 
     private void setupUserData() {
         email = getIntent().getStringExtra("email");
+        fullname = getIntent().getStringExtra("fullname");
+        role=getIntent().getStringExtra("role");
+        macAddress=getIntent().getStringExtra("mac_address");
         userId = getIntent().getIntExtra("user_id", 0);
-        userName = getIntent().getStringExtra("user_name");
 
         if (email == null || userId == 0) {
             showToast("Invalid user credentials");
             finish();
         }
     }
+    private boolean isMacAddressRegistered() {
+        // Check if we have a MAC address from the intent (from database)
+        return macAddress != null && !macAddress.isEmpty();
+    }
 
+    private boolean isCurrentMacAddressValid() {
+        String currentMac = getMacAddress(this);
+        return currentMac.equals(macAddress);
+    }
+
+    private void verifyMacAddress() {
+        if (!isMacAddressRegistered()) {
+            // No MAC in database - register current one
+            registerMacAddress();
+        } else if (!isCurrentMacAddressValid()) {
+            // MAC changed - show warning
+            showMacAddressChangedDialog();
+        }
+    }
+
+    private void registerMacAddress() {
+        String currentMac = getMacAddress(this);
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("email", email);
+            requestBody.put("user_id", userId);
+            requestBody.put("mac_address", currentMac);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating MAC registration request", e);
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                WORK_HOURS_API_URL, // Or use a different endpoint
+                requestBody,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            macAddress = currentMac;
+                            showToast("Device registered successfully");
+                        } else {
+                            showToast("Failed to register device: " + response.optString("message"));
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error parsing MAC registration response", e);
+                    }
+                },
+                error -> {
+                    Log.e(TAG, "Network error registering MAC", error);
+                    showToast("Network error registering device");
+                });
+
+        configureRequest(request);
+        requestQueue.add(request);
+    }
+
+    private void showMacAddressChangedDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Device Changed")
+                .setMessage("You're using a different device. Please contact HR to register this device.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Just close the dialog
+                })
+                .setCancelable(false)
+                .show();
+    }
     private void initializeNetworkQueue() {
         requestQueue = Volley.newRequestQueue(this);
     }
-
     private void initializeBiometricComponents() {
         try {
             keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
             keyStore.load(null);
-            generateSecretKey();
+
+            BiometricManager biometricManager = BiometricManager.from(this);
+            int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG);
+
+            if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
+                generateSecretKey();
+            } else {
+                Log.w(TAG, "Biometrics not enrolled, skipping key generation");
+            }
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize biometric components", e);
         }
@@ -185,76 +271,159 @@ public class attendance extends AppCompatActivity {
             keyGenerator.generateKey();
         }
     }
-
+    private void showFingerprintChangedDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Fingerprint Changed")
+                .setMessage("Your device's fingerprints have been modified. Please contact HR before continuing.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Just close the dialog, don't allow any action
+                })
+                .setCancelable(false)
+                .show();
+    }
     private void checkBiometricSupport(boolean isVerification) {
-        // First check device hardware capability
-        switch (BiometricManager.from(this).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
+        // First check MAC address
+        if (!isMacAddressRegistered()) {
+            registerMacAddress();
+            return;
+        }
+
+        if (!isCurrentMacAddressValid()) {
+            showMacAddressChangedDialog();
+            return;
+        }
+
+        // Then check fingerprint changes
+        if (hasFingerprintChanged()) {
+            showFingerprintChangedDialog();
+            return;
+        }
+
+
+        BiometricManager biometricManager = BiometricManager.from(this);
+        int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG);
+
+        switch (canAuthenticate) {
             case BiometricManager.BIOMETRIC_SUCCESS:
-                checkServerBiometricStatus(isVerification);
+                // Device supports biometrics and has enrolled fingerprints
+                String title = isVerification ? "Verify Identity" : "Authenticate to Continue";
+                String subtitle = isVerification ? "Authenticate to stop work" : "Authenticate to start work";
+                showBiometricPrompt(title, subtitle);
                 break;
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                showToast("Device doesn't support biometrics");
-                fallbackToQR();
+
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                // Device supports biometrics but no fingerprints enrolled
+                showToast("No fingerprints enrolled");
+                promptFingerprintEnrollment();
                 break;
+
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
                 showToast("Biometrics currently unavailable");
                 fallbackToQR();
                 break;
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                showToast("No biometrics enrolled in device settings");
+
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                showToast("Device doesn't support biometrics");
                 fallbackToQR();
                 break;
+
             default:
-                Log.d("log","unkown error");
                 showToast("Unknown biometric error");
                 fallbackToQR();
         }
+
     }
 
-
-    private void handleBiometricSupportResponse(JSONObject response, boolean isVerification) {
-        try {
-            if (response.getString("status").equals("success")) {
-                boolean hasBiometric = response.getBoolean("has_biometric");
-
-                if (isVerification && hasBiometric) {
-                    showBiometricPrompt("Verify Identity", "Authenticate to continue");
-                } else if (!isVerification && !hasBiometric) {
-                    showBiometricEnrollmentPrompt();
-                } else {
+    private void promptFingerprintEnrollment() {
+        new AlertDialog.Builder(this)
+                .setTitle("Fingerprint Setup Required")
+                .setMessage("You need to register at least one fingerprint to use this feature. Would you like to go to settings now?")
+                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                    // Open fingerprint settings
+                    try {
+                        Intent intent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+                        intent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                BiometricManager.Authenticators.BIOMETRIC_STRONG);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // Fallback to general security settings if specific intent fails
+                        startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
                     fallbackToQR();
-                }
-            } else {
-                showToast("Server error checking biometric status");
-                fallbackToQR();
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, "Error parsing biometric support response", e);
-            fallbackToQR();
+                })
+                .setCancelable(false)
+                .show();
+    }
+    public static String getMacAddress(Context context) {
+        String macAddress = getMacAddressByWifiInfo(context);
+        if (!TextUtils.isEmpty(macAddress)) {
+            return macAddress;
         }
+
+        macAddress = getMacAddressByNetworkInterface();
+        if (!TextUtils.isEmpty(macAddress)) {
+            return macAddress;
+        }
+
+        return "02:00:00:00:00:00"; // Default MAC address for Android 6.0+
+    }
+
+    private static String getMacAddressByWifiInfo(Context context) {
+        try {
+            WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if (wifiManager == null) {
+                return null;
+            }
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            return wifiInfo.getMacAddress();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    private static  String getMacAddressByNetworkInterface() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) {
+                    continue;
+                }
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return null;
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(String.format("%02X:", b));
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception e) {
+            // Handle exception
+        }
+        return null;
     }
 
     private void showBiometricPrompt(String title, String subtitle) {
         if (isAuthenticationInProgress) return;
         isAuthenticationInProgress = true;
 
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(title)
+                .setSubtitle(subtitle)
+                .setNegativeButtonText("Use QR Code")
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                .build();
+
         try {
-            SecretKey secretKey = (SecretKey) keyStore.getKey(KEYSTORE_ALIAS, null);
-            cipher = Cipher.getInstance(
-                    KeyProperties.KEY_ALGORITHM_AES + "/" +
-                            KeyProperties.BLOCK_MODE_CBC + "/" +
-                            KeyProperties.ENCRYPTION_PADDING_PKCS7);
-
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
-            BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(title)
-                    .setSubtitle(subtitle)
-                    .setNegativeButtonText("Use QR Code")
-                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-                    .build();
-
-            biometricPrompt.authenticate(promptInfo, new BiometricPrompt.CryptoObject(cipher));
+            biometricPrompt.authenticate(promptInfo);
         } catch (Exception e) {
             Log.e(TAG, "Biometric authentication error", e);
             isAuthenticationInProgress = false;
@@ -262,33 +431,48 @@ public class attendance extends AppCompatActivity {
         }
     }
 
-    private void showBiometricEnrollmentPrompt() {
-        if (isAuthenticationInProgress) return;
-        isAuthenticationInProgress = true;
+    private boolean hasFingerprintChanged() {
+        SharedPreferences prefs = getSharedPreferences("BiometricPrefs", MODE_PRIVATE);
+        String currentFingerprintHash = generateFingerprintHash();
+        String savedFingerprintHash = prefs.getString("fingerprint_hash", null);
 
-        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Register Biometric")
-                .setSubtitle("Scan your fingerprint to register")
-                .setDescription("This will allow faster authentication in the future")
-                .setNegativeButtonText("Use QR Code Instead")
-                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-                .build();
+        if (savedFingerprintHash == null) {
+            // First time usage, save the current hash
+            prefs.edit().putString("fingerprint_hash", currentFingerprintHash).apply();
+            return false;
+        }
 
+        return !savedFingerprintHash.equals(currentFingerprintHash);
+    }
+
+    private String generateFingerprintHash() {
         try {
-            biometricPrompt.authenticate(promptInfo);
+            PackageManager pm = getPackageManager();
+            String packageName = getPackageName();
+            PackageInfo info = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+
+            // Combine package signature with biometric hardware info
+            String combined = info.signatures[0].toCharsString() +
+                    Build.MANUFACTURER + Build.BRAND + Build.MODEL;
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(combined.getBytes(StandardCharsets.UTF_8));
+            return Base64.encodeToString(hash, Base64.NO_WRAP);
         } catch (Exception e) {
-            Log.e(TAG, "Biometric enrollment error", e);
-            isAuthenticationInProgress = false;
-            fallbackToQR();
+            Log.e(TAG, "Error generating fingerprint hash", e);
+            return "error";
         }
     }
-
     private void handleBiometricSuccess(BiometricPrompt.AuthenticationResult result) {
+        if (hasFingerprintChanged()) {
+            showFingerprintChangedDialog();
+            return;
+        }
+
         isAuthenticationInProgress = false;
         biometricAttempts = 0;
-        processBiometricResult(result);
+        handleAuthSuccess();
     }
-
     private void handleBiometricFailure() {
         isAuthenticationInProgress = false;
         biometricAttempts++;
@@ -308,163 +492,21 @@ public class attendance extends AppCompatActivity {
         }
     }
 
-    private void processBiometricResult(BiometricPrompt.AuthenticationResult result) {
-        try {
-            // Generate secure biometric template using Android's crypto object
-            byte[] encrypted = result.getCryptoObject().getCipher().doFinal(
-                    generateBiometricTemplate(userId).getBytes(StandardCharsets.UTF_8));
-
-            String encryptedBiometricData = Base64.encodeToString(encrypted, Base64.DEFAULT);
-            String action = isWorking ? "verify_biometric" : "register_biometric";
-
-            JSONObject requestBody = new JSONObject();
-            try {
-                requestBody.put("email", email);
-                requestBody.put("action", action);
-                requestBody.put("biometric_data", encryptedBiometricData);
-                requestBody.put("iv", Base64.encodeToString(
-                        result.getCryptoObject().getCipher().getIV(), Base64.DEFAULT));
-            } catch (JSONException e) {
-                Log.e(TAG, "Error creating biometric request JSON", e);
-                fallbackToQR();
-                return;
-            }
-
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
-                    BIOMETRIC_API_URL,
-                    requestBody,
-                    response -> handleBiometricProcessingResponse(response, action),
-                    error -> {
-                        Log.e(TAG, "Network error processing biometric", error);
-                        fallbackToQR();
-                    });
-
-            configureRequest(request);
-            requestQueue.add(request);
-        } catch (Exception e) {
-            Log.e(TAG, "Error processing biometric result", e);
-            fallbackToQR();
-        }
-    }
-    private String generateBiometricTemplate(int userId) {
-        try {
-            // 1. Gather unique device and user identifiers
-            String deviceId = Settings.Secure.getString(getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-            String userUniqueId = String.valueOf(userId);
-
-            // 2. Get current timestamp with nanosecond precision
-            long timestamp = System.nanoTime();
-
-            // 3. Generate cryptographically secure random data
-            SecureRandom secureRandom = new SecureRandom();
-            byte[] randomBytes = new byte[32];
-            secureRandom.nextBytes(randomBytes);
-            String randomData = Base64.encodeToString(randomBytes, Base64.NO_WRAP);
-
-            // 4. Combine all components with proper delimiters
-            String rawTemplate = String.format(Locale.US,
-                    "%s|%s|%d|%s|%f",
-                    deviceId,
-                    userUniqueId,
-                    timestamp,
-                    randomData,
-                    Math.random()
-            );
-
-            // 5. Create SHA-256 hash of the combined data
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            digest.update(rawTemplate.getBytes(StandardCharsets.UTF_8));
-
-            // 6. Add additional salt and hash again
-            byte[] salt = new byte[16];
-            secureRandom.nextBytes(salt);
-            digest.update(salt);
-
-            // 7. Convert to Base64 for storage/transmission
-            byte[] hash = digest.digest();
-            String template = Base64.encodeToString(hash, Base64.NO_WRAP);
-
-            // 8. Store the salt securely for later verification
-            SharedPreferences prefs = getSharedPreferences("BiometricPrefs", MODE_PRIVATE);
-            prefs.edit()
-                    .putString("biometric_salt_" + userId,
-                            Base64.encodeToString(salt, Base64.NO_WRAP))
-                    .apply();
-
-            return template;
-
-        } catch (Exception e) {
-            Log.e(TAG, "Error generating biometric template", e);
-
-            // Fallback mechanism with limited security
-            SecureRandom fallbackRandom = new SecureRandom();
-            long fallbackTimestamp = System.currentTimeMillis();
-            int fallbackRandomValue = fallbackRandom.nextInt(1000000);
-
-            return String.format(Locale.US,
-                    "fallback_%d_%d_%d",
-                    userId,
-                    fallbackTimestamp,
-                    fallbackRandomValue
-            );
-        }
-    }
-
-    private void handleBiometricProcessingResponse(JSONObject response, String action) {
-        try {
-            if (response.getString("status").equals("success")) {
-                if (action.equals("verify_biometric")) {
-                    if (response.getBoolean("authenticated")) {
-                        handleAuthSuccess();
-                    } else {
-                        showToast("Biometric verification failed");
-                        fallbackToQR();
-                    }
-                } else {
-                    showToast("Biometric registered successfully");
-                    handleAuthSuccess();
-                }
-            } else {
-                showToast("Server error: " + response.optString("message"));
-                fallbackToQR();
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, "Error parsing biometric response", e);
-            fallbackToQR();
-        }
-    }
 
 
 
-
-
-    private String decryptQRData(String encryptedData) {
-        try {
-            // First try Java-style decryption
-            return QRUtils.decrypt(encryptedData);
-        } catch (Exception e) {
-            Log.e(TAG, "QR decryption failed", e);
-            return null;
-        }
-    }
-
-    private void handleQrVerificationResponse(JSONObject response) {
-        try {
-            if (response.getString("status").equals("success") &&
-                    response.getBoolean("authenticated")) {
-                handleAuthSuccess();
-            } else {
-                showToast("Invalid QR code: " + response.optString("message"));
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, "Error parsing QR response", e);
-            showToast("Error processing QR response");
-        }
-    }
 
     private void handleAuthSuccess() {
+        if (!isMacAddressRegistered()) {
+            registerMacAddress();
+            return;
+        }
+
+        if (!isCurrentMacAddressValid()) {
+            showMacAddressChangedDialog();
+            return;
+        }
+
         if (isWorking) {
             stopWork();
         } else {
@@ -497,6 +539,10 @@ public class attendance extends AppCompatActivity {
     }
 
     private void sendWorkRecord(String action) {
+        if (!isCurrentMacAddressValid()) {
+            showMacAddressChangedDialog();
+            return;
+        }
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date(startTime));
         String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(
                 new Date(action.equals("start") ? startTime : System.currentTimeMillis()));
@@ -508,6 +554,8 @@ public class attendance extends AppCompatActivity {
             requestBody.put("date", date);
             requestBody.put("action", action);
             requestBody.put("time", time);
+            requestBody.put("mac_address", macAddress); // Add MAC to the request
+
         } catch (JSONException e) {
             Log.e(TAG, "Error creating work record JSON", e);
             return;
@@ -564,30 +612,16 @@ public class attendance extends AppCompatActivity {
     }
 
     private void verifyAdminQRCode(String encryptedQrData) {
-        // Step 1: Decrypt the QR code data
         String decryptedData = QRUtils.decrypt(encryptedQrData);
 
-        if (decryptedData == null) {
-            showToast("Invalid QR code format");
+        if (decryptedData == null || !isValidQrFormat(decryptedData) || isQrCodeExpired(decryptedData)) {
+            showToast("Invalid or expired QR code");
             return;
         }
 
-        // Step 2: Verify the QR code format
-        if (!isValidQrFormat(decryptedData)) {
-            showToast("Invalid QR code content");
-            return;
-        }
-
-        // Step 3: Check expiration (QR codes are valid for 24 hours)
-        if (isQrCodeExpired(decryptedData)) {
-            showToast("QR code has expired");
-            return;
-        }
-
-        // Step 4: Verify with server
-        verifyQRWithServer(encryptedQrData, decryptedData);
+        // QR code is valid locally; proceed as authenticated
+        handleAuthSuccess();
     }
-
     private boolean isValidQrFormat(String decryptedData) {
         // Expected format: "WorkSync_<timestamp>_<random_hash>"
         String[] parts = decryptedData.split("_");
@@ -621,126 +655,14 @@ public class attendance extends AppCompatActivity {
         }
     }
 
-    private void verifyQRWithServer(String encryptedQrData, String decryptedData) {
-        JSONObject requestBody = new JSONObject();
-        try {
-            requestBody.put("email", email);
-            requestBody.put("action", "verify_qr");
-            requestBody.put("qr_data", encryptedQrData);
-            requestBody.put("decrypted_data", decryptedData);
-            requestBody.put("user_id", userId);
-        } catch (JSONException e) {
-            Log.e(TAG, "Error creating QR verification request", e);
-            showToast("Error processing QR code");
-            return;
-        }
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                BIOMETRIC_API_URL,
-                requestBody,
-                response -> {
-                    try {
-                        if (response.getString("status").equals("success") &&
-                                response.getBoolean("authenticated")) {
-
-                            if (isWorking) {
-                                stopWork();
-                            } else {
-                                startWork();
-                            }
-                        } else {
-                            showToast("QR verification failed: " +
-                                    response.optString("message", ""));
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error parsing QR response", e);
-                        showToast("Error processing QR response");
-                    }
-                },
-                error -> {
-                    Log.e(TAG, "Network error verifying QR", error);
-                    showToast("Network error verifying QR");
-                });
-
-        configureRequest(request);
-        requestQueue.add(request);
-    }
     private void configureRequest(JsonObjectRequest request) {
         request.setRetryPolicy(new DefaultRetryPolicy(
                 REQUEST_TIMEOUT_MS,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
-    // Replace all direct JsonObjectRequest creations with this method
-    private JsonObjectRequest createAuthenticatedRequest(int method, String url, JSONObject jsonRequest,
-                                                         Response.Listener<JSONObject> listener,
-                                                         Response.ErrorListener errorListener) {
-        JsonObjectRequest request = new JsonObjectRequest(method, url, jsonRequest, listener, errorListener) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
 
-                // Add auth token if available
-                SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
-                String authToken = prefs.getString("auth_token", null);
-                if (authToken != null) {
-                    headers.put("Authorization", "Bearer " + authToken);
-                }
 
-                // Add device info headers
-                headers.put("Device-ID", Settings.Secure.getString(
-                        getContentResolver(), Settings.Secure.ANDROID_ID));
-
-                try {
-                    PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    headers.put("App-Version", pInfo.versionName);
-                    headers.put("App-Version-Code", String.valueOf(pInfo.versionCode));
-                } catch (PackageManager.NameNotFoundException e) {
-                    headers.put("App-Version", "unknown");
-                }
-
-                headers.put("Platform", "Android");
-                headers.put("OS-Version", Build.VERSION.RELEASE);
-
-                return headers;
-            }
-        };
-
-        // Apply the retry policy
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                REQUEST_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
-        return request;
-    }
-
-    // Example usage in checkServerBiometricStatus():
-    private void checkServerBiometricStatus(boolean isVerification) {
-        JSONObject requestBody = new JSONObject();
-        try {
-            requestBody.put("email", email);
-            requestBody.put("action", "check_biometric_support");
-        } catch (JSONException e) {
-            Log.e(TAG, "Error creating request JSON", e);
-            fallbackToQR();
-            return;
-        }
-
-        // Using the new method instead of creating JsonObjectRequest directly
-        JsonObjectRequest request = createAuthenticatedRequest(
-                Request.Method.POST,
-                BIOMETRIC_API_URL,
-                requestBody,
-                response -> handleBiometricSupportResponse(response, isVerification),
-                error -> {
-                    Log.e(TAG, "Network error checking biometric support", error);
-                    fallbackToQR();
-                });
-
-        requestQueue.add(request);
-    }
 
     private void loadSavedState() {
         SharedPreferences prefs = getSharedPreferences("AttendancePrefs", MODE_PRIVATE);

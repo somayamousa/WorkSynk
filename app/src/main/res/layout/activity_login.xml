@@ -57,7 +57,7 @@
                 android:layout_width="297dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:backgroundTint="@android:color/holo_blue_dark"
+                android:backgroundTint="#8A4ECA"
                 android:text="Login"
                 android:textColor="@android:color/white"/>
 
@@ -67,7 +67,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:text="FORGOT PASSWORD ?"
-                android:textColor="@android:color/holo_blue_dark"
+                android:textColor="#8A4ECA"
                 android:textStyle="bold"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
