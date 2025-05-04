@@ -110,50 +110,45 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:id="@+id/dateHoursSection"
+                android:layout_width="407dp"
+                android:layout_height="134dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/userAccountSection">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/dateText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="S"
-                    android:textColor="#777777" />
+                    android:text="May, 2024"
+                    android:textColor="#100F0F"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/hoursText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="M"
-                    android:textColor="#777777" />
+                    android:layout_marginTop="8dp"
+                    android:text="21:10:07 Hours"
+                    android:textColor="#0E0E0E"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="0dp"
+                <ProgressBar
+                    android:id="@+id/hoursProgress"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T"
-                    android:textColor="#777777" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="W"
-                    android:textColor="#777777" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="T"
-                    android:textColor="#777777" />
+                    android:layout_marginTop="8dp"
+                    android:progress="70"
+                    android:progressTint="#92278F" />
             </LinearLayout>
 
             <LinearLayout

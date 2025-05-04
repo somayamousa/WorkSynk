@@ -1,5 +1,7 @@
 package com.example.worksyck;
 
+
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,7 +54,7 @@ import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String WORK_HOURS_API_URL = "http://192.168.1.7/worksync/attendence.php";
+    private static final String WORK_HOURS_API_URL = "http://10.0.2.2/worksync/attendence.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
