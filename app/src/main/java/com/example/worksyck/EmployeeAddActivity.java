@@ -30,7 +30,7 @@ public class EmployeeAddActivity extends AppCompatActivity {
     private Button btnAddEmployee;
     private RequestQueue requestQueue;
     private static final String TAG = "EmployeeAddActivity";
-    private static final String ADD_EMPLOYEE_URL = "http://192.168.1.11/worksync/add_employee.php";
+    private static final String ADD_EMPLOYEE_URL = "http://10.0.2.2/worksync/add_employee.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

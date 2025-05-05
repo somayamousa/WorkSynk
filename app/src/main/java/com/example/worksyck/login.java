@@ -30,7 +30,7 @@ public class login extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
     private RequestQueue requestQueue;
     private static final String TAG = "LoginActivity";
-    private static final String LOGIN_URL = "http://192.168.1.11/worksync/loginapi.php";
+    private static final String LOGIN_URL = "http://10.0.2.2/worksync/loginapi.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +76,11 @@ public class login extends AppCompatActivity {
             @Override
             protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
                 try {
+
+
                     String jsonString = new String(response.data,
                             HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+
                     Log.d(TAG, "Raw response: " + jsonString);
                     JSONObject jsonResponse = new JSONObject(jsonString);
                     return Response.success(jsonResponse,
@@ -144,6 +147,7 @@ public class login extends AppCompatActivity {
     }
 
     private void handleLoginError(VolleyError error) {
+        Log.d("ServerResponse", String.valueOf(error)); // لعرض الرد من السيرفر
         String errorMessage = "Login failed";
 
         if (error.networkResponse != null) {
