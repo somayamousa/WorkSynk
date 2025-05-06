@@ -1,6 +1,7 @@
 package com.example.worksyck;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,11 +16,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +33,7 @@ public class EmployeeAddActivity extends AppCompatActivity {
     private RadioGroup radioGroupStatus;
     private Button btnAddEmployee;
     private RequestQueue requestQueue;
+
     private static final String TAG = "EmployeeAddActivity";
     private static final String ADD_EMPLOYEE_URL = "http://10.0.2.2/worksync/add_employee.php";
 
@@ -45,15 +50,14 @@ public class EmployeeAddActivity extends AppCompatActivity {
         editTextMacAddress = findViewById(R.id.editTextMacAddress);
         radioGroupStatus = findViewById(R.id.radioGroupStatus);
         btnAddEmployee = findViewById(R.id.btnAddEmployee);
-
         requestQueue = Volley.newRequestQueue(this);
-
         btnAddEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addNewEmployee();
             }
         });
+
     }
 
     private void addNewEmployee() {
@@ -118,4 +122,9 @@ public class EmployeeAddActivity extends AppCompatActivity {
 
         requestQueue.add(request);
     }
+
+
+
+
+
 }

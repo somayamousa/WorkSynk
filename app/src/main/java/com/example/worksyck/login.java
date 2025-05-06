@@ -105,16 +105,17 @@ public class login extends AppCompatActivity {
         try {
             String status = response.optString("status", "");
 
+
             if ("success".equalsIgnoreCase(status)) {
                 JSONObject user = response.getJSONObject("data").getJSONObject("user");
-
+Log.d("HR",String.valueOf(user));
                 // استخراج بيانات المستخدم
                 int id = user.optInt("id");
                 String email = user.optString("email");
                 String fullname = user.optString("fullname");
                 String role = user.optString("role");
                 String macAddress = user.optString("mac_address", "");
-                String companyName = user.optString("company_name", "");
+                String company_id = user.optString("company_id", "");
                 String companyCode = user.optString("company_code", "");
 
                 Intent intent;
@@ -131,7 +132,7 @@ public class login extends AppCompatActivity {
                 intent.putExtra("fullname", fullname);
                 intent.putExtra("role", role);
                 intent.putExtra("mac_address", macAddress);
-                intent.putExtra("company_name", companyName);
+                intent.putExtra("company_id", company_id);
                 intent.putExtra("company_code", companyCode);
 
                 startActivity(intent);
