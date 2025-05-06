@@ -34,6 +34,8 @@ public class MainActivity2 extends AppCompatActivity {
         Button btnAddEmployee = findViewById(R.id.btnAddEmployee);
         Button   Employee= findViewById(R.id.Employee);
         Button   payroll_entry= findViewById(R.id.payroll_entry);
+        Button   add_holiday= findViewById(R.id.add_holiday);
+        Button   cont_holiday= findViewById(R.id.cont_holidays);
         Intent intent = getIntent();
 
         company_id= intent.getStringExtra("company_id");
@@ -49,6 +51,21 @@ public class MainActivity2 extends AppCompatActivity {
             payroll_entry_Intent.putExtra("company_id",company_id);
             payroll_entry_Intent.putExtra("user_id",user_id);
             startActivity(payroll_entry_Intent);
+        });
+
+       add_holiday.setOnClickListener(v -> {
+
+            Intent     Add_holiday_Intent = new Intent(MainActivity2.this, AddHoliday.class);
+
+            startActivity(Add_holiday_Intent);
+
+        });
+        cont_holiday.setOnClickListener(v -> {
+
+            Intent     cont_holiday_Intent = new Intent(MainActivity2.this, show_holidays.class);
+
+            startActivity(cont_holiday_Intent);
+
         });
 
         // Add Employee Button Click

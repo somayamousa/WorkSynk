@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -99,7 +100,7 @@ String get_hr_company_url="http://10.0.2.2/worksync/get_hr_company.php?hr_id="+h
                        textViewCompanyName.setText(company_name);
 //                       Fetch all employee in this Company
 
-                        get_all_company_employees();
+//                        get_all_company_employees();
 
                     }else{
                         Log.e("error",response);
@@ -123,50 +124,54 @@ String get_hr_company_url="http://10.0.2.2/worksync/get_hr_company.php?hr_id="+h
         requestQueue.add(stringRequest);
     }
 
-    private void get_all_company_employees() {
-
-        String get_all_company_employee_url="http://10.0.2.2/worksync/get_all_comany_employee.php?company_id="+company_id;
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, get_all_company_employee_url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("User_id",company_id);
-                Log.d("Response",response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    String status=jsonObject.getString("status");
-                    if (status.equals("success")){
-
-                        JSONObject data_= jsonObject.getJSONObject("data");
-                        String company_name=data_.getString("name");
-                        String company_id=data_.getString("id");
-                        textViewCompanyName.setText(company_name);
-//                       Fetch all employee in this Company
-
-                        get_all_company_employees();
-
-                    }else{
-                        Log.e("error",response);
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-            }
-
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Company Name Error:",String.valueOf(error));
-            }
-        });
-
-
-        requestQueue.add(stringRequest);
-    }
-
+//    private void get_all_company_employees() {
+//
+//        String get_all_company_employee_url="http://10.0.2.2/worksync/get_all_comany_employee.php?company_id="+company_id;
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, get_all_company_employee_url, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d("User_id",company_id);
+//                Log.d("Response",response);
+//                if (response == null || response.trim().isEmpty()) {
+//                    Toast.makeText(getApplicationContext(), "Empty response from server", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    String status=jsonObject.getString("status");
+//                    if (status.equals("success")){
+//
+//                        JSONObject data_= jsonObject.getJSONObject("data");
+//                        String company_name=data_.getString("name");
+//                        String company_id=data_.getString("id");
+//                        textViewCompanyName.setText(company_name);
+////                       Fetch all employee in this Company
+//
+//                        get_all_company_employees();
+//
+//                    }else{
+//                        Log.e("error",response);
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//
+//            }
+//
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("Company Name Error:",String.valueOf(error));
+//            }
+//        });
+//
+//
+//        requestQueue.add(stringRequest);
+//    }
+//
 
 
 
