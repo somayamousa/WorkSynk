@@ -35,6 +35,23 @@ public class DepartmentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_designations);
+        listView = findViewById(R.id.listViewDesignations);
+        departments = new ArrayList<>();
+        departmentsNames = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, departmentsNames);
+        listView.setAdapter(adapter);
+
+        requestQueue = Volley.newRequestQueue(this);
+
+        FetchAllDepartments();
+//
+        AddNewDepartment();
+        DeleteDepartment();
+        UpdateOnDepartment();
     }
 
     private void UpdateOnDepartment() {

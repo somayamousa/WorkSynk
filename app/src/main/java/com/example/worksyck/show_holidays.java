@@ -63,7 +63,7 @@ public class show_holidays extends AppCompatActivity {
     }
     private void FetchHolidaysForYear(int year) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String Url="http://10.0.2.2/WorkSync/spesfic_year_holidays.php?year=" + year;
+        String Url="http://10.0.2.2/worksync/spesfic_year_holidays.php?year=" + year;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
