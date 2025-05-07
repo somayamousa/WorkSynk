@@ -6,6 +6,9 @@ public class Designations {
         this.id = id;
         this.name = name;
     }
+    public Designations(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return id;
@@ -13,5 +16,13 @@ public class Designations {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return  name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

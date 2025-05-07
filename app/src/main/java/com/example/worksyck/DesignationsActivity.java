@@ -1,5 +1,4 @@
 package com.example.worksyck;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,15 +20,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 public class DesignationsActivity extends AppCompatActivity {
-
     private ArrayList<Designations> designations;
     private ArrayList<String> designationNames;
     private ArrayAdapter<String> adapter;
     private RequestQueue requestQueue;
     private ListView listView;
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,32 +39,132 @@ public class DesignationsActivity extends AppCompatActivity {
         designationNames = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, designationNames);
         listView.setAdapter(adapter);
-
         requestQueue = Volley.newRequestQueue(this);
-
         FetchAllDesignations();
+//      DeleteDesignation("1");
+//    Designations designationObj=    new Designations("Customer Support Agent");
+//        AddNewDesignation("Software EngineEr");
+//        UpdateOnDesignation("1","Software Engineer1");
 //
-//        AddNewDesignation(new Designations());
-        DeleteDesignation();
-        UpdateOnDesignations();
     }
 
-    private void AddNewDesignation() {
+    private void AddNewDesignation(String name) {
 
+        //        Click on the  Add Button
+//        Enter the New Designation Name.
+//        Send to server to Add..
+
+
+//        Check if the job_title name is not empty if empty show to the user dialog that is must fill
+
+
+        String add_designation_url = "http://10.0.2.2//worksync/add_new_job_title.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, add_designation_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+//                handle the response
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    String message = jsonObject.getString("message");
+                    Log.d("Response",message);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+//                handle the error
+
+                Log.d("Error" , String.valueOf(error));
+                Log.d("Error" , "Error While Adding try again please");
+
+            }
+
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("job_title", name);
+
+                return params;
+            }
+
+
+        };
+
+
+        requestQueue.add(stringRequest);
 
 
     }
 
-    private void DeleteDesignation() {
-    }
 
-    private void UpdateOnDesignations() {
-    }
 
+
+
+    private void UpdateOnDesignation(String id , String name) {
+//        Click on the Edit Button Extract the Id of the clicked Department
+//        Enter the New Department Name.
+//        Send to server to Update..
+
+
+//        Check if the department name is not empty if empty show to the user dialog that is must fill
+
+
+        String update_department_url = "http://10.0.2.2//worksync/update_designation.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, update_department_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String message=jsonObject.getString("message");
+                    Log.d("Response",message);
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+//                handle the error
+                Log.e("Error" , String.valueOf(error));
+                Log.d("Error" , "Error While Update try again please");
+
+            }
+
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("job_title_id", id);
+                params.put("job_title_name", name);
+
+                return params;
+            }
+
+
+        };
+        requestQueue.add(stringRequest);
+    }
     private void FetchAllDesignations() {
 
 
-        String get_all_designations_url="http://10.0.2.2/worksync/fetch_all_job_titles.php";
+        String get_all_designations_url="http://10.0.2.2/worksync/fetch_all_job_titiles.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,get_all_designations_url, new Response.Listener<String>() {
             @Override
@@ -91,7 +189,7 @@ public class DesignationsActivity extends AppCompatActivity {
                     }
 
                     else{
-                        Log.d("Case 2 :","No Designations found.");
+                        Log.d("Case 2 :",message);
 //                                UI there is No  DesignationsActivity .the page is empty.
                     }
                 } catch (JSONException e) {
@@ -114,4 +212,60 @@ public class DesignationsActivity extends AppCompatActivity {
 
 
     }
+
+    private void DeleteDesignation(String id) {
+//        url
+        String delete_department_url = "http://10.0.2.2/worksync/delete_designation.php";
+//        string request
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, delete_department_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+//                handle the response
+//                Log.d("Response",response);
+
+
+                //                handle the response
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status =jsonObject.getString("status");
+                    Log.d("Response",jsonObject.getString("message"));
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+//                handle the error
+                Log.e("Error" , String.valueOf(error));
+                Log.d("Error" , "Error While Deleting try again please");
+
+
+            }
+
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("designation_id", id);
+
+                return params;
+            }
+
+
+        };
+        requestQueue.add(stringRequest);
+
+
+    }
+
 }
