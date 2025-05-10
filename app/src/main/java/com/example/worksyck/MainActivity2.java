@@ -69,19 +69,22 @@ public class MainActivity2 extends AppCompatActivity {
             startActivity(cont_holiday_Intent);
 
         });
-        // Add Employee Button Click
+
         btnDepartment.setOnClickListener(v -> {
             Intent DepartmentIntent = new Intent(MainActivity2.this, DepartmentsActivity.class);
+
             startActivity(DepartmentIntent);
         });
-            // Add Employee Button Click
+
             btnDesignations.setOnClickListener(v -> {
                 Intent DesignationsIntent = new Intent(MainActivity2.this, DesignationsActivity.class);
                 startActivity(DesignationsIntent);
             });
         // Add Employee Button Click
         btnAddEmployee.setOnClickListener(v -> {
+
             Intent addIntent = new Intent(MainActivity2.this, EmployeeAddActivity.class);
+         addIntent.putExtra("company_id",company_id);
             startActivity(addIntent);
         });Employee.setOnClickListener(v -> {
             Intent addIntent = new Intent(MainActivity2.this, EmployeesListActivity.class);
