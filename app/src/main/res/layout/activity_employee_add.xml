@@ -57,7 +57,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="حالة الحساب"
+            android:layout_margin="10dp"
             android:layout_marginTop="8dp"/>
+
+        <Spinner
+            android:id="@+id/departments_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/designations_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <RadioGroup
             android:id="@+id/radioGroupStatus"
@@ -78,6 +89,8 @@
                 android:layout_height="wrap_content"
                 android:text="غير نشط"/>
         </RadioGroup>
+
+
 
         <Button
             android:id="@+id/btnAddEmployee"
