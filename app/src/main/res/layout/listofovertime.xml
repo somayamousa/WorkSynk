@@ -4,30 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDE7F6"
-    tools:context=".RequestsActivity">
+    android:background="#EDE7F6">
 
-    <!-- Back Button -->
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
-        android:src="?attr/actionModeCloseDrawable"
-        android:contentDescription="Back"
-        app:tint="#000000"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- Title -->
+    <!-- Title Bar -->
     <TextView
         android:id="@+id/titleTextView"
+        android:text="Overtime Request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Request Type"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#000000"
@@ -35,96 +19,154 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center_horizontal" />
 
-    <!-- Leave Request Card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/leaveRequestCardView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="60dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="8dp"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+    <!-- Back Button -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:padding="8dp"
+        android:src="?attr/actionModeCloseDrawable"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/overtimeRequestCardView">
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#000000" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/leave"
-                app:tint="#4A148C"
-                android:contentDescription="Leave Icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Leave"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/poppins_medium"
-                android:layout_marginTop="12dp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Overtime Request Card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/overtimeRequestCardView"
+    <!-- Form Section -->
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="60dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="8dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"
-        app:layout_constraintStart_toEndOf="@id/leaveRequestCardView"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
-            android:padding="20dp">
+            android:padding="16dp">
 
-            <ImageView
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:src="@drawable/overtime"
-                app:tint="#4A148C"
-                android:contentDescription="Overtime Icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Accepted Overtime Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/acceptedOvertimeCard"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Overtime"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/acceptedOvertimeLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Accepted Overtime"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="#757575"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/acceptedOvertimeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12"
+                        android:textColor="#4A148C"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/acceptedOvertimeTotalLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="of 30 Per Year"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="#757575"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/checkIcon"
+                        android:layout_width="33dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/present"
+                        app:tint="#4A148C" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- New Overtime Request Button -->
+            <Button
+                android:id="@+id/newOvertimeRequestButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:backgroundTint="#4A148C"
+                android:text="+ New Overtime Request"
                 android:fontFamily="@font/poppins_medium"
-                android:layout_marginTop="12dp" />
+                android:elevation="6dp"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <!-- Overtime List Title -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/poppins_bolditalic"
+                    android:text="List of My Overtime"
+                    android:textColor="#4A148C"
+                    android:textSize="20sp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Filter Icon"
+                    android:src="@drawable/filter"
+                    app:tint="#4A148C" />
+            </LinearLayout>
+
+            <!-- RecyclerView for Overtime requests -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/overtimeRequestsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                tools:listitem="@layout/overtime_request_item" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </ScrollView>
 
     <!-- Bottom Navigation -->
     <LinearLayout

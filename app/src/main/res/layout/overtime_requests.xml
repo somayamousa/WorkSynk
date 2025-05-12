@@ -1,210 +1,185 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EDE7F6">
 
-    <!-- Back Button -->
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:clickable="true"
-        android:contentDescription="Back to Dashboard"
-        android:focusable="true"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        android:padding="8dp"
-        android:src="?attr/actionModeCloseDrawable"
-        app:layout_constraintBottom_toBottomOf="@+id/titleTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/titleTextView"
-        app:tint="#000000"
-        tools:ignore="ImageContrastCheck" />
-
-    <!-- Title Text -->
+    <!-- Title Bar -->
     <TextView
         android:id="@+id/titleTextView"
+        android:text="📝 Create Overtime Request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create Overtime Request"
-        android:textSize="23sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#000000"
+        android:fontFamily="@font/poppins_bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_horizontal" />
 
-    <!-- CardView Wrapper -->
+    <!-- Back Button -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="?attr/actionModeCloseDrawable"
+        android:contentDescription="Back"
+        app:tint="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Form Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/formCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="6dp"
+        android:layout_margin="24dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
         app:cardBackgroundColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp">
-
-            <!-- Overtime Date Label -->
-
-            <!-- Date Picker Button -->
-
-            <!-- Hours Worked Label -->
-
-            <TextView
-                android:id="@+id/overtimeDateLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Overtime Date"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/selectDateButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#5C2E91"
-                android:text="Select Date"
-                android:textColor="@android:color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/overtimeDateLabel" />
-
-            <!-- EditText for Hours Worked -->
-
-            <!-- Reason Label -->
-
-            <TextView
-                android:id="@+id/hoursWorkedLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="How Many Hours?"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/selectDateButton" />
-
-            <EditText
-                android:id="@+id/hoursWorkedEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="#EEEEEE"
-                android:hint="Enter Hours"
-                android:inputType="numberDecimal"
-                android:padding="12dp"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hoursWorkedLabel" />
-
-            <!-- EditText for Reason -->
-            <TextView
-                android:id="@+id/reasonLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Reason For Overtime"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hoursWorkedEditText" />
-
-            <!-- Attachment Label -->
-            <EditText
-                android:id="@+id/reasonEditText"
-                android:layout_width="351dp"
-                android:layout_height="87dp"
-                android:layout_marginTop="16dp"
-                android:background="#EEEEEE"
-                android:hint="Plase write here"
-                android:inputType="textMultiLine"
-                android:padding="12dp"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reasonLabel" />
-
-            <!-- Attachment Layout -->
-
-            <!-- Submit Button -->
-            <TextView
-                android:id="@+id/attachmentLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Attach Documents (Optional)"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reasonEditText" />
+            android:padding="24dp">
 
             <LinearLayout
-                android:id="@+id/attachmentLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/attachmentLabel">
+                android:orientation="vertical">
 
+                <!-- Overtime Date -->
                 <TextView
-                    android:id="@+id/fileNameTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="No file selected"
-                    android:textColor="#888888" />
-
-                <Button
-                    android:id="@+id/chooseFileButton"
+                    android:text="📅 Overtime Date"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333"
+                    android:fontFamily="@font/poppins_semibold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#5C2E91"
-                    android:text="Choose File" />
+                    android:layout_marginTop="24dp" />
+                <Button
+                    android:id="@+id/selectDateButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Select Date"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:backgroundTint="#4A148C"
+                    android:layout_marginTop="16dp" />
+
+                <!-- Overtime Hours -->
+                <TextView
+                    android:text="⏰ How Many Hours?"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp" />
+                <EditText
+                    android:id="@+id/overtimeHoursEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter Hours"
+                    android:fontFamily="@font/poppins_medium"
+                    android:background="#F1F1F1"
+                    android:textColor="#000"
+                    android:textColorHint="#999"
+                    android:padding="12dp"
+                    android:gravity="start|center_vertical"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="16dp" />
+
+                <!-- Reason for Overtime -->
+                <TextView
+                    android:text="🗒️ Reason for Overtime"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp" />
+                <EditText
+                    android:id="@+id/reasonTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:hint="Write your reason here..."
+                    android:fontFamily="@font/poppins_medium"
+                    android:background="#F1F1F1"
+                    android:padding="12dp"
+                    android:textColor="#000"
+                    android:textColorHint="#999"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:layout_marginTop="16dp" />
+
+                <!-- Attach Documents (Optional) -->
+                <TextView
+                    android:text="📎 Attach Documents (Optional)"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/fileNameTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="No file selected"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="#888888" />
+
+                    <Button
+                        android:id="@+id/chooseFileButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose File"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:backgroundTint="#4A148C" />
+                </LinearLayout>
+
+                <!-- Submit Button -->
+                <Button
+                    android:id="@+id/submitButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="✓ Submit"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_medium"
+                    android:backgroundTint="#4A148C"
+                    android:textSize="16sp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginBottom="24dp" />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/submitButton"
-                android:layout_width="144dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="40dp"
-                android:backgroundTint="#5C2E91"
-                android:text="Submit"
-                android:textColor="#FFFFFF"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/attachmentLayout" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

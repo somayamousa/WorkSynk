@@ -64,9 +64,30 @@
         <activity
             android:name=".QrDisplayActivity"
             android:exported="false" />
+
         <activity
             android:name=".RequestsActivity"
-            android:exported="false" />
+            android:exported="true" />
+        <activity
+            android:name=".LeaveRequests"
+            android:exported="true" />
+        <activity
+            android:name=".OvertimeRequests"
+            android:exported="true" />
+        <activity
+            android:name=".OvertimeRequest"
+            android:exported="true" />
+        <activity
+            android:name=".OvertimeOverview"
+            android:exported="true" />
+        <activity
+            android:name=".LeaveOverview"
+            android:exported="true" />
+
+        <activity
+            android:name=".LeaveRequest"
+            android:exported="true" />
+
         <activity
             android:name=".login"
             android:exported="true">

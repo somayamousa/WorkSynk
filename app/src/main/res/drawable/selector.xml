@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- اللون عند النقر (selected) -->
+    <item android:color="#4A148C" android:state_selected="true" />
+    <!-- اللون عند عدم النقر (default) -->
+    <item android:color="#1F1F1F" />
+</selector>

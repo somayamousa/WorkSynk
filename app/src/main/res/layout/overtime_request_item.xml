@@ -1,0 +1,69 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@android:color/white"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Left Side (Leave Type and Dates) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <!-- Leave Type -->
+            <TextView
+                android:id="@+id/overtimeReason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Important"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <!-- Dates -->
+            <TextView
+                android:id="@+id/overtimeDateRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3 Aug - 7 Sep"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="#757575"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <!-- Right Side (Leave Status) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <!-- Status -->
+            <TextView
+                android:id="@+id/overtimeStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pending"
+                android:textColor="#4CAF50"
+                android:textSize="14sp"
+                android:fontFamily="@font/poppins_semibolditalic"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

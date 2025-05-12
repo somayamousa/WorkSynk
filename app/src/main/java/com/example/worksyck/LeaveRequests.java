@@ -1,249 +1,261 @@
 package com.example.worksyck;
+
+
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
-import android.database.Cursor;
-import android.widget.*;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class LeaveRequests extends AppCompatActivity {
 
-    private static final int FILE_SELECT_CODE = 101;
+    Spinner leaveTypeSpinner;
+    Button selectDateButton, chooseFileButton, submitButton;
+    EditText reasonTextView;
+    TextView fileNameTextView;
 
-    private Spinner leaveTypeSpinner;
-    private EditText reasonEditText;
-    private Button selectDateButton, submitButton, chooseFileButton;
-    private TextView fileNameTextView;
-    private List<LeavePeriod> leavePeriods = new ArrayList<>();
-    private String selectedTimeRange = null;
-    private Uri selectedFileUri = null;
+    String startDate = "";
+    String endDate = "";
+    Uri fileUri = null;
 
-    private final Calendar calendar = Calendar.getInstance();
-    private Date selectedStartDate = null;
-
-    private static class LeavePeriod {
-        Date startDate;
-        Date endDate;
-
-        LeavePeriod(Date startDate, Date endDate) {
-            this.startDate = startDate;
-            this.endDate = endDate;
-        }
-
-        String getFormattedPeriod() {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            return "From: " + sdf.format(startDate) + " To: " + sdf.format(endDate);
-        }
-    }
+    final Calendar calendar = Calendar.getInstance();
+    Calendar endCalendar = Calendar.getInstance();
+    boolean isStartSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.leave_requests);
-        setBackButtonListener();
+
         leaveTypeSpinner = findViewById(R.id.leaveTypeSpinner);
-        reasonEditText = findViewById(R.id.reasonTextView);
         selectDateButton = findViewById(R.id.selectDateButton);
-        submitButton = findViewById(R.id.submitButton);
         chooseFileButton = findViewById(R.id.chooseFileButton);
+        submitButton = findViewById(R.id.submitButton);
+        reasonTextView = findViewById(R.id.reasonTextView);
         fileNameTextView = findViewById(R.id.fileNameTextView);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.leave_types, android.R.layout.simple_spinner_item);
+        submitButton.setOnClickListener(v -> {
+            // الانتقال إلى صفحة LeaveOverview عند النقر على زر Submit
+            Intent intent = new Intent(LeaveRequests.this, LeaveOverview.class);
+            startActivity(intent);
+        });
+
+
+        // إعداد أنواع الإجازة
+        String[] leaveTypes = {
+                "Select Leave Type",
+                "Sick Leave",
+                "Casual Leave",
+                "Annual Leave",
+                "Emergency Leave",
+                "Maternity Leave",
+                "Unpaid Leave"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, leaveTypes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         leaveTypeSpinner.setAdapter(adapter);
 
-        selectDateButton.setOnClickListener(v -> showDateSelectionDialog());
+        // التعامل مع زر اختيار التاريخ
+        selectDateButton.setOnClickListener(v -> showStartDatePicker());
+
+        // زر الإرسال
+        submitButton.setOnClickListener(v -> {
+            if (!validateForm()) return;
+            sendLeaveRequestToServer();
+        });
+
+        // زر الرجوع
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
+        // تفعيل اختيار المستند
         chooseFileButton.setOnClickListener(v -> openFilePicker());
-        submitButton.setOnClickListener(v -> validateForm());
-
-    }
-    private void setBackButtonListener() {
-        ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> onBackPressed()); // This will call the default back button functionality
     }
 
-    private void showDateSelectionDialog() {
-        String[] options = {"Pick Start Date", "Pick End Date"};
-        new AlertDialog.Builder(this)
-                .setItems(options, (dialog, which) -> {
-                    calendar.setTime(new Date());
-                    if (which == 0) {
-                        openStartDatePicker();
-                    } else {
-                        openEndDatePicker();
+    private void sendLeaveRequestToServer() {
+        String leaveType = leaveTypeSpinner.getSelectedItem().toString();
+        String reason = reasonTextView.getText().toString().trim();
+
+        String url = "http://10.0.2.2/leave_requests/insert_leave_request.php"; // تعديل عنوان الخادم
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(LeaveRequests.this, "Leave request submitted successfully", Toast.LENGTH_SHORT).show();
+                        clearFields();  // Clear all fields after submission
                     }
-                })
-                .show();
-    }
+                },
+                error -> Toast.makeText(LeaveRequests.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show()) {
 
-    private void openStartDatePicker() {
-        if (selectedStartDate != null) {
-            Toast.makeText(this, "Please select end date for the previous start date first", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Calendar now = Calendar.getInstance();
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            calendar.set(year, month, dayOfMonth);
-            selectedStartDate = calendar.getTime();
-            updateDateButton();
-        }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
-    private void openEndDatePicker() {
-        if (selectedStartDate == null) {
-            Toast.makeText(this, "Please select a start date first", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Calendar now = Calendar.getInstance();
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            calendar.set(year, month, dayOfMonth);
-            Date selectedEndDate = calendar.getTime();
-
-            if (selectedEndDate.before(selectedStartDate)) {
-                Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
-            } else if (isSameDay(selectedEndDate, selectedStartDate)) {
-                Toast.makeText(this, "End date cannot be the same as the start date", Toast.LENGTH_SHORT).show();
-            } else {
-                leavePeriods.add(new LeavePeriod(selectedStartDate, selectedEndDate));
-                selectedStartDate = null; // Reset
-                updateDateButton();
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("leave_type", leaveType);
+                params.put("start_date", startDate);
+                params.put("end_date", endDate);
+                params.put("reason", reason);
+                return params;
             }
-        }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)).show();
-    }
+        };
 
-    private boolean isSameDay(Date date1, Date date2) {
-        Calendar cal1 = Calendar.getInstance();
-        Calendar cal2 = Calendar.getInstance();
-        cal1.setTime(date1);
-        cal2.setTime(date2);
-        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
-    }
-
-    private void updateDateButton() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        StringBuilder builder = new StringBuilder();
-
-        if (leavePeriods.isEmpty() && selectedStartDate != null) {
-            builder.append("Start: ").append(sdf.format(selectedStartDate));
-        } else {
-            for (LeavePeriod period : leavePeriods) {
-                builder.append(period.getFormattedPeriod()).append("\n");
-            }
-        }
-
-        if (selectedTimeRange != null) {
-            builder.append("\nTime: ").append(selectedTimeRange);
-        }
-
-        selectDateButton.setText(builder.toString().trim());
-    }
-
-
-    private void askIfAddTime() {
-        new AlertDialog.Builder(this)
-                .setTitle("Add Time Range")
-                .setMessage("Do you want to specify a time range?")
-                .setPositiveButton("Yes", (dialog, which) -> openTimePicker())
-                .setNegativeButton("No", null)
-                .show();
-    }
-
-    private void openTimePicker() {
-        final Calendar startCalendar = Calendar.getInstance();
-        TimePickerDialog startTimePicker = new TimePickerDialog(this,
-                (view, hourOfDay, minute) -> {
-                    String startTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
-
-                    final Calendar endCalendar = Calendar.getInstance();
-                    TimePickerDialog endTimePicker = new TimePickerDialog(this,
-                            (view1, endHour, endMinute) -> {
-                                String endTime = String.format(Locale.getDefault(), "%02d:%02d", endHour, endMinute);
-                                selectedTimeRange = startTime + " - " + endTime;
-                                updateDateButton();
-                            }, endCalendar.get(Calendar.HOUR_OF_DAY), endCalendar.get(Calendar.MINUTE), true);
-                    endTimePicker.setTitle("Select End Time");
-                    endTimePicker.show();
-
-                }, startCalendar.get(Calendar.HOUR_OF_DAY), startCalendar.get(Calendar.MINUTE), true);
-        startTimePicker.setTitle("Select Start Time");
-        startTimePicker.show();
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 
     private void openFilePicker() {
+        // فتح مستعرض الملفات لاختيار المستند
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
-        startActivityForResult(Intent.createChooser(intent, "Please choose the file"), FILE_SELECT_CODE);
+        intent.setType("*/*");  // يسمح باختيار أي نوع من الملفات
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(intent, "Choose a file"), 1); // طلب اختيار الملف
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == FILE_SELECT_CODE && resultCode == RESULT_OK && data != null) {
-            selectedFileUri = data.getData();
-            String fileName = getFileName(selectedFileUri);
-            fileNameTextView.setText(fileName);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            // عند اختيار الملف
+            if (data != null && data.getData() != null) {
+                fileUri = data.getData();  // الحصول على URI للملف
+                String fileName = getFileName(fileUri);  // الحصول على اسم الملف
+                fileNameTextView.setText(fileName); // عرض اسم الملف في TextView
+            }
         }
     }
 
     private String getFileName(Uri uri) {
-        String result = "Unknown";
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int nameIndex = cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME);
-            result = cursor.getString(nameIndex);
-            cursor.close();
+        String result = null;
+        String[] projection = { android.provider.MediaStore.Images.Media.DISPLAY_NAME };
+        try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndex(projection[0]);
+                result = cursor.getString(columnIndex);
+            }
         }
         return result;
     }
-    private void validateForm() {
-        String leaveType = leaveTypeSpinner.getSelectedItem().toString();
-        String reason = reasonEditText.getText().toString().trim();
 
-        boolean hasError = false; // Flag to track if any error occurred
+    private void showStartDatePicker() {
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        DatePickerDialog startPicker = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            calendar.set(year, month, dayOfMonth);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            startDate = sdf.format(calendar.getTime());
+            isStartSelected = true;
+            showEndDatePicker();
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        startPicker.setTitle("Select Start Date");
+        startPicker.show();
+    }
+
+    private void showEndDatePicker() {
+        endCalendar.setTimeInMillis(System.currentTimeMillis());
+        DatePickerDialog endPicker = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            endCalendar.set(year, month, dayOfMonth);
+
+            if (endCalendar.compareTo(calendar) < 0) {
+                Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            long diff = endCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) > 30) {
+                Toast.makeText(this, "Leave duration must be less than 30 days", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            endDate = sdf.format(endCalendar.getTime());
+            selectDateButton.setText(startDate + " to " + endDate);
+        }, endCalendar.get(Calendar.YEAR), endCalendar.get(Calendar.MONTH), endCalendar.get(Calendar.DAY_OF_MONTH));
+
+        endPicker.setTitle("Select End Date");
+        endPicker.show();
+    }
+
+    private boolean validateForm() {
+        String reason = reasonTextView.getText().toString().trim();
 
         if (leaveTypeSpinner.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select leave type", Toast.LENGTH_SHORT).show();
-            hasError = true;
+            Toast.makeText(this, "Please select a leave type", Toast.LENGTH_SHORT).show();
+            return false;
         }
 
-        if (leavePeriods.isEmpty()) {
-            Toast.makeText(this, "Please select at least one start and end date", Toast.LENGTH_SHORT).show();
-            hasError = true;
+        if (startDate.isEmpty() || endDate.isEmpty()) {
+            Toast.makeText(this, "Please select a valid date range", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        Calendar today = Calendar.getInstance();
+        if (calendar.before(today)) {
+            Toast.makeText(this, "Start date cannot be in the past", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (endCalendar.compareTo(calendar) < 0 || endCalendar.before(calendar)) {
+            Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        long diff = endCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+        if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) > 30) {
+            Toast.makeText(this, "Leave duration must be less than 30 days", Toast.LENGTH_SHORT).show();
+            return false;
         }
 
         if (reason.isEmpty()) {
-            reasonEditText.setError("Please enter a reason"); // Set error on reason EditText
-            hasError = true;
-        } else {
-            reasonEditText.setError(null); // Clear error if it was previously set and is now valid
+            Toast.makeText(this, "Please provide a reason for leave", Toast.LENGTH_SHORT).show();
+            return false;
         }
 
-        if (hasError) {
-            return; // Stop submission if there are any errors
-        }
 
-        Toast.makeText(this, "Leave request submitted successfully", Toast.LENGTH_LONG).show();
+        submitButton.setOnClickListener(v -> {
+            if (!validateForm()) return;
+            sendLeaveRequestToServer();
 
-        leaveTypeSpinner.setSelection(0);
-        reasonEditText.setText("");
-        fileNameTextView.setText("");
-        leavePeriods.clear();
-        selectedStartDate = null;
-        selectedTimeRange = null;
-        selectedFileUri = null;
-        selectDateButton.setText("Select Date");
+            // إرسال البيانات إلى صفحة Overview
+            Intent intent = new Intent(LeaveRequests.this, LeaveOverview.class);
+            intent.putExtra("leaveType", leaveTypeSpinner.getSelectedItem().toString());
+            intent.putExtra("startDate", startDate);
+            intent.putExtra("endDate", endDate);
+            intent.putExtra("reason", reasonTextView.getText().toString());
+            startActivity(intent);
+        });
+
+
+
+        return true;
     }
+    private void clearFields() {
+        leaveTypeSpinner.setSelection(0);  // Clear overtime hours input
+        reasonTextView.setText("");  // Clear reason input
+        selectDateButton.setText("Select Date");  // Reset the date button
+        fileNameTextView.setText("");  // Clear file name text view
+    }
+
 }
