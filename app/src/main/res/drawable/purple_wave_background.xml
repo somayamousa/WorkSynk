@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="1080dp"
+    android:height="1920dp"
+    android:viewportWidth="1080"
+    android:viewportHeight="1920">
+
+    <!-- خلفية بنفسجية أساسية -->
+    <path
+        android:fillColor="#4A148C"
+        android:pathData="M0,0h1080v1920h-1080z" />
+
+    <!-- شكل مائل أنيق في الأسفل بلون فاتح -->
+    <path
+        android:fillColor="#EFEAF6"
+        android:pathData="
+            M0,1700
+            L1080,1600
+            V1920
+            H0
+            Z" />
+</vector>
