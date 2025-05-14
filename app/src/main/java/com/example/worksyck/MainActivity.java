@@ -1,6 +1,5 @@
 package com.example.worksyck;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateDate() {
         // Update the current date in the TextView
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM, dd", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd,MMMM yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(new Date());
         dateText.setText(currentDate);
     }
+
 
     private void startUpdatingHours() {
         // Create a new thread to update the current time every second

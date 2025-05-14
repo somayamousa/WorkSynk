@@ -201,39 +201,55 @@ public class LeaveRequests extends AppCompatActivity {
     private boolean validateForm() {
         String reason = reasonTextView.getText().toString().trim();
 
+        // التحقق من الحقل نوع الإجازة
         if (leaveTypeSpinner.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a leave type", Toast.LENGTH_SHORT).show();
-            return false;
+            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // تغيير اللون إلى الأحمر
+        } else {
+            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.transparent));  // إعادة اللون الطبيعي
         }
 
+        // التحقق من تاريخ البداية والنهاية
         if (startDate.isEmpty() || endDate.isEmpty()) {
             Toast.makeText(this, "Please select a valid date range", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));  // تغيير النص إلى اللون الأحمر
             return false;
+        } else {
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.black));  // إعادة النص إلى اللون الأسود
         }
 
         Calendar today = Calendar.getInstance();
         if (calendar.before(today)) {
             Toast.makeText(this, "Start date cannot be in the past", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
         }
 
         if (endCalendar.compareTo(calendar) < 0 || endCalendar.before(calendar)) {
             Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
         }
 
         long diff = endCalendar.getTimeInMillis() - calendar.getTimeInMillis();
         if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) > 30) {
             Toast.makeText(this, "Leave duration must be less than 30 days", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
         }
 
+        // التحقق من الحقل السبب
         if (reason.isEmpty()) {
             Toast.makeText(this, "Please provide a reason for leave", Toast.LENGTH_SHORT).show();
+            reasonTextView.setError("This field is required");  // إضافة رسالة خطأ بجانب الحقل
+            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // تغيير خلفية الحقل إلى الأحمر
             return false;
+        } else {
+            reasonTextView.setError(null);  // إزالة رسالة الخطأ
+            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));  // إعادة خلفية الحقل إلى الطبيعي
         }
 
-
+        // إذا كانت جميع الحقول صحيحة، سنواصل إرسال الطلب
         submitButton.setOnClickListener(v -> {
             if (!validateForm()) return;
             sendLeaveRequestToServer();
@@ -247,10 +263,9 @@ public class LeaveRequests extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-
         return true;
     }
+
     private void clearFields() {
         leaveTypeSpinner.setSelection(0);  // Clear overtime hours input
         reasonTextView.setText("");  // Clear reason input
