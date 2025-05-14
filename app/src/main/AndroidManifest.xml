@@ -20,6 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".SalaryStructure"
+            android:exported="false" />
+        <activity
             android:name=".AddHoliday"
             android:exported="false" />
         <activity
@@ -62,7 +65,6 @@
         <activity
             android:name=".QrDisplayActivity"
             android:exported="false" />
-
         <activity
             android:name=".RequestsActivity"
             android:exported="true" />
@@ -81,11 +83,9 @@
         <activity
             android:name=".LeaveOverview"
             android:exported="true" />
-
         <activity
             android:name=".LeaveRequest"
             android:exported="true" />
-
         <activity
             android:name=".login"
             android:exported="true">

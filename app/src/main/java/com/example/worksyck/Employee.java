@@ -10,12 +10,19 @@ public class Employee {
     private String status;
     private int companyId;
     private int departmentId;
+
     private int designationId;
 
-    // Constructor
-    public Employee(String email, String password, String fullname, String phone,
-                    String macAddress, String status, int companyId,
-                    int departmentId, int designationId) {
+    private double baseSalary;
+
+    private  double hourCost;
+
+    private  String SalaryStructureType;
+    private double normalHourRate;
+    private double overtimeHourRate;
+
+    public Employee(String id, String email, String password, String fullname, String phone, String macAddress, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.fullname = fullname;
@@ -25,7 +32,67 @@ public class Employee {
         this.companyId = companyId;
         this.departmentId = departmentId;
         this.designationId = designationId;
+        this.baseSalary = baseSalary;
+        this.hourCost = hourCost;
+        SalaryStructureType = salaryStructureType;
+        this.normalHourRate = normalHourRate;
+        this.overtimeHourRate = overtimeHourRate;
     }
+
+    public Employee(String email, String password, String fullname, String phone, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.macAddress = macAddress;
+        this.status = status;
+        this.companyId = companyId;
+        this.departmentId = departmentId;
+        this.designationId = designationId;
+        this.baseSalary = baseSalary;
+        this.hourCost = hourCost;
+        SalaryStructureType = salaryStructureType;
+        this.normalHourRate = normalHourRate;
+        this.overtimeHourRate = overtimeHourRate;
+    }
+
+
+    public String getSalaryStructureType() {
+        return SalaryStructureType;
+    }
+
+    public double getHourCost() {
+        return hourCost;
+    }
+
+    public double getNormalHourRate() {
+        return normalHourRate;
+    }
+
+    public void setNormalHourRate(double normalHourRate) {
+        this.normalHourRate = normalHourRate;
+    }
+
+    public double getOvertimeHourRate() {
+        return overtimeHourRate;
+    }
+
+    public void setOvertimeHourRate(double overtimeHourRate) {
+        this.overtimeHourRate = overtimeHourRate;
+    }
+
+    public void setSalaryStructureType(String salaryStructureType) {
+        SalaryStructureType = salaryStructureType;
+    }
+
+    public void setHourCost(double hourCost) {
+        this.hourCost = hourCost;
+    }
+    // Constructor
+
+
+
 
     // Getters and Setters
     public String getEmail() {
@@ -98,6 +165,23 @@ public class Employee {
 
     public void setDesignationId(int designationId) {
         this.designationId = designationId;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getBaseSalary() {
+        return baseSalary;
+    }
+
+    public void setBaseSalary(double baseSalary) {
+        this.baseSalary = baseSalary;
     }
 }
 
