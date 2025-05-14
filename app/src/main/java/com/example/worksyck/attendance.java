@@ -49,7 +49,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
-import javax.crypto.Cipher;
+
 import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
@@ -76,12 +76,13 @@ public class attendance extends AppCompatActivity {
 
     // Network
     private RequestQueue requestQueue;
-    private LinearLayout homeLayout;
 
     // Biometric
     private BiometricPrompt biometricPrompt;
     private KeyStore keyStore;
+    private NavigationHelper navigationHelper;
 
+    private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
     // QR Code
     private final ActivityResultLauncher<Intent> qrLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -92,19 +93,26 @@ public class attendance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
+
+
         initializeViews();
         setupUserData();
         initializeNetworkQueue();
         initializeBiometricComponents();
         loadSavedState();
         updateUI();
+
+
+        // إعداد Bottom Navigation باستخدام الـ Helper
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout );
+
     }
 
     private void initializeViews() {
         startButton = findViewById(R.id.startButton);
         stopButton = findViewById(R.id.stopButton);
         currentDateText = findViewById(R.id.currentDateText);
-        selectedAddressText = findViewById(R.id.selectedAddressText);
         checkInTimeText = findViewById(R.id.checkInTime);
         checkOutTimeText = findViewById(R.id.checkOutTime);
         homeLayout = findViewById(R.id.homeLayout);

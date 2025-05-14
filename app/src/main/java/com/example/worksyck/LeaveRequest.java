@@ -46,10 +46,10 @@ public class LeaveRequest extends AppCompatActivity {
         navigationHelper = new NavigationHelper(this);
         navigationHelper.enableBackButton();  // تفعيل زر الرجوع في ActionBar
         initializeViews();
-        // إعداد Bottom Navigation باستخدام الـ Helper
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout);
 
+        // إعداد Bottom Navigation باستخدام الـ Helper
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
 
         // إعداد RecyclerView
         leaveRequestsRecyclerView = findViewById(R.id.leaveRequestsRecyclerView);

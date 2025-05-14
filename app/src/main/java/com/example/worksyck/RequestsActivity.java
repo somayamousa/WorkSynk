@@ -28,8 +28,8 @@ public class RequestsActivity extends AppCompatActivity {
         initializeViews();
 
         // إعداد Bottom Navigation باستخدام الـ Helper
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout);
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
 
         // تفعيل النقر على CardView للانتقال إلى الأنشطة المناسبة
         leaveRequestCardView.setOnClickListener(v -> navigateToActivity(LeaveRequest.class));

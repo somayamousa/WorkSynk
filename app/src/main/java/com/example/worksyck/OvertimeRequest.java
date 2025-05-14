@@ -46,8 +46,9 @@ public class OvertimeRequest extends AppCompatActivity {
         navigationHelper.enableBackButton();  // تفعيل زر الرجوع في ActionBar
         initializeViews();
         // إعداد Bottom Navigation باستخدام الـ Helper
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout);
+        // إعداد Bottom Navigation باستخدام الـ Helper
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
         // تهيئة الـ RecyclerView
         overtimeRequestsRecyclerView = findViewById(R.id.overtimeRequestsRecyclerView);
         overtimeRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));

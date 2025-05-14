@@ -1,6 +1,5 @@
 package com.example.worksyck;
 
-
 import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,11 +23,11 @@ public class NavigationHelper {
     }
 
     // إعداد مستمعات الأزرار في Bottom Navigation
-    public void setBottomNavigationListeners(LinearLayout[] bottomNavItems, LinearLayout homeLayout, LinearLayout requestsLayout) {
+    public void setBottomNavigationListeners(LinearLayout[] bottomNavItems, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout) {
         for (LinearLayout item : bottomNavItems) {
             item.setOnClickListener(v -> {
-                navigateToActivity(getActivityClass(item, homeLayout, requestsLayout));  // التنقل للنشاط المناسب
-                updateSelection(item, homeLayout, requestsLayout);  // تحديث حالة التحديد
+                navigateToActivity(getActivityClass(item, homeLayout, requestsLayout, checkInLayout));  // التنقل للنشاط المناسب
+                updateSelection(item, homeLayout, requestsLayout, checkInLayout);  // تحديث حالة التحديد
             });
         }
     }
@@ -40,16 +39,18 @@ public class NavigationHelper {
     }
 
     // تحديد النشاط المناسب بناءً على العنصر الذي تم النقر عليه
-    private Class<?> getActivityClass(LinearLayout item, LinearLayout homeLayout, LinearLayout requestsLayout) {
+    private Class<?> getActivityClass(LinearLayout item, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout) {
         if (item == homeLayout) return MainActivity.class;
         if (item == requestsLayout) return RequestsActivity.class;
+        if (item == checkInLayout) return attendance.class;  // إضافة التنقل إلى CheckInActivity
         return null;
     }
 
     // تحديث حالة التحديد للـ Bottom Navigation Items
-    private void updateSelection(LinearLayout selectedLayout, LinearLayout homeLayout, LinearLayout requestsLayout) {
+    private void updateSelection(LinearLayout selectedLayout, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout) {
         homeLayout.setSelected(false);
         requestsLayout.setSelected(false);
+        checkInLayout.setSelected(false);  // إضافة التحديد لـ checkInLayout
         selectedLayout.setSelected(true);
     }
 

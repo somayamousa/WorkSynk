@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         // Initialize views
         initializeViews();
 
-        // Set up Bottom Navigation listeners
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout);
+        // إعداد Bottom Navigation باستخدام الـ Helper
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
 
         // Update date and hours
         updateDate();
