@@ -4,17 +4,19 @@
     android:viewportWidth="1080"
     android:viewportHeight="1920">
 
-    <!-- خلفية بنفسجية أساسية -->
+    <!-- الخلفية البنفسجية -->
     <path
         android:fillColor="#4A148C"
         android:pathData="M0,0h1080v1920h-1080z" />
 
-    <!-- شكل مائل أنيق في الأسفل بلون فاتح -->
+    <!-- الشكل الأبيض السفلي بطريقة مائلة مثل المثال -->
     <path
-        android:fillColor="#EFEAF6"
+        android:fillColor="#FFFFFF"
         android:pathData="
-            M0,1700
-            L1080,1600
+            M0,1400
+            L200,1350
+            L880,1350
+            L1080,1400
             V1920
             H0
             Z" />

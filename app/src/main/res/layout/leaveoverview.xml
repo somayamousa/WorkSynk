@@ -35,7 +35,7 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
+            android:fontFamily="@font/font1"
             android:text="Leave Overview"
             android:textColor="#212121"
             android:textSize="24sp"

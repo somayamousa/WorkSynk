@@ -2,11 +2,4 @@
     <string name="app_name">ws</string>
     <string name="title_activity_login">login</string>
     <string name="password">password</string>
-    <string-array name="leave_types">
-        <item>Choose Leave Type</item>
-        <item>Vacation</item>
-        <item>Sick Leave</item>
-        <item>Personal Leave</item>
-        <item>Other</item>
-    </string-array>
 </resources>

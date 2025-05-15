@@ -4,6 +4,13 @@
     <color name="purple">#6A0DAD</color>
     <color name="light_purple">#E6D5F5</color>
     <color name="gray">#757575</color>
-    <color name="black">#000000</color>
+    <color name="purple_dark">#7B1FA2</color> <!-- اللون البنفسجي الداكن -->
+    <color name="primaryColor">#6A11CB</color> <!-- A soft purple-blue -->
+    <color name="primaryDarkColor">#2575FC</color> <!-- A lighter blue -->
+    <color name="accentColor">#D3CCE3</color> <!-- A soft light pink -->
+    <color name="backgroundGradientStart">#6A11CB</color>
+    <color name="backgroundGradientEnd">#2575FC</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="textColor">#333333</color> <!-- Dark gray text color -->
 </resources>

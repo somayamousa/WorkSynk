@@ -3,26 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EDE7F6">
-
-    <!-- Date Section -->
+    android:layout_height="match_parent">
 
     <!-- User Account Section -->
-
-    <TextView
-        android:id="@+id/dateText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="May, 2024"
-        android:textColor="#0B0B0B"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userAccountCard" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/userAccountCard"
         android:layout_width="0dp"
@@ -42,7 +25,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="20dp">
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/userProfileImage"
@@ -63,16 +46,16 @@
                     android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/poppins_semibold"
                     android:text="User Name"
-                    android:textColor="#000000"
+                    android:textColor="#020202"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/userRole"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
+                    android:fontFamily="@font/poppins_medium"
                     android:text="Employee"
                     android:textColor="#616161"
                     android:textSize="14sp" />
@@ -95,37 +78,46 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Hours Section -->
+    <!-- Date and Hours Section -->
     <androidx.cardview.widget.CardView
         android:id="@+id/dateHoursCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:cardBackgroundColor="#FFFFFF"
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dateText">
+        app:layout_constraintTop_toBottomOf="@id/userAccountCard">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="25dp"
+            android:padding="20dp"
             android:gravity="center">
+
+            <TextView
+                android:id="@+id/dateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="May, 2024"
+                android:textColor="#4A148C"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/hoursText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/poppins_bold"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="21:10:07 Hours"
-                android:textColor="#000000"
-                android:textSize="24sp" />
+                android:textColor="#4A148C"
+                android:textSize="22sp" />
 
             <ProgressBar
                 android:id="@+id/hoursProgress"
@@ -140,14 +132,16 @@
     </androidx.cardview.widget.CardView>
 
     <!-- Attendance Summary Section -->
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/attendanceSummaryCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:elevation="6dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dateHoursCard">
@@ -156,16 +150,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="40dp">
+            android:padding="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/poppins_bold"
+                android:fontFamily="@font/font1"
                 android:text="Attendance Summary"
                 android:textColor="#000000"
-                android:textSize="25sp" />
+                android:textSize="24sp" />
 
             <GridLayout
                 android:id="@+id/attendanceGrid"
@@ -182,7 +176,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="#F3E5F5"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -205,7 +199,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="Month Days\n31"
                             android:textColor="#212121"
                             android:textSize="15sp" />
@@ -218,7 +212,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="#F3E5F5"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -241,7 +235,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="Present Days\n2"
                             android:textColor="#212121"
                             android:textSize="15sp" />
@@ -254,7 +248,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="#F3E5F5"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -277,7 +271,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="Absent Days\n7"
                             android:textColor="#212121"
                             android:textSize="15sp" />
@@ -290,7 +284,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="#F3E5F5"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -313,7 +307,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="Bad Records\n1"
                             android:textColor="#212121"
                             android:textSize="15sp" />
@@ -326,7 +320,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="#F3E5F5"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -349,7 +343,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="Leaves\n0"
                             android:textColor="#212121"
                             android:textSize="15sp" />
@@ -362,7 +356,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="#F3E5F5"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -385,7 +379,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="Holidays\n0"
                             android:textColor="#212121"
                             android:textSize="15sp" />
@@ -393,7 +387,7 @@
                 </androidx.cardview.widget.CardView>
             </GridLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- Bottom Navigation -->
     <LinearLayout

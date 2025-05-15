@@ -32,6 +32,17 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/font1"
+                android:padding="8dp"
+                android:text="Login Account"
+                android:textColor="#290B4E"
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/inputEmail"
                 android:layout_width="295dp"
@@ -40,6 +51,7 @@
                 android:drawableStart="@android:drawable/ic_dialog_email"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Email"
+                android:fontFamily="@font/font1"
                 android:padding="12dp"/>
 
             <EditText
@@ -48,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="@string/password"
+                android:fontFamily="@font/font1"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:drawableStart="@android:drawable/ic_lock_lock"
                 android:padding="12dp"/>
@@ -68,11 +81,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="14dp"
-                android:fontFamily="@font/poppins_semibold"
+                android:fontFamily="@font/font1"
                 android:padding="8dp"
                 android:text="Forgot Password?"
                 android:textColor="#290B4E"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
