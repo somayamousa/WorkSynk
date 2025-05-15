@@ -11,9 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,24 +19,30 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 public class EmployeeAddActivity extends AppCompatActivity {
-    private EditText editTextEmail, editTextPassword, editTextFullName, editTextPhone, editTextMacAddress;
+    private EditText    normalHourCostEditText,   overTimeHourCostEditText, detectionhourCostEditText, baseSalaryEditText, editTextEmail, editTextPassword, editTextFullName, editTextPhone, editTextMacAddress;
     private RadioGroup radioGroupStatus;
         private Button btnAddEmployee;
     private RequestQueue requestQueue;
     private ArrayList<Departments> departments;
     private ArrayList<Designations> designations;
     private Spinner departmentsSpinner;
+
+    private String SalaryStructureType;
+
+    private double base_salary;
+    private double hourCost;
+
     private Spinner designationsSpinner;
+
+    private   Spinner SalaryStructureSpinner ;
     private List<String> departmentNames;
     private List<Integer> departmentIds;
     private List<String> designationsName;
@@ -46,6 +50,8 @@ public class EmployeeAddActivity extends AppCompatActivity {
     private int department_id;
     private int designation_id;
     private String company_id;
+    private double overTimeRate;
+    private double normalHourRate;
     private String selectedStatusValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +59,21 @@ public class EmployeeAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employee_add);
         Intent intent = getIntent();
         company_id = intent.getStringExtra("company_id");
-
 // Set views
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextFullName = findViewById(R.id.editTextFullName);
         editTextPhone = findViewById(R.id.editTextPhone);
+        normalHourCostEditText=findViewById(R.id.normalHourCostEditText);
+          overTimeHourCostEditText=findViewById(R.id.OverTimeHourCostEditText);
         editTextMacAddress = findViewById(R.id.editTextMacAddress);
         departmentsSpinner = findViewById(R.id.departments_spinner);
         designationsSpinner = findViewById(R.id.designations_spinner);
+         SalaryStructureSpinner = findViewById(R.id.salary_structure_spinner);
         radioGroupStatus = findViewById(R.id.radioGroupStatus);
         btnAddEmployee = findViewById(R.id.btnAddEmployee);
+        baseSalaryEditText= findViewById(R.id.baseSalaryEditText);
+        detectionhourCostEditText= findViewById(R.id.hourCostEditText);
 //        set arrays
         departments = new ArrayList<>();
         departmentNames = new ArrayList<>();
@@ -71,29 +81,56 @@ public class EmployeeAddActivity extends AppCompatActivity {
         designations = new ArrayList<>();
         designationsName = new ArrayList<>();
         designationsId = new ArrayList<>();
-
-
 //        set request queue
         requestQueue = Volley.newRequestQueue(this);
 
 //        Fill the departments  && designations on the spinner
         FetchAllDepartments();
         FetchAllDesignations();
+        String[] Salary_structure_item = {"Salary Structure","Basic Salary" ,"per Hour"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Salary_structure_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SalaryStructureSpinner.setAdapter(adapter);
+
+        SalaryStructureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 1) {
+                    SalaryStructureType="base salary";
+                    baseSalaryEditText.setVisibility(View.VISIBLE);
+                    detectionhourCostEditText.setVisibility(View.VISIBLE);
+                    normalHourCostEditText.setVisibility(View.GONE);
+                    overTimeHourCostEditText.setVisibility(View.GONE);
 
 
+                } else {
+                    SalaryStructureType="per hour";
+                    overTimeHourCostEditText.setVisibility(View.VISIBLE);
+                    normalHourCostEditText.setVisibility(View.VISIBLE);
+                    baseSalaryEditText.setVisibility(View.GONE);
+                    detectionhourCostEditText.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                SalaryStructureType="base salary";
+                baseSalaryEditText.setVisibility(View.GONE);
+               detectionhourCostEditText.setVisibility(View.GONE);
+                baseSalaryEditText.setVisibility(View.GONE);
+                detectionhourCostEditText.setVisibility(View.GONE);
+            }
+        });
         departmentsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 int selectedIndex = position;
                 department_id = departmentIds.get(selectedIndex);
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 department_id = -1;
-
             }
         });
         designationsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -104,12 +141,9 @@ public class EmployeeAddActivity extends AppCompatActivity {
                 designation_id = designationsId.get(selectedIndex);
 
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 designation_id = -1;
-
-
             }
         });
 
@@ -123,11 +157,70 @@ public class EmployeeAddActivity extends AppCompatActivity {
                 String password = editTextPassword.getText().toString().trim();
                 String fullName = editTextFullName.getText().toString().trim();
                 String phone = editTextPhone.getText().toString().trim();
-                String macAddress = editTextMacAddress.getText().toString().trim();
+//                String macAddress = editTextMacAddress.getText().toString().trim();
                 int selectedId = radioGroupStatus.getCheckedRadioButtonId();
                 RadioButton selectedRadioButton = findViewById(selectedId);
                 selectedStatusValue = selectedRadioButton.getText().toString().trim();
-                Employee employee = new Employee(email, password, fullName, phone, macAddress, selectedStatusValue, Integer.valueOf(company_id), department_id, designation_id);
+
+
+                String baseSalaryStr= baseSalaryEditText.getText().toString().trim();
+                String hourCostString  =detectionhourCostEditText.getText().toString().trim();
+                if (baseSalaryEditText.getVisibility() == View.VISIBLE) {
+
+                    if (!baseSalaryStr.isEmpty()) {
+                        try {
+                            base_salary = Double.parseDouble(baseSalaryStr);
+
+                        } catch (NumberFormatException e) {
+
+                            Toast.makeText(EmployeeAddActivity.this, "الرجاء إدخال رقم صالح للراتب الأساسي", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else{
+                        Toast.makeText(EmployeeAddActivity.this,"base salary is required", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if(!hourCostString.isEmpty()){
+                        try {
+                            hourCost = Double.parseDouble(hourCostString);
+
+                        } catch (NumberFormatException e) {
+
+                            Toast.makeText(EmployeeAddActivity.this, "الرجاء إدخال رقم صالح لسعر الساعه", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else{
+                        Toast.makeText(EmployeeAddActivity.this,"hour Cost is required", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    String overTimeRateSalaryStr = overTimeHourCostEditText.getText().toString().trim();
+                    String normalHourRateStr = normalHourCostEditText.getText().toString().trim();
+                    if (!overTimeRateSalaryStr.isEmpty()) {
+                        try {
+                            overTimeRate = Double.parseDouble(overTimeRateSalaryStr);
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(EmployeeAddActivity.this, "الرجاء إدخال رقم صالح لسعر الساعه الاضافيه", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        Toast.makeText(EmployeeAddActivity.this, "over time hour Cost is required", Toast.LENGTH_SHORT).show();
+
+                    }
+                    if (!normalHourRateStr.isEmpty()) {
+                        try {
+                            normalHourRate = Double.parseDouble(normalHourRateStr);
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(EmployeeAddActivity.this, "الرجاء إدخال رقم صالح لسعر الساعه العاديه", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        Toast.makeText(EmployeeAddActivity.this, "normal hour Cost is required", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                }
+                Employee employee = new Employee(email, password, fullName, phone, selectedStatusValue, Integer.valueOf(company_id), department_id, designation_id,base_salary,hourCost,SalaryStructureType,normalHourRate,overTimeRate);
                 Add_new_Employeee(employee);
 
             }
@@ -171,11 +264,24 @@ public class EmployeeAddActivity extends AppCompatActivity {
                                                   params.put("email", employee.getEmail());
                                                   params.put("password", employee.getPassword());
                                                   params.put("status", employee.getStatus());
-                                                  params.put("mac_address", employee.getMacAddress());
+//                                                  params.put("mac_address", employee.getMacAddress());
                                                   params.put("phone_number", employee.getPhone());
                                                   params.put("company_id", String.valueOf(employee.getCompanyId()));
                                                   params.put("department_id", String.valueOf(employee.getDepartmentId()));
                                                   params.put("designation_id", String.valueOf(employee.getDesignationId()));
+
+                                                  if (employee.getBaseSalary() > 0) {
+                                                      params.put("base_salary", String.valueOf(employee.getBaseSalary()));
+                                                      params.put("detection_hour_cost", String.valueOf(employee.getHourCost()));
+                                                      params.put("salary_structure_type", employee.getSalaryStructureType());
+                                                  }
+                                                  else{
+                                                      params.put("overtime_hour_rate", String.valueOf(employee.getOvertimeHourRate()));
+                                                      params.put("normal_hour_rate", String.valueOf(employee.getNormalHourRate()));
+                                                      params.put("salary_structure_type", employee.getSalaryStructureType());
+                                                  }
+
+
                                                   return params;
                                               }
 

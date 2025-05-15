@@ -46,12 +46,14 @@
             android:layout_height="wrap_content"
             android:hint="رقم الهاتف"
             android:inputType="phone"/>
-
         <EditText
-            android:id="@+id/editTextMacAddress"
+            android:id="@+id/editTextSalary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="عنوان MAC (اختياري)"/>
+            android:hint="الراتب الأساسي"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="8dp"/>
+
 
         <TextView
             android:layout_width="match_parent"
@@ -78,10 +80,52 @@
             android:layout_marginTop="8dp"/>
 
 
+
+
+
+
+
         <Spinner
             android:id="@+id/designations_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/salary_structure_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/baseSalaryEditText"
+            android:hint="Base Salary"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/hourCostEditText"
+            android:hint="Cost per Hour (if deduction)"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/normalHourCostEditText"
+            android:hint="normal Hour Cost"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/OverTimeHourCostEditText"
+            android:hint="Cost per Hour (if deduction)"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <RadioGroup
             android:id="@+id/radioGroupStatus"
