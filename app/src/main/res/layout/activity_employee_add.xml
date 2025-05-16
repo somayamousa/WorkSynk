@@ -28,17 +28,19 @@
             android:inputType="textEmailAddress"/>
 
         <EditText
+            android:id="@+id/editTextFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="الاسم الكامل"/>
+
+        <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="كلمة المرور"
             android:inputType="textPassword"/>
 
-        <EditText
-            android:id="@+id/editTextFullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="الاسم الكامل"/>
+
 
         <EditText
             android:id="@+id/editTextPhone"
@@ -46,13 +48,7 @@
             android:layout_height="wrap_content"
             android:hint="رقم الهاتف"
             android:inputType="phone"/>
-        <EditText
-            android:id="@+id/editTextSalary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="الراتب الأساسي"
-            android:inputType="numberDecimal"
-            android:layout_marginTop="8dp"/>
+
 
 
         <TextView
@@ -61,28 +57,11 @@
             android:text="حالة الحساب"
             android:layout_margin="10dp"
             android:layout_marginTop="8dp"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-        android:text="choose department"
-            android:layout_margin="10dp"
-            android:layout_marginTop="8dp"/>
 
         <Spinner
             android:id="@+id/departments_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="choose designation"
-            android:layout_margin="10dp"
-            android:layout_marginTop="8dp"/>
-
-
-
-
-
 
 
         <Spinner
