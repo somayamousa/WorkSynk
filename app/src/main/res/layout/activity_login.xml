@@ -51,7 +51,7 @@
                 android:drawableStart="@android:drawable/ic_dialog_email"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:hint="Email"
-                android:fontFamily="@font/font1"
+                android:fontFamily="@font/poppins_regular"
                 android:padding="12dp"/>
 
             <EditText
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="@string/password"
-                android:fontFamily="@font/font1"
+                android:fontFamily="@font/poppins_regular"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:drawableStart="@android:drawable/ic_lock_lock"
                 android:padding="12dp"/>
