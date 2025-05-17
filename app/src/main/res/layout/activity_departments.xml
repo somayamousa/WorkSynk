@@ -88,16 +88,14 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <ListView
-        android:id="@+id/listViewDesignations"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewDesignations"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        android:divider="@null"
-        android:dividerHeight="8dp"
         android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="16dp"
