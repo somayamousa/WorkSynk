@@ -1,8 +1,0 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Ws" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:windowFullscreen">false</item>
-    </style>
-
-    <style name="Theme.Ws" parent="Base.Theme.Ws" />
-</resources>

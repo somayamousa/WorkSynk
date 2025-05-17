@@ -32,7 +32,7 @@ public class RequestsActivity extends AppCompatActivity {
         navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
 
         // تفعيل النقر على CardView للانتقال إلى الأنشطة المناسبة
-        leaveRequestCardView.setOnClickListener(v -> navigateToActivity(LeaveRequest.class));
+        leaveRequestCardView.setOnClickListener(v -> navigateToActivity(DepartmentsActivity.class));
         overtimeRequestCardView.setOnClickListener(v -> navigateToActivity(OvertimeRequest.class));
     }
 

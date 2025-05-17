@@ -1,23 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_margin="25dp"
+    android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical"
+    android:background="#EDE7F6"
+    android:padding="16dp">
 
-    tools:context=".DepartmentsActivity">
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp"
+        android:text="Manage Departments"
+        android:textSize="28sp"
+        android:textColor="#000000"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:shadowColor="#30000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/searchCardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_search"
+                android:contentDescription="Search Icon"
+                app:tint="#757575" />
+
+            <EditText
+                android:id="@+id/editTextDepartmentSearch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Search departments..."
+                android:textSize="16sp"
+                android:textColor="#212121"
+                android:textColorHint="#757575"
+                android:background="@android:color/transparent"
+                android:inputType="textCapWords"
+                android:imeOptions="actionSearch"
+                android:layout_marginStart="8dp" />
+
+            <ImageView
+                android:id="@+id/clearSearchDepartment"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:contentDescription="Clear Search"
+                android:visibility="gone"
+                app:tint="#757575" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <ListView
-        android:id="@+id/listViewDepartments"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
+        android:id="@+id/listViewDesignations"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="8dp"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/searchCardView"
+        app:layout_constraintBottom_toTopOf="@id/buttonAddDepartment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buttonAddDepartment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:contentDescription="Add Department"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="#4A148C"
+        app:tint="#FFFFFF"
+        app:fabSize="normal"
+        app:elevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#B388FF" />
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
