@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,7 +30,7 @@ public class DepartmentsActivity extends AppCompatActivity {
 
     private EditText searchEditText;
     private ImageView clearSearch;
-    private ListView listView;
+    private RecyclerView recyclerViewDesignations;
     private FloatingActionButton addButton;
 
     private ArrayList<Departments> departmentsList = new ArrayList<>();
@@ -43,7 +45,7 @@ public class DepartmentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_departments);
 
-        listView = findViewById(R.id.listViewDesignations);
+        recyclerViewDesignations = findViewById(R.id.recyclerViewDesignations);
         searchEditText = findViewById(R.id.editTextDepartmentSearch);
         clearSearch = findViewById(R.id.clearSearchDepartment);
         addButton = findViewById(R.id.buttonAddDepartment);
@@ -51,7 +53,8 @@ public class DepartmentsActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         adapter = new DepartmentAdapter();
-        listView.setAdapter(adapter);
+        recyclerViewDesignations.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewDesignations.setAdapter(adapter);
 
         addButton.setOnClickListener(v -> showAddDepartmentDialog());
 
@@ -143,9 +146,8 @@ public class DepartmentsActivity extends AppCompatActivity {
 
                 if (status.equals("success")) {
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-                    fetchAllDepartments(); // لتحديث القائمة بعد الإضافة الناجحة
+                    fetchAllDepartments();
                 } else {
-                    // هنا نعرض رسالة الخطأ اللي جتنا من السيرفر
                     Toast.makeText(this, message, Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
@@ -163,7 +165,6 @@ public class DepartmentsActivity extends AppCompatActivity {
         };
         requestQueue.add(request);
     }
-
 
     private void deleteDepartment(String id) {
         String url = BASE_URL + "delete_department.php";
@@ -204,40 +205,54 @@ public class DepartmentsActivity extends AppCompatActivity {
         @Override public void afterTextChanged(Editable s) {}
     };
 
-    private class DepartmentAdapter extends BaseAdapter {
-        @Override public int getCount() { return filteredList.size(); }
-        @Override public Object getItem(int i) { return filteredList.get(i); }
-        @Override public long getItemId(int i) { return i; }
+    private class DepartmentAdapter extends RecyclerView.Adapter<DepartmentAdapter.DepartmentViewHolder> {
 
         @Override
-        public View getView(int i, View view, ViewGroup parent) {
-            if (view == null) {
-                view = LayoutInflater.from(DepartmentsActivity.this)
-                        .inflate(R.layout.list_item_department, parent, false);
+        public DepartmentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(DepartmentsActivity.this)
+                    .inflate(R.layout.list_item_department, parent, false);
+            return new DepartmentViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(DepartmentViewHolder holder, int position) {
+            Departments dep = filteredList.get(position);
+            holder.bind(dep);
+        }
+
+        @Override
+        public int getItemCount() {
+            return filteredList.size();
+        }
+
+        class DepartmentViewHolder extends RecyclerView.ViewHolder {
+            TextView nameText;
+            ImageButton btnEdit, btnDelete;
+
+            DepartmentViewHolder(View itemView) {
+                super(itemView);
+                nameText = itemView.findViewById(R.id.departmentNameTextView);
+                btnEdit = itemView.findViewById(R.id.btnEditDepartment);
+                btnDelete = itemView.findViewById(R.id.btnDeleteDepartment);
             }
 
-            TextView nameText = view.findViewById(R.id.departmentNameTextView);
-            ImageButton btnEdit = view.findViewById(R.id.btnEditDepartment);
-            ImageButton btnDelete = view.findViewById(R.id.btnDeleteDepartment);
+            void bind(final Departments dep) {
+                nameText.setText(dep.getName());
 
-            Departments dep = filteredList.get(i);
-            nameText.setText(dep.getName());
+                btnEdit.setOnClickListener(v -> showEditDialog(dep));
 
-            btnEdit.setOnClickListener(v -> showEditDialog(dep));
-            btnDelete.setOnClickListener(v -> {
-                new AlertDialog.Builder(DepartmentsActivity.this)
-                        .setTitle("Delete")
-                        .setMessage("Are you sure?")
-                        .setPositiveButton("Yes", (d, w) -> deleteDepartment(dep.getId()))
-                        .setNegativeButton("No", null)
-                        .show();
-            });
-
-            return view;
+                btnDelete.setOnClickListener(v -> {
+                    new AlertDialog.Builder(DepartmentsActivity.this)
+                            .setTitle("Delete")
+                            .setMessage("Are you sure?")
+                            .setPositiveButton("Yes", (d, w) -> deleteDepartment(dep.getId()))
+                            .setNegativeButton("No", null)
+                            .show();
+                });
+            }
         }
     }
 
-    // كلاس داخلي Departments
     private static class Departments {
         private final String id;
         private final String name;

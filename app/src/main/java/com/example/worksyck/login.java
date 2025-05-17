@@ -30,7 +30,7 @@ public class login extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
     private RequestQueue requestQueue;
     private static final String TAG = "LoginActivity";
-    private static final String LOGIN_URL = "http://10.0.2.2/worksync/loginapi.php";
+    private static final String LOGIN_URL = "http://192.168.1.13/worksync/loginapi.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class login extends AppCompatActivity {
 
             if ("success".equalsIgnoreCase(status)) {
                 JSONObject user = response.getJSONObject("data").getJSONObject("user");
-Log.d("HR",String.valueOf(user));
+                Log.d("HR",String.valueOf(user));
                 // استخراج بيانات المستخدم
                 int id = user.optInt("id");
                 String email = user.optString("email");
