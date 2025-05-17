@@ -38,6 +38,7 @@ public class MainActivity2 extends AppCompatActivity {
         Button   cont_holiday= findViewById(R.id.cont_holidays);
         Button       btnDepartment= findViewById(R.id.departmentBtn);
         Button      btnDesignations= findViewById(R.id.jobTitleBtn);
+        Button  createSalarySlip=findViewById(R.id.salary_slip);
         Intent intent = getIntent();
 
         company_id= intent.getStringExtra("company_id");
@@ -67,6 +68,13 @@ public class MainActivity2 extends AppCompatActivity {
             Intent     cont_holiday_Intent = new Intent(MainActivity2.this, show_holidays.class);
 
             startActivity(cont_holiday_Intent);
+
+        });
+        createSalarySlip.setOnClickListener(v -> {
+
+            Intent     salary_slip_Intent = new Intent(MainActivity2.this,SalarySlip.class);
+
+            startActivity(salary_slip_Intent);
 
         });
 
