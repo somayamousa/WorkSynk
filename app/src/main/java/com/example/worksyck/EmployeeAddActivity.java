@@ -66,7 +66,7 @@ public class EmployeeAddActivity extends AppCompatActivity {
         editTextPhone = findViewById(R.id.editTextPhone);
         normalHourCostEditText=findViewById(R.id.normalHourCostEditText);
           overTimeHourCostEditText=findViewById(R.id.OverTimeHourCostEditText);
-        editTextMacAddress = findViewById(R.id.editTextMacAddress);
+       // editTextMacAddress = findViewById(R.id.editTextMacAddress);
         departmentsSpinner = findViewById(R.id.departments_spinner);
         designationsSpinner = findViewById(R.id.designations_spinner);
          SalaryStructureSpinner = findViewById(R.id.salary_structure_spinner);
