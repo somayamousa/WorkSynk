@@ -30,7 +30,7 @@ public class DepartmentsActivity extends AppCompatActivity {
 
     private EditText searchEditText;
     private ImageView clearSearch;
-    private RecyclerView recyclerViewDesignations;
+    private RecyclerView recyclerViewDepartments;
     private FloatingActionButton addButton;
 
     private ArrayList<Departments> departmentsList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class DepartmentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_departments);
 
-        recyclerViewDesignations = findViewById(R.id.recyclerViewDesignations);
+        recyclerViewDepartments = findViewById(R.id.recyclerViewDepartments);
         searchEditText = findViewById(R.id.editTextDepartmentSearch);
         clearSearch = findViewById(R.id.clearSearchDepartment);
         addButton = findViewById(R.id.buttonAddDepartment);
@@ -53,8 +53,8 @@ public class DepartmentsActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         adapter = new DepartmentAdapter();
-        recyclerViewDesignations.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewDesignations.setAdapter(adapter);
+        recyclerViewDepartments.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewDepartments.setAdapter(adapter);
 
         addButton.setOnClickListener(v -> showAddDepartmentDialog());
 
@@ -108,17 +108,25 @@ public class DepartmentsActivity extends AppCompatActivity {
                 .setView(input)
                 .setPositiveButton("Add", (d, w) -> {
                     String name = input.getText().toString().trim();
-                    if (!name.isEmpty()) {
-                        addDepartment(name);
-                    } else {
+                    if (name.isEmpty()) {
                         Toast.makeText(this, "Name required", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    for (Departments dep : departmentsList) {
+                        if (dep.getName().equalsIgnoreCase(name)) {
+                            Toast.makeText(this, "Department already exists", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+                    addDepartment(name);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void showEditDialog(Departments dep) {
+    private void showEditDialog(Departments dep, int position) {
         EditText input = new EditText(this);
         input.setText(dep.getName());
         new AlertDialog.Builder(this)
@@ -126,11 +134,20 @@ public class DepartmentsActivity extends AppCompatActivity {
                 .setView(input)
                 .setPositiveButton("Update", (d, w) -> {
                     String name = input.getText().toString().trim();
-                    if (!name.isEmpty()) {
-                        updateDepartment(dep.getId(), name);
-                    } else {
+                    if (name.isEmpty()) {
                         Toast.makeText(this, "Name required", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    for (Departments other : departmentsList) {
+                        if (!other.getId().equals(dep.getId()) &&
+                                other.getName().equalsIgnoreCase(name)) {
+                            Toast.makeText(this, "Another department with this name exists", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+                    updateDepartment(dep.getId(), name, position);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
@@ -180,11 +197,32 @@ public class DepartmentsActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-    private void updateDepartment(String id, String name) {
+    private void updateDepartment(String id, String name, int position) {
         String url = BASE_URL + "update_department.php";
+
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            fetchAllDepartments();
-            Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+            try {
+                JSONObject obj = new JSONObject(response);
+                String message = obj.getString("message");
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                // تحديث في filteredList
+                Departments dep = filteredList.get(position);
+                dep.setName(name);
+
+                // تحديث في departmentsList
+                for (Departments d : departmentsList) {
+                    if (d.getId().equals(id)) {
+                        d.setName(name);
+                        break;
+                    }
+                }
+
+                adapter.notifyItemChanged(position);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }, error -> Log.e("Update Error", error.toString())) {
             @Override
             protected Map<String, String> getParams() {
@@ -194,8 +232,10 @@ public class DepartmentsActivity extends AppCompatActivity {
                 return map;
             }
         };
+
         requestQueue.add(request);
     }
+
 
     private final TextWatcher searchWatcher = new TextWatcher() {
         @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -239,7 +279,12 @@ public class DepartmentsActivity extends AppCompatActivity {
             void bind(final Departments dep) {
                 nameText.setText(dep.getName());
 
-                btnEdit.setOnClickListener(v -> showEditDialog(dep));
+                btnEdit.setOnClickListener(v -> {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        showEditDialog(dep, position);
+                    }
+                });
 
                 btnDelete.setOnClickListener(v -> {
                     new AlertDialog.Builder(DepartmentsActivity.this)
@@ -255,7 +300,7 @@ public class DepartmentsActivity extends AppCompatActivity {
 
     private static class Departments {
         private final String id;
-        private final String name;
+        private String name;
 
         public Departments(String id, String name) {
             this.id = id;
@@ -264,5 +309,6 @@ public class DepartmentsActivity extends AppCompatActivity {
 
         public String getId() { return id; }
         public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
     }
 }

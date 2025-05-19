@@ -38,7 +38,6 @@ import java.util.Map;
 public class DesignationsActivity extends AppCompatActivity {
 
     private ArrayList<Designations> designations;
-    private ArrayList<Designations> filteredList = new ArrayList<>();
     private RecyclerView recyclerView;
     private FloatingActionButton buttonAdd;
     private RequestQueue requestQueue;
@@ -247,7 +246,8 @@ public class DesignationsActivity extends AppCompatActivity {
                         String name = item.getString("name");
                         designations.add(new Designations(id, name));
                     }
-                    adapter.notifyDataSetChanged();
+
+                    adapter.updateList(designations);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -256,20 +256,8 @@ public class DesignationsActivity extends AppCompatActivity {
 
         requestQueue.add(request);
     }
-    private void filterDesignations(String query) {
-        filteredList.clear();
-        for (Designations dep : designations) {
-            if (dep.getName().toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(dep);
-            }
-        }
-        adapter.notifyDataSetChanged();
-        clearSearch.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
-    }
-
 
     // ----------- Adapter داخلي --------------
-
     public class DesignationsAdapter extends RecyclerView.Adapter<DesignationsAdapter.ViewHolder> implements android.widget.Filterable {
 
         private Context context;
@@ -278,8 +266,18 @@ public class DesignationsActivity extends AppCompatActivity {
 
         public DesignationsAdapter(Context context, ArrayList<Designations> list) {
             this.context = context;
-            this.designationsList = list;
+            this.designationsList = new ArrayList<>(list);
             this.designationsListFull = new ArrayList<>(list);
+        }
+
+        public void updateList(ArrayList<Designations> newList) {
+            designationsList.clear();
+            designationsList.addAll(newList);
+
+            designationsListFull.clear();
+            designationsListFull.addAll(newList);
+
+            notifyDataSetChanged();
         }
 
         @NonNull
