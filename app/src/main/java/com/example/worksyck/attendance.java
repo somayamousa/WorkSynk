@@ -1,7 +1,5 @@
 package com.example.worksyck;
 
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +20,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -30,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,8 +37,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.net.NetworkInterface;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
@@ -54,23 +56,24 @@ import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String WORK_HOURS_API_URL = "http://10.0.2.2/worksync/attendence.php";
+    private static final String ATTENDANCE_API_URL = "http://192.168.1.13/worksync/attendence.php";
+    private static final String DEVICE_VERIFICATION_URL = "http://192.168.1.13/worksync/device_verification.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
+    private static final String ATTENDANCE_PREFS = "AttendancePrefs";
 
     // UI Components
     private Button startButton, stopButton;
-    private TextView  currentDateText, selectedAddressText;
-    private TextView checkInTimeText, checkOutTimeText;
+    private TextView currentDateText, checkInTimeText, checkOutTimeText;
+    private LinearLayout homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout;
 
     // Authentication state
     private boolean isWorking = false;
     private long startTime = 0;
     private int userId;
-    private String email, fullname,role;
-    private String macAddress;
+    private String email, fullname, role;
     private int biometricAttempts = 0;
     private boolean isAuthenticationInProgress = false;
 
@@ -82,7 +85,6 @@ public class attendance extends AppCompatActivity {
     private KeyStore keyStore;
     private NavigationHelper navigationHelper;
 
-    private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
     // QR Code
     private final ActivityResultLauncher<Intent> qrLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -93,8 +95,6 @@ public class attendance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
-
-
         initializeViews();
         setupUserData();
         initializeNetworkQueue();
@@ -102,11 +102,9 @@ public class attendance extends AppCompatActivity {
         loadSavedState();
         updateUI();
 
-
-        // إعداد Bottom Navigation باستخدام الـ Helper
+        navigationHelper = new NavigationHelper(this);
         LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout );
-
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
     }
 
     private void initializeViews() {
@@ -116,32 +114,32 @@ public class attendance extends AppCompatActivity {
         checkInTimeText = findViewById(R.id.checkInTime);
         checkOutTimeText = findViewById(R.id.checkOutTime);
         homeLayout = findViewById(R.id.homeLayout);
+        requestsLayout = findViewById(R.id.requestsLayout);
+        checkInLayout = findViewById(R.id.checkInLayout);
+        salaryLayout = findViewById(R.id.salaryLayout);
+        attendanceLayout = findViewById(R.id.attendanceLayout);
 
         // Set current date
         currentDateText.setText(new SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(new Date()));
 
+        homeLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(attendance.this, MainActivity.class);
+            intent.putExtra("user_id", userId);
+            intent.putExtra("email", email);
+            intent.putExtra("fullname", fullname);
+            intent.putExtra("role", role);
+            startActivity(intent);
+        });
+
         startButton.setOnClickListener(v -> {
             if (!isWorking && !isAuthenticationInProgress) {
-                checkBiometricSupport(false);
+                verifyDeviceAndProceed(false, () -> checkBiometricSupport(false));
             }
         });
-        homeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Reopen the same MainActivity.
-                Intent intent = new Intent(attendance.this, MainActivity.class);
-                // Pass all user data to next activity
-                intent.putExtra("user_id", userId);
-                intent.putExtra("email", email);
-                intent.putExtra("fullname", fullname);
-                intent.putExtra("role", role);
-                intent.putExtra("mac_address", macAddress);
-                startActivity(intent);
-            }
-        });
+
         stopButton.setOnClickListener(v -> {
             if (isWorking && !isAuthenticationInProgress) {
-                checkBiometricSupport(true);
+                verifyDeviceAndProceed(true, () -> checkBiometricSupport(true));
             }
         });
     }
@@ -149,8 +147,7 @@ public class attendance extends AppCompatActivity {
     private void setupUserData() {
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
-        role=getIntent().getStringExtra("role");
-        macAddress=getIntent().getStringExtra("mac_address");
+        role = getIntent().getStringExtra("role");
         userId = getIntent().getIntExtra("user_id", 0);
 
         if (email == null || userId == 0) {
@@ -158,77 +155,11 @@ public class attendance extends AppCompatActivity {
             finish();
         }
     }
-    private boolean isMacAddressRegistered() {
-        // Check if we have a MAC address from the intent (from database)
-        return macAddress != null && !macAddress.isEmpty();
-    }
 
-    private boolean isCurrentMacAddressValid() {
-        String currentMac = getMacAddress(this);
-        return currentMac.equals(macAddress);
-    }
-
-    private void verifyMacAddress() {
-        if (!isMacAddressRegistered()) {
-            // No MAC in database - register current one
-            registerMacAddress();
-        } else if (!isCurrentMacAddressValid()) {
-            // MAC changed - show warning
-            showMacAddressChangedDialog();
-        }
-    }
-
-    private void registerMacAddress() {
-        String currentMac = getMacAddress(this);
-
-        JSONObject requestBody = new JSONObject();
-        try {
-            requestBody.put("email", email);
-            requestBody.put("user_id", userId);
-            requestBody.put("mac_address", currentMac);
-        } catch (JSONException e) {
-            Log.e(TAG, "Error creating MAC registration request", e);
-            return;
-        }
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                WORK_HOURS_API_URL, // Or use a different endpoint
-                requestBody,
-                response -> {
-                    try {
-                        if (response.getString("status").equals("success")) {
-                            macAddress = currentMac;
-                            showToast("Device registered successfully");
-                        } else {
-                            showToast("Failed to register device: " + response.optString("message"));
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error parsing MAC registration response", e);
-                    }
-                },
-                error -> {
-                    Log.e(TAG, "Network error registering MAC", error);
-                    showToast("Network error registering device");
-                });
-
-        configureRequest(request);
-        requestQueue.add(request);
-    }
-
-    private void showMacAddressChangedDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Device Changed")
-                .setMessage("You're using a different device. Please contact HR to register this device.")
-                .setPositiveButton("OK", (dialog, which) -> {
-                    // Just close the dialog
-                })
-                .setCancelable(false)
-                .show();
-    }
     private void initializeNetworkQueue() {
         requestQueue = Volley.newRequestQueue(this);
     }
+
     private void initializeBiometricComponents() {
         try {
             keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
@@ -265,6 +196,19 @@ public class attendance extends AppCompatActivity {
         });
     }
 
+    private String getAndroidId() {
+        try {
+            String androidId = Settings.Secure.getString(
+                    getContentResolver(),
+                    Settings.Secure.ANDROID_ID
+            );
+            return !TextUtils.isEmpty(androidId) ? androidId : "unknown";
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting Android ID", e);
+            return "unknown";
+        }
+    }
+
     private void generateSecretKey() throws Exception {
         if (!keyStore.containsAlias(KEYSTORE_ALIAS)) {
             KeyGenerator keyGenerator = KeyGenerator.getInstance(
@@ -281,50 +225,95 @@ public class attendance extends AppCompatActivity {
             keyGenerator.generateKey();
         }
     }
+
     private void showFingerprintChangedDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Fingerprint Changed")
                 .setMessage("Your device's fingerprints have been modified. Please contact HR before continuing.")
-                .setPositiveButton("OK", (dialog, which) -> {
-                    // Just close the dialog, don't allow any action
-                })
+                .setPositiveButton("OK", (dialog, which) -> {})
                 .setCancelable(false)
                 .show();
     }
+
+    private void verifyDeviceAndProceed(boolean isVerification, Runnable onSuccess) {
+        String androidId = getAndroidId();
+
+        showToast("Verifying device...");
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("user_id", userId);
+            requestBody.put("email", email);
+            requestBody.put("android_id", androidId);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating device verification JSON", e);
+            showToast("Device verification failed");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                DEVICE_VERIFICATION_URL,
+                requestBody,
+                response -> {
+                    try {
+                        String status = response.getString("status");
+                        if ("success".equals(status)) {
+                            onSuccess.run();
+                        } else {
+                            String message = response.optString("message", "Device verification failed");
+                            showToast(message);
+                            Log.e(TAG, "Device verification failed: " + message);
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error parsing device verification response", e);
+                        showToast("Device verification error");
+                    }
+                },
+                error -> {
+                    Log.e(TAG, "Network error during device verification", error);
+                    if (error.networkResponse != null) {
+                        Log.e(TAG, "Status code: " + error.networkResponse.statusCode);
+                        try {
+                            String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                            Log.e(TAG, "Response: " + responseBody);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error reading error response", e);
+                        }
+                    }
+                    showToast("Verification Failed");
+                });
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                15000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        requestQueue.add(request);
+    }
+
     private void checkBiometricSupport(boolean isVerification) {
-        // First check MAC address
-        if (!isMacAddressRegistered()) {
-            registerMacAddress();
-            return;
-        }
-
-        if (!isCurrentMacAddressValid()) {
-            showMacAddressChangedDialog();
-            return;
-        }
-
-        // Then check fingerprint changes
         if (hasFingerprintChanged()) {
             showFingerprintChangedDialog();
             return;
         }
-
 
         BiometricManager biometricManager = BiometricManager.from(this);
         int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG);
 
         switch (canAuthenticate) {
             case BiometricManager.BIOMETRIC_SUCCESS:
-                // Device supports biometrics and has enrolled fingerprints
                 String title = isVerification ? "Verify Identity" : "Authenticate to Continue";
                 String subtitle = isVerification ? "Authenticate to stop work" : "Authenticate to start work";
                 showBiometricPrompt(title, subtitle);
                 break;
 
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                // Device supports biometrics but no fingerprints enrolled
                 showToast("No fingerprints enrolled");
                 promptFingerprintEnrollment();
+                title = isVerification ? "Verify Identity" : "Authenticate to Continue";
+                subtitle = isVerification ? "Authenticate to stop work" : "Authenticate to start work";
+                showBiometricPrompt(title, subtitle);
                 break;
 
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
@@ -341,7 +330,6 @@ public class attendance extends AppCompatActivity {
                 showToast("Unknown biometric error");
                 fallbackToQR();
         }
-
     }
 
     private void promptFingerprintEnrollment() {
@@ -349,76 +337,18 @@ public class attendance extends AppCompatActivity {
                 .setTitle("Fingerprint Setup Required")
                 .setMessage("You need to register at least one fingerprint to use this feature. Would you like to go to settings now?")
                 .setPositiveButton("Go to Settings", (dialog, which) -> {
-                    // Open fingerprint settings
                     try {
                         Intent intent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
                         intent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
                                 BiometricManager.Authenticators.BIOMETRIC_STRONG);
                         startActivity(intent);
                     } catch (Exception e) {
-                        // Fallback to general security settings if specific intent fails
                         startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
                     }
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> {
-                    fallbackToQR();
-                })
+                .setNegativeButton("Cancel", (dialog, which) -> fallbackToQR())
                 .setCancelable(false)
                 .show();
-    }
-    public static String getMacAddress(Context context) {
-        String macAddress = getMacAddressByWifiInfo(context);
-        if (!TextUtils.isEmpty(macAddress)) {
-            return macAddress;
-        }
-
-        macAddress = getMacAddressByNetworkInterface();
-        if (!TextUtils.isEmpty(macAddress)) {
-            return macAddress;
-        }
-
-        return "02:00:00:00:00:00"; // Default MAC address for Android 6.0+
-    }
-
-    private static String getMacAddressByWifiInfo(Context context) {
-        try {
-            WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            if (wifiManager == null) {
-                return null;
-            }
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            return wifiInfo.getMacAddress();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-    private static  String getMacAddressByNetworkInterface() {
-        try {
-            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface nif : all) {
-                if (!nif.getName().equalsIgnoreCase("wlan0")) {
-                    continue;
-                }
-
-                byte[] macBytes = nif.getHardwareAddress();
-                if (macBytes == null) {
-                    return null;
-                }
-
-                StringBuilder res1 = new StringBuilder();
-                for (byte b : macBytes) {
-                    res1.append(String.format("%02X:", b));
-                }
-
-                if (res1.length() > 0) {
-                    res1.deleteCharAt(res1.length() - 1);
-                }
-                return res1.toString();
-            }
-        } catch (Exception e) {
-            // Handle exception
-        }
-        return null;
     }
 
     private void showBiometricPrompt(String title, String subtitle) {
@@ -447,7 +377,6 @@ public class attendance extends AppCompatActivity {
         String savedFingerprintHash = prefs.getString("fingerprint_hash", null);
 
         if (savedFingerprintHash == null) {
-            // First time usage, save the current hash
             prefs.edit().putString("fingerprint_hash", currentFingerprintHash).apply();
             return false;
         }
@@ -461,7 +390,6 @@ public class attendance extends AppCompatActivity {
             String packageName = getPackageName();
             PackageInfo info = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
 
-            // Combine package signature with biometric hardware info
             String combined = info.signatures[0].toCharsString() +
                     Build.MANUFACTURER + Build.BRAND + Build.MODEL;
 
@@ -473,6 +401,7 @@ public class attendance extends AppCompatActivity {
             return "error";
         }
     }
+
     private void handleBiometricSuccess(BiometricPrompt.AuthenticationResult result) {
         if (hasFingerprintChanged()) {
             showFingerprintChangedDialog();
@@ -483,6 +412,7 @@ public class attendance extends AppCompatActivity {
         biometricAttempts = 0;
         handleAuthSuccess();
     }
+
     private void handleBiometricFailure() {
         isAuthenticationInProgress = false;
         biometricAttempts++;
@@ -502,21 +432,7 @@ public class attendance extends AppCompatActivity {
         }
     }
 
-
-
-
-
     private void handleAuthSuccess() {
-        if (!isMacAddressRegistered()) {
-            registerMacAddress();
-            return;
-        }
-
-        if (!isCurrentMacAddressValid()) {
-            showMacAddressChangedDialog();
-            return;
-        }
-
         if (isWorking) {
             stopWork();
         } else {
@@ -528,11 +444,9 @@ public class attendance extends AppCompatActivity {
         startTime = System.currentTimeMillis();
         isWorking = true;
         saveState();
-        sendWorkRecord("start");
+        sendAttendanceRecord("start");
         updateUI();
         showToast("Work started at " + formatTime(startTime));
-
-        // Update check-in time display
         checkInTimeText.setText(formatTime(startTime));
     }
 
@@ -540,22 +454,15 @@ public class attendance extends AppCompatActivity {
         long endTime = System.currentTimeMillis();
         isWorking = false;
         saveState();
-        sendWorkRecord("end");
+        sendAttendanceRecord("end");
         updateUI();
         showToast("Work ended at " + formatTime(endTime));
-
-        // Update check-out time display
         checkOutTimeText.setText(formatTime(endTime));
     }
 
-    private void sendWorkRecord(String action) {
-        if (!isCurrentMacAddressValid()) {
-            showMacAddressChangedDialog();
-            return;
-        }
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date(startTime));
-        String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(
-                new Date(action.equals("start") ? startTime : System.currentTimeMillis()));
+    private void sendAttendanceRecord(String action) {
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
 
         JSONObject requestBody = new JSONObject();
         try {
@@ -564,40 +471,45 @@ public class attendance extends AppCompatActivity {
             requestBody.put("date", date);
             requestBody.put("action", action);
             requestBody.put("time", time);
-            requestBody.put("mac_address", macAddress); // Add MAC to the request
-
+            requestBody.put("android_id", getAndroidId());
         } catch (JSONException e) {
-            Log.e(TAG, "Error creating work record JSON", e);
+            Log.e(TAG, "Error creating attendance JSON", e);
+            showToast("Error creating attendance record");
             return;
         }
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                WORK_HOURS_API_URL,
+                ATTENDANCE_API_URL,
                 requestBody,
                 response -> {
                     try {
                         if (!response.getString("status").equals("success")) {
-                            Log.e(TAG, "Error saving work record: " + response.optString("message"));
-                            showToast("Error saving attendance record");
+                            Log.e(TAG, "Error saving attendance: " + response.optString("message"));
+                            showToast("Error saving attendance: " + response.optString("message"));
                         }
                     } catch (JSONException e) {
-                        Log.e(TAG, "Error parsing work record response", e);
+                        Log.e(TAG, "Error parsing attendance response", e);
+                        showToast("Error processing attendance response");
                     }
                 },
                 error -> {
-                    Log.e(TAG, "Network error saving work record", error);
-                    showToast("Network error saving record");
+                    Log.e(TAG, "Network error saving attendance", error);
+                    showToast("Network error saving attendance");
                 });
 
-        configureRequest(request);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                REQUEST_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         requestQueue.add(request);
     }
+
     private void fallbackToQR() {
         isAuthenticationInProgress = false;
         showToast("Using QR code authentication");
 
-        // Launch QR scanner
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setPrompt("Scan Admin QR Code");
         integrator.setOrientationLocked(true);
@@ -629,26 +541,18 @@ public class attendance extends AppCompatActivity {
             return;
         }
 
-        // QR code is valid locally; proceed as authenticated
         handleAuthSuccess();
     }
+
     private boolean isValidQrFormat(String decryptedData) {
-        // Expected format: "WorkSync_<timestamp>_<random_hash>"
         String[] parts = decryptedData.split("_");
-
-        // Check basic structure
         if (parts.length < 3) return false;
-
-        // Check prefix
         if (!"WorkSync".equals(parts[0])) return false;
-
-        // Check timestamp is numeric
         try {
             Long.parseLong(parts[1]);
         } catch (NumberFormatException e) {
             return false;
         }
-
         return true;
     }
 
@@ -658,35 +562,26 @@ public class attendance extends AppCompatActivity {
             long qrTimestamp = Long.parseLong(parts[1]);
             long currentTime = System.currentTimeMillis();
             long twentyFourHours = 24 * 60 * 60 * 1000;
-
             return (currentTime - qrTimestamp) > twentyFourHours;
         } catch (Exception e) {
-            return true; // If we can't parse, consider it expired
+            return true;
         }
     }
 
-    private void configureRequest(JsonObjectRequest request) {
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                REQUEST_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-    }
-
-
-
     private void loadSavedState() {
-        SharedPreferences prefs = getSharedPreferences("AttendancePrefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(ATTENDANCE_PREFS, MODE_PRIVATE);
         isWorking = prefs.getBoolean("isWorking", false);
         startTime = prefs.getLong("startTime", 0);
     }
 
     private void saveState() {
-        SharedPreferences prefs = getSharedPreferences("AttendancePrefs", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(ATTENDANCE_PREFS, MODE_PRIVATE);
         prefs.edit()
                 .putBoolean("isWorking", isWorking)
                 .putLong("startTime", startTime)
                 .apply();
     }
+
     private void updateUI() {
         runOnUiThread(() -> {
             startButton.setEnabled(!isWorking);
@@ -696,6 +591,7 @@ public class attendance extends AppCompatActivity {
                 checkInTimeText.setText("Working - started at " + formatTime(startTime));
             } else {
                 checkInTimeText.setText("Ready to check in");
+                checkOutTimeText.setText("");
             }
         });
     }
@@ -709,7 +605,6 @@ public class attendance extends AppCompatActivity {
     }
 
     public static class QrCaptureActivity extends com.journeyapps.barcodescanner.CaptureActivity {
-        // Custom QR scanner activity with additional configuration
+        // Custom QR scanner activity
     }
-
 }

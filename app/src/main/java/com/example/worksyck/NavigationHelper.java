@@ -6,12 +6,19 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class NavigationHelper {
-
+public  class NavigationHelper {
+    private static int userId;
+    private static String email, fullname,role;
     private AppCompatActivity activity;
+    public NavigationHelper(AppCompatActivity activity){
 
-    public NavigationHelper(AppCompatActivity activity) {
+    }
+    public NavigationHelper(AppCompatActivity activity,int userId,String email, String fullname,String role) {
         this.activity = activity;
+        NavigationHelper.userId=userId;
+        NavigationHelper.email=email;
+        NavigationHelper.fullname=fullname;
+        NavigationHelper.role=role;
     }
 
     // تفعيل زر الرجوع في ActionBar
@@ -35,6 +42,10 @@ public class NavigationHelper {
     // التنقل إلى النشاط المناسب
     private void navigateToActivity(Class<?> activityClass) {
         Intent intent = new Intent(activity, activityClass);
+        intent.putExtra("user_id", userId);
+        intent.putExtra("email", email);
+        intent.putExtra("fullname", fullname);
+        intent.putExtra("role", role);
         activity.startActivity(intent);
     }
 
