@@ -3,6 +3,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +25,17 @@ public class AddHoliday extends AppCompatActivity {
     EditText editTextName, editTextDate, editTextDescription;
     Button buttonAddHoliday;
     TextView textViewMessage;
-
+    private ImageView backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_holidays_settings);
+
+        backButton = findViewById(R.id.backButton);  // ربط الـ ImageView بالكود
+        backButton.setOnClickListener(v -> {
+            finish(); // هذا يغلق النشاط ويرجع للنشاط السابق
+        });
 
         editTextName = findViewById(R.id.editTextName);
         editTextDate = findViewById(R.id.editTextDate);

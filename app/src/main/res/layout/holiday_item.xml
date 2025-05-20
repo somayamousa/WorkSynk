@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    card_view:cardCornerRadius="14dp"
+    card_view:cardElevation="4dp"
+    card_view:cardBackgroundColor="?attr/colorSurface"
+    card_view:cardUseCompatPadding="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:backgroundTint="#00000000"
+    android:clickable="true"
+    android:focusable="true"
+    android:scaleX="1.0"
+    android:scaleY="1.0"
+    android:transitionName="card_transition">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:clipToPadding="false">
+
+        <!-- Top Accent Bar -->
+        <View
+            android:id="@+id/accent_top"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:background="#4A148C"
+            android:importantForAccessibility="no"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Holiday Icon with Shadow -->
+        <ImageView
+            android:id="@+id/holidayIcon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@android:drawable/ic_menu_my_calendar"
+            android:scaleType="centerInside"
+            android:background="@drawable/circle_background"
+            android:contentDescription="Holiday icon, represents the type of holiday"
+            android:elevation="2dp"
+            android:layout_marginEnd="12dp"
+            card_view:layout_constraintTop_toBottomOf="@id/accent_top"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintBottom_toTopOf="@id/divider"/>
+
+        <!-- Holiday Name -->
+        <TextView
+            android:id="@+id/holiday_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Holiday Name"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.02"
+            android:textColor="?android:attr/textColorPrimary"
+            android:background="@null"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginBottom="8dp"
+            card_view:layout_constraintTop_toBottomOf="@id/accent_top"
+            card_view:layout_constraintStart_toEndOf="@id/holidayIcon"
+            card_view:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Holiday Date -->
+        <TextView
+            android:id="@+id/holiday_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Holiday Date"
+            android:textSize="15sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:background="@null"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="8dp"
+            card_view:layout_constraintTop_toBottomOf="@id/holiday_name"
+            card_view:layout_constraintStart_toEndOf="@id/holidayIcon"
+            card_view:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Holiday Description -->
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Holiday Details"
+            android:textSize="15sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:background="@null"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            card_view:layout_constraintTop_toBottomOf="@id/holiday_date"
+            card_view:layout_constraintStart_toEndOf="@id/holidayIcon"
+            card_view:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="#1F000000"
+            android:layout_marginTop="8dp"
+            android:importantForAccessibility="no"
+            card_view:layout_constraintTop_toBottomOf="@id/description"
+            card_view:layout_constraintStart_toEndOf="@id/holidayIcon"
+            card_view:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Edit Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="✎ Edit"
+            android:textSize="14sp"
+            android:textColor="#4A148C"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:contentDescription="Edit this holiday's details"
+            android:tooltipText="Edit holiday"
+            android:focusable="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            card_view:layout_constraintTop_toBottomOf="@id/divider"
+            card_view:layout_constraintEnd_toStartOf="@id/btnDelete"
+            card_view:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- Delete Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="🗑 Delete"
+            android:textSize="14sp"
+            android:textColor="#FF2C2C"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:contentDescription="Delete this holiday"
+            android:tooltipText="Delete holiday"
+            android:focusable="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            card_view:layout_constraintTop_toBottomOf="@id/divider"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
