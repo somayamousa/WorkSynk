@@ -39,6 +39,7 @@ public class MainActivity2 extends AppCompatActivity {
         Button       btnDepartment= findViewById(R.id.departmentBtn);
         Button      btnDesignations= findViewById(R.id.jobTitleBtn);
         Button  createSalarySlip=findViewById(R.id.salary_slip);
+        Button  gps=findViewById(R.id.gps);
         Intent intent = getIntent();
 
         company_id= intent.getStringExtra("company_id");
@@ -96,6 +97,9 @@ public class MainActivity2 extends AppCompatActivity {
             startActivity(addIntent);
         });Employee.setOnClickListener(v -> {
             Intent addIntent = new Intent(MainActivity2.this, EmployeesListActivity.class);
+            startActivity(addIntent);
+        });gps.setOnClickListener(v -> {
+            Intent addIntent = new Intent(MainActivity2.this, Gps.class);
             startActivity(addIntent);
         });
     }
