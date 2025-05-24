@@ -14,9 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity2 extends AppCompatActivity {
 
 
-    private  String company_id;
-    private  int user_id;
-
+    private int userId;
+    private String email, fullname,role,company_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +41,12 @@ public class MainActivity2 extends AppCompatActivity {
         Button  gps=findViewById(R.id.gps);
         Intent intent = getIntent();
 
-        company_id= intent.getStringExtra("company_id");
-        user_id   = intent.getIntExtra("user_id",-1);
+        email = getIntent().getStringExtra("email");
+        fullname = getIntent().getStringExtra("fullname");
+        role=getIntent().getStringExtra("role");
+        userId = getIntent().getIntExtra("user_id", 0);
+        company_id=getIntent().getStringExtra("company_id");
+        // Initialize NavigationHelper and set back button functionality
         // QR Button Click
         btnQr.setOnClickListener(v -> {
             Intent qrIntent = new Intent(MainActivity2.this, QrDisplayActivity.class);
@@ -53,11 +56,11 @@ public class MainActivity2 extends AppCompatActivity {
 
             Intent     payroll_entry_Intent = new Intent(MainActivity2.this, Payroll_Entry.class);
             payroll_entry_Intent.putExtra("company_id",company_id);
-            payroll_entry_Intent.putExtra("user_id",user_id);
+            payroll_entry_Intent.putExtra("user_id",userId);
             startActivity(payroll_entry_Intent);
         });
 
-       add_holiday.setOnClickListener(v -> {
+        add_holiday.setOnClickListener(v -> {
 
             Intent     Add_holiday_Intent = new Intent(MainActivity2.this, AddHoliday.class);
 
@@ -85,22 +88,27 @@ public class MainActivity2 extends AppCompatActivity {
             startActivity(DepartmentIntent);
         });
 
-            btnDesignations.setOnClickListener(v -> {
-                Intent DesignationsIntent = new Intent(MainActivity2.this, DesignationsActivity.class);
-                startActivity(DesignationsIntent);
-            });
+        btnDesignations.setOnClickListener(v -> {
+            Intent DesignationsIntent = new Intent(MainActivity2.this, DesignationsActivity.class);
+            startActivity(DesignationsIntent);
+        });
         // Add Employee Button Click
         btnAddEmployee.setOnClickListener(v -> {
 
             Intent addIntent = new Intent(MainActivity2.this, EmployeeAddActivity.class);
-         addIntent.putExtra("company_id",company_id);
+            addIntent.putExtra("company_id",company_id);
             startActivity(addIntent);
         });Employee.setOnClickListener(v -> {
             Intent addIntent = new Intent(MainActivity2.this, EmployeesListActivity.class);
             startActivity(addIntent);
         });gps.setOnClickListener(v -> {
             Intent addIntent = new Intent(MainActivity2.this, MapsActivity.class);
-            startActivity(addIntent);
+            addIntent.putExtra("user_id", userId);
+            addIntent.putExtra("email", email);
+            addIntent.putExtra("fullname", fullname);
+            addIntent.putExtra("role", role);
+            addIntent.putExtra("company_id", company_id);
+            addIntent.putExtra("company_code", company_id);            startActivity(addIntent);
         });
     }
 }

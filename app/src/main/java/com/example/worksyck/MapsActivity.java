@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
@@ -42,7 +43,7 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private static final String SAVE_LOCATION_URL = "http://your-server-address/worksync/save_location.php";
+    private static final String SAVE_LOCATION_URL = "http:/192.168.1.13/worksync/save_location.php";
 
     private MapView map;
     private Button btnClearAll;
@@ -56,8 +57,8 @@ public class MapsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_maps);
 
         // Get user ID from intent
-        userId = getIntent().getIntExtra("user_id", 0);
-        if (userId == 0) {
+        userId = getIntent().getIntExtra("user_id", -1);
+        if (userId == -1) {
             Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -333,7 +334,7 @@ public class MapsActivity extends AppCompatActivity {
         protected List<LocationItem> doInBackground(Void... voids) {
             List<LocationItem> items = new ArrayList<>();
             try {
-                URL url = new URL(SAVE_LOCATION_URL + "?user_id=" + userId);
+                URL url = new URL("http://192.168.1.13/worksync/get_locations.php?user_id=" + userId);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
@@ -346,9 +347,21 @@ public class MapsActivity extends AppCompatActivity {
                 }
                 reader.close();
 
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                // Parse the response and create LocationItems
-                // This depends on your server response format
+                JSONArray jsonArray = new JSONArray(response.toString());
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    int id = jsonObject.getInt("id");
+                    double latitude = jsonObject.getDouble("latitude");
+                    double longitude = jsonObject.getDouble("longitude");
+                    double width = jsonObject.getDouble("width");
+                    double height = jsonObject.getDouble("height");
+
+                    GeoPoint center = new GeoPoint(latitude, longitude);
+                    Polygon rectangle = createRectanglePolygon(center, width, height);
+                    Marker marker = createCenterMarker(center, i + 1);
+
+                    items.add(new LocationItem(id, center, width, height, marker, rectangle));
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -362,6 +375,12 @@ public class MapsActivity extends AppCompatActivity {
                 locationItems.add(item);
                 map.getOverlays().add(item.rectangle);
                 map.getOverlays().add(item.marker);
+
+                // Set click listener for each marker
+                item.marker.setOnMarkerClickListener((m, mv) -> {
+                    showMarkerOptions(item);
+                    return true;
+                });
             }
             map.invalidate();
         }
