@@ -99,7 +99,7 @@ public class MainActivity2 extends AppCompatActivity {
             Intent addIntent = new Intent(MainActivity2.this, EmployeesListActivity.class);
             startActivity(addIntent);
         });gps.setOnClickListener(v -> {
-            Intent addIntent = new Intent(MainActivity2.this, Gps.class);
+            Intent addIntent = new Intent(MainActivity2.this, MapsActivity.class);
             startActivity(addIntent);
         });
     }

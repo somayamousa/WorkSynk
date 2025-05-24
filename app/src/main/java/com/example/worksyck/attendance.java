@@ -56,8 +56,8 @@ import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String ATTENDANCE_API_URL = "http://192.168.1.101/worksync/attendence.php";
-    private static final String DEVICE_VERIFICATION_URL = "http://192.168.1.101/worksync/device_verification.php";
+    private static final String ATTENDANCE_API_URL = "http://192.168.1.13/worksync/attendence.php";
+    private static final String DEVICE_VERIFICATION_URL = "http://192.168.1.13/worksync/device_verification.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
