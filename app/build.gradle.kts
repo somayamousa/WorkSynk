@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.android.gms:play-services-maps:18.2.0")
+    implementation ("org.osmdroid:osmdroid-android:6.1.16")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("com.google.zxing:core:3.5.2")
