@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView dateText;
     private TextView hoursText;
     private Handler handler;
-    private int userId;
+    private int userId,company_id;
     private String email, fullname,role;
     private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
     private NavigationHelper navigationHelper;
@@ -32,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
         fullname = getIntent().getStringExtra("fullname");
         role=getIntent().getStringExtra("role");
         userId = getIntent().getIntExtra("user_id", 0);
+        company_id = getIntent().getIntExtra("company_id", 0);
+
         // Initialize NavigationHelper and set back button functionality
-        navigationHelper = new NavigationHelper(this,userId,email,fullname,role);
+        navigationHelper = new NavigationHelper(this,userId,email,fullname,role,company_id);
         navigationHelper.enableBackButton();
 
         // Initialize views

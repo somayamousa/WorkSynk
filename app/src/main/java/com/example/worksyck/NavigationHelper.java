@@ -7,13 +7,13 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 public  class NavigationHelper {
-    private static int userId;
+    private static int userId,company_id;
     private static String email, fullname,role;
     private AppCompatActivity activity;
     public NavigationHelper(AppCompatActivity activity){
 
     }
-    public NavigationHelper(AppCompatActivity activity,int userId,String email, String fullname,String role) {
+    public NavigationHelper(AppCompatActivity activity,int userId,String email, String fullname,String role,int company_id) {
         this.activity = activity;
         NavigationHelper.userId=userId;
         NavigationHelper.email=email;
@@ -45,6 +45,8 @@ public  class NavigationHelper {
         intent.putExtra("user_id", userId);
         intent.putExtra("email", email);
         intent.putExtra("fullname", fullname);
+        intent.putExtra("company_id", company_id);
+
         intent.putExtra("role", role);
         activity.startActivity(intent);
     }
