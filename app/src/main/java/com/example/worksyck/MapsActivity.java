@@ -747,4 +747,4 @@ public class MapsActivity extends AppCompatActivity {
             this.shape = shape;
         }
     }
-}
+}//
