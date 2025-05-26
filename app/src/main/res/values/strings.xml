@@ -2,4 +2,8 @@
     <string name="app_name">ws</string>
     <string name="title_activity_login">login</string>
     <string name="password">password</string>
+    <string-array name="shape_types">
+        <item>مربع/مستطيل</item>
+        <item>دائرة</item>
+    </string-array>
 </resources>

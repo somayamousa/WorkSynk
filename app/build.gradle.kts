@@ -32,6 +32,8 @@ android {
 }
 
 dependencies {
+    implementation ("org.osmdroid:osmdroid-android:6.1.16")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("com.google.zxing:core:3.5.2")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
@@ -42,6 +44,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.biometric)
     implementation(libs.volley)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

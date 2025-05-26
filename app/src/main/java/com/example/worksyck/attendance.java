@@ -459,7 +459,37 @@ public class attendance extends AppCompatActivity {
         showToast("Work ended at " + formatTime(endTime));
         checkOutTimeText.setText(formatTime(endTime));
     }
+    private void checkCurrentAttendanceStatus() {
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("email", email);
+            requestBody.put("user_id", userId);
+            requestBody.put("date", date);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating status check JSON", e);
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                "http://192.168.1.101/worksync/check_attendance.php", // You'll need to create this endpoint
+                requestBody,
+                response -> {
+                    try {
+                        boolean isWorking = response.getBoolean("is_working");
+                        this.isWorking = isWorking;
+                        saveState();
+                        updateUI();
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error parsing status response", e);
+                    }
+                },
+                error -> Log.e(TAG, "Error checking attendance status", error));
+
+        requestQueue.add(request);
+    }
     private void sendAttendanceRecord(String action) {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
@@ -485,8 +515,14 @@ public class attendance extends AppCompatActivity {
                 response -> {
                     try {
                         if (!response.getString("status").equals("success")) {
-                            Log.e(TAG, "Error saving attendance: " + response.optString("message"));
-                            showToast("Error saving attendance: " + response.optString("message"));
+                            String message = response.optString("message", "Error saving attendance");
+                            showToast(message);
+                            // Reset state if ending failed
+                            if (action.equals("end")) {
+                                isWorking = true; // Keep in working state
+                                saveState();
+                                updateUI();
+                            }
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Error parsing attendance response", e);
@@ -494,8 +530,24 @@ public class attendance extends AppCompatActivity {
                     }
                 },
                 error -> {
-                    Log.e(TAG, "Network error saving attendance", error);
-                    showToast("Network error saving attendance");
+                    String errorMessage = "Network error saving attendance";
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        try {
+                            String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                            JSONObject errorResponse = new JSONObject(responseBody);
+                            errorMessage = errorResponse.optString("message", errorMessage);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error parsing error response", e);
+                        }
+                    }
+                    showToast(errorMessage);
+
+                    // Reset state if ending failed
+                    if (action.equals("end")) {
+                        isWorking = true; // Keep in working state
+                        saveState();
+                        updateUI();
+                    }
                 });
 
         request.setRetryPolicy(new DefaultRetryPolicy(
