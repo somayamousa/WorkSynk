@@ -30,7 +30,7 @@ public class login extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
     private RequestQueue requestQueue;
     private static final String TAG = "LoginActivity";
-    private static final String LOGIN_URL = "http://192.168.1.13/worksync/loginapi.php";
+    private static final String LOGIN_URL = "http://192.168.1.11/worksync/loginapi.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,7 @@ public class login extends AppCompatActivity {
                 String fullname = user.optString("fullname");
                 String role = user.optString("role");
                 String macAddress = user.optString("mac_address", "");
-                String company_id = user.optString("company_id", "");
+                int company_id = user.optInt("company_id");
                 String companyCode = user.optString("company_code", "");
 
                 Intent intent;
