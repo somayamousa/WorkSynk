@@ -1,106 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="YOUR_API_KEY_HERE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+    <queries>
+        <package android:name="com.google.android.apps.maps"/>
+    </queries>
+    <application android:allowBackup="true" android:dataExtractionRules="@xml/data_extraction_rules" android:fullBackupContent="@xml/backup_rules" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/Theme.Ws" android:usesCleartextTraffic="true" tools:targetApi="31">
+        <!--  Google Maps API Key  -->
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCpzIkiEei_glULWKIxQ6fraCDBpQl5l98"/>
+        <!--  Google Play Services version  -->
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+        <activity android:name=".AddHoliday" android:exported="false"/>
+        <activity android:name=".DesignationsActivity" android:exported="false"/>
+        <activity android:name=".DepartmentsActivity" android:exported="false"/>
+        <activity android:name=".Payroll_Entry" android:exported="false"/>
+        <activity android:name=".EmployeeDetailsActivity" android:exported="false"/>
+        <activity android:name=".EmployeesListActivity" android:exported="false"/>
+        <activity android:name=".EmployeeAddActivity" android:exported="false"/>
+        <activity android:name=".MainActivity2" android:exported="false"/>
+        <activity android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".MainActivity" android:exported="false"/>
+        <activity android:name=".attendance" android:exported="false"/>
+        <activity android:name=".show_holidays" android:exported="false"/>
+        <activity android:name=".MapsActivity" android:exported="false"/>
+        <activity android:name=".attendance$QrCaptureActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".QrDisplayActivity" android:exported="false"/>
+        <activity android:name=".RequestsActivity" android:exported="true"/>
+        <activity android:name=".LeaveRequests" android:exported="true"/>
+        <activity android:name=".OvertimeRequests" android:exported="true"/>
+        <activity android:name=".OvertimeRequest" android:exported="true"/>
+        <activity android:name=".OvertimeOverview" android:exported="true"/>
+        <activity android:name=".LeaveOverview" android:exported="true"/>
+        <activity android:name=".LeaveRequest" android:exported="true"/>
+        <activity android:name=".login" android:exported="true">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="YOUR_API_KEY"/>
 
-    <application
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Ws"
-        android:usesCleartextTraffic="true"
-        tools:targetApi="31">
-        <activity
-            android:name=".SalarySlip"
-            android:exported="false" />
-        <activity
-            android:name=".SalaryStructure"
-            android:exported="false" />
-        <activity
-            android:name=".AddHoliday"
-            android:exported="false" />
-        <activity
-            android:name=".DesignationsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DepartmentsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Payroll_Entry"
-            android:exported="false" />
-        <activity
-            android:name=".EmployeeDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EmployeesListAdapter"
-            android:exported="false" />
-        <activity
-            android:name=".EmployeesListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EmployeeAddActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".attendance"
-            android:exported="false" />
-        <activity
-            android:name=".show_holidays"
-            android:exported="false" />
-        <activity
-            android:name=".attendance$QrCaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".QrDisplayActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RequestsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".LeaveRequests"
-            android:exported="true" />
-        <activity
-            android:name=".OvertimeRequests"
-            android:exported="true" />
-        <activity
-            android:name=".OvertimeRequest"
-            android:exported="true" />
-        <activity
-            android:name=".OvertimeOverview"
-            android:exported="true" />
-        <activity
-            android:name=".LeaveOverview"
-            android:exported="true" />
-        <activity
-            android:name=".LeaveRequest"
-            android:exported="true" />
-
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".login"
-            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
