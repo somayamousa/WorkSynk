@@ -41,6 +41,7 @@ public class OvertimeRequests extends AppCompatActivity {
     private String overtimeReason = "";
     private Uri fileUri = null;
     private String fileName = "";
+    String status = "Pending";
     private final Calendar calendar = Calendar.getInstance();
 
     @Override
@@ -115,20 +116,15 @@ public class OvertimeRequests extends AppCompatActivity {
         // Check if the overtime date is selected
         if (overtimeDate.isEmpty()) {
             Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
-            selectDateButton.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // Change to red light
             return false;
-        } else {
-            selectDateButton.setBackgroundColor(getResources().getColor(android.R.color.transparent));  // Reset the color
         }
 
         // Check if the overtime hours input is empty
         if (hoursStr.isEmpty()) {
             Toast.makeText(this, "Please enter number of hours", Toast.LENGTH_SHORT).show();
-            overtimeHoursEditText.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // Change to red light
             return false;
-        } else {
-            overtimeHoursEditText.setBackgroundColor(getResources().getColor(android.R.color.transparent));  // Reset the color
         }
+
 
         // Parse the hours to float and validate
         try {
@@ -138,35 +134,32 @@ public class OvertimeRequests extends AppCompatActivity {
             // Check if overtime hours are within the valid range (greater than 0 and less than or equal to 2)
             if (hours <= 0 || hours > 2) {
                 Toast.makeText(this, "Hours must be between 0 and 2", Toast.LENGTH_SHORT).show();
-                overtimeHoursEditText.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // Change to red light
                 return false;
             }
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Invalid hours input", Toast.LENGTH_SHORT).show();
-            overtimeHoursEditText.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // Change to red light
             return false;
         }
+
 
         // Check if the reason is provided
         if (overtimeReason.isEmpty()) {
             Toast.makeText(this, "Please enter a reason", Toast.LENGTH_SHORT).show();
-            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // Change to red light
             return false;
-        } else {
-            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));  // Reset the color
         }
 
         return true;
     }
-
     // Send the overtime request to the server
     private void sendOvertimeRequestToServer() {
-        String url = "http://10.0.2.2/leave_requests/insert_overtime_request.php"; // Change the URL to match your server's path
+        String url = "http://10.0.2.2/worksync/insert_overtime_request.php"; // Change the URL to match your server's path
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     Toast.makeText(OvertimeRequests.this, "Request submitted successfully", Toast.LENGTH_SHORT).show();
                     clearFields();  // Clear all fields after submission
+                    setResult(RESULT_OK);
+
                 },
                 error -> Toast.makeText(OvertimeRequests.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show()) {
 
@@ -176,6 +169,7 @@ public class OvertimeRequests extends AppCompatActivity {
                 params.put("overtime_date", overtimeDate);
                 params.put("hours", overtimeHours);
                 params.put("reason", overtimeReason);
+                params.put("status", status);
                 return params;
             }
         };

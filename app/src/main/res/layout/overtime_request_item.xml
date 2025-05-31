@@ -54,7 +54,7 @@
 
             <!-- Status -->
             <TextView
-                android:id="@+id/overtimeStatus"
+                android:id="@+id/statusTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pending"

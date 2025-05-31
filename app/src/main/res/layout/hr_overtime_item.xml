@@ -24,10 +24,10 @@
 
             <!-- Leave Type -->
             <TextView
-                android:id="@+id/leaveTypeTextView"
+                android:id="@+id/overtimeReason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vacation Leave"
+                android:text="Important"
                 android:fontFamily="@font/poppins_semibold"
                 android:textColor="#000000"
                 android:textSize="16sp"
@@ -35,7 +35,7 @@
 
             <!-- Dates -->
             <TextView
-                android:id="@+id/leaveDatesTextView"
+                android:id="@+id/overtimeDateRange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3 Aug - 7 Sep"
@@ -54,10 +54,11 @@
 
             <!-- Status -->
             <TextView
-                android:id="@+id/statusTextView"
+                android:id="@+id/overtimeStatusTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pending"
+                android:textColor="#4CAF50"
                 android:textSize="14sp"
                 android:fontFamily="@font/poppins_semibolditalic"
                 android:textStyle="bold"/>

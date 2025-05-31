@@ -2,7 +2,6 @@ package com.example.worksyck;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeaveRequest extends AppCompatActivity {
+public class HrLeaveRequest extends AppCompatActivity {
 
     private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
     private ImageView backButton;
@@ -41,26 +40,13 @@ public class LeaveRequest extends AppCompatActivity {
     private int userId, company_id;
     private String email, fullname, role;
 
-    private static final int VIEW_LEAVE_REQUEST_CODE = 100; // request code for new leave
+    private static final int VIEW_LEAVE_REQUEST_CODE = 100;
+    // request code for new leave
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listofleave);
-
-        email = getIntent().getStringExtra("email");
-        fullname = getIntent().getStringExtra("fullname");
-        role = getIntent().getStringExtra("role");
-        userId = getIntent().getIntExtra("user_id", 0);
-        company_id = getIntent().getIntExtra("company_id", 0);
-
-        navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
-        navigationHelper.enableBackButton();
-
-        initializeViews();
-
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
+        setContentView(R.layout.hr_leave_requests);
 
         leaveRequestsRecyclerView = findViewById(R.id.leaveRequestsRecyclerView);
         leaveRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -68,11 +54,6 @@ public class LeaveRequest extends AppCompatActivity {
         leaveRequestList = new ArrayList<>();
 
         fetchLeaveDataFromServer();
-
-        findViewById(R.id.newLeaveRequestButton).setOnClickListener(v -> {
-            Intent intent = new Intent(LeaveRequest.this, LeaveRequests.class);
-            startActivityForResult(intent, VIEW_LEAVE_REQUEST_CODE );
-        });
 
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
     }
@@ -96,8 +77,7 @@ public class LeaveRequest extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            leaveRequestList.clear(); // Clear before adding new data
-
+                            leaveRequestList.clear();
                             JSONArray jsonArray = new JSONArray(response);
 
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -106,6 +86,7 @@ public class LeaveRequest extends AppCompatActivity {
                                 String leaveType = leaveRequest.getString("leave_type");
                                 String startDate = leaveRequest.getString("start_date");
                                 String endDate = leaveRequest.getString("end_date");
+
                                 String status = capitalizeFirstLetter(leaveRequest.optString("status", "Pending"));
                                 leaveRequestList.add(new LeaveRequestModel(id, leaveType, startDate, endDate, status));
                             }
@@ -115,11 +96,11 @@ public class LeaveRequest extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(LeaveRequest.this, "Error parsing data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HrLeaveRequest.this, "Error parsing data", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
-                error -> Toast.makeText(LeaveRequest.this, "Error fetching data: " + error.toString(), Toast.LENGTH_SHORT).show()
+                error -> Toast.makeText(HrLeaveRequest.this, "Error fetching data: " + error.toString(), Toast.LENGTH_SHORT).show()
         );
 
         Volley.newRequestQueue(this).add(stringRequest);
@@ -128,15 +109,15 @@ public class LeaveRequest extends AppCompatActivity {
         if (input == null || input.isEmpty()) return input;
         return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == VIEW_LEAVE_REQUEST_CODE  && resultCode == RESULT_OK) {
-            fetchLeaveDataFromServer(); // Reload list when new leave added
+        if (requestCode == VIEW_LEAVE_REQUEST_CODE && resultCode == RESULT_OK) {
+            fetchLeaveDataFromServer();  // تحديث البيانات بعد الرجوع من صفحة العرض
         }
     }
+
 
     class LeaveRequestAdapter extends RecyclerView.Adapter<LeaveRequestAdapter.LeaveRequestViewHolder> {
 
@@ -148,7 +129,7 @@ public class LeaveRequest extends AppCompatActivity {
 
         @Override
         public LeaveRequestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.leave_request_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hr_leave_item, parent, false);
             return new LeaveRequestViewHolder(view);
         }
 
@@ -158,8 +139,6 @@ public class LeaveRequest extends AppCompatActivity {
             holder.leaveTypeTextView.setText(leaveRequest.getLeaveType());
             holder.leaveDatesTextView.setText(leaveRequest.getStartDate() + " to " + leaveRequest.getEndDate());
             holder.statusTextView.setText(leaveRequest.getStatus());
-            Log.d("LeaveRequest", "Status value: " + leaveRequest.getStatus());
-
             String status = leaveRequest.getStatus().toLowerCase();
 
             switch (status) {
@@ -175,10 +154,12 @@ public class LeaveRequest extends AppCompatActivity {
                     break;
             }
 
+
             holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(LeaveRequest.this, LeaveOverview.class);
+                Intent intent = new Intent(HrLeaveRequest.this, HrLeaveOverview.class);
                 intent.putExtra("leaveRequestId", leaveRequest.getId());
-                startActivity(intent);
+                startActivityForResult(intent, VIEW_LEAVE_REQUEST_CODE);
+
             });
         }
 
@@ -194,10 +175,9 @@ public class LeaveRequest extends AppCompatActivity {
                 super(itemView);
                 leaveTypeTextView = itemView.findViewById(R.id.leaveTypeTextView);
                 leaveDatesTextView = itemView.findViewById(R.id.leaveDatesTextView);
-                statusTextView = itemView.findViewById(R.id.statusTextView);  // ربط ال TextView الجديدة
+                statusTextView = itemView.findViewById(R.id.statusTextView);
             }
         }
-
 
     }
 

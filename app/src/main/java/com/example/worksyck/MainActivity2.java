@@ -39,6 +39,11 @@ public class MainActivity2 extends AppCompatActivity {
         Button      btnDesignations= findViewById(R.id.jobTitleBtn);
         Button  createSalarySlip=findViewById(R.id.salary_slip);
         Button  gps=findViewById(R.id.gps);
+
+       Button btnLeaveRequest = findViewById(R.id.HrLeaveRequest);
+        Button btnOverRequest = findViewById(R.id.HrOverRequest);
+
+
         Intent intent = getIntent();
 
         email = getIntent().getStringExtra("email");
@@ -92,6 +97,19 @@ public class MainActivity2 extends AppCompatActivity {
             Intent DesignationsIntent = new Intent(MainActivity2.this, DesignationsActivity.class);
             startActivity(DesignationsIntent);
         });
+
+
+        btnLeaveRequest.setOnClickListener(v -> {
+            Intent LeaveRequestIntent = new Intent(MainActivity2.this, HrLeaveRequest.class);
+            startActivity(LeaveRequestIntent);
+        });
+
+        btnOverRequest.setOnClickListener(v -> {
+            Intent OvertimeRequestIntent = new Intent(MainActivity2.this, HrOvertimeRequest.class);
+            startActivity(OvertimeRequestIntent);
+        });
+
+
         // Add Employee Button Click
         btnAddEmployee.setOnClickListener(v -> {
 

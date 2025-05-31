@@ -13,4 +13,10 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="textColor">#333333</color> <!-- Dark gray text color -->
+
+        <color name="status_accepted">#2ED934</color>   <!-- أخضر -->
+        <color name="status_rejected">#FF3828</color>   <!-- أحمر -->
+        <color name="status_pending">#757575</color>    <!-- رمادي -->
+
+
 </resources>

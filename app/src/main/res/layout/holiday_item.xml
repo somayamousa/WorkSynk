@@ -81,7 +81,7 @@
             android:id="@+id/holiday_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="May 26, 2025 - 11:57 PM"
+            android:text="May 26, 2025"
             android:textSize="15sp"
             android:textColor="#424242"
             android:background="@null"

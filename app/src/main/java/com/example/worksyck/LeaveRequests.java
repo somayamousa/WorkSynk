@@ -1,7 +1,5 @@
 package com.example.worksyck;
 
-
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -44,6 +42,7 @@ public class LeaveRequests extends AppCompatActivity {
     final Calendar calendar = Calendar.getInstance();
     Calendar endCalendar = Calendar.getInstance();
     boolean isStartSelected = false;
+    String status = "Pending";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +56,13 @@ public class LeaveRequests extends AppCompatActivity {
         reasonTextView = findViewById(R.id.reasonTextView);
         fileNameTextView = findViewById(R.id.fileNameTextView);
 
-        submitButton.setOnClickListener(v -> {
-            // الانتقال إلى صفحة LeaveOverview عند النقر على زر Submit
-            Intent intent = new Intent(LeaveRequests.this, LeaveOverview.class);
-            startActivity(intent);
-        });
-
-
         // إعداد أنواع الإجازة
         String[] leaveTypes = {
                 "Select Leave Type",
                 "Sick Leave",
-                "Casual Leave",
                 "Annual Leave",
                 "Emergency Leave",
-                "Maternity Leave",
-                "Unpaid Leave"
+                "Maternity Leave"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -80,8 +70,11 @@ public class LeaveRequests extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         leaveTypeSpinner.setAdapter(adapter);
 
-        // التعامل مع زر اختيار التاريخ
+        // اختيار التواريخ
         selectDateButton.setOnClickListener(v -> showStartDatePicker());
+
+        // اختيار الملف
+        chooseFileButton.setOnClickListener(v -> openFilePicker());
 
         // زر الإرسال
         submitButton.setOnClickListener(v -> {
@@ -91,23 +84,30 @@ public class LeaveRequests extends AppCompatActivity {
 
         // زر الرجوع
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
-
-        // تفعيل اختيار المستند
-        chooseFileButton.setOnClickListener(v -> openFilePicker());
     }
 
     private void sendLeaveRequestToServer() {
         String leaveType = leaveTypeSpinner.getSelectedItem().toString();
         String reason = reasonTextView.getText().toString().trim();
 
-        String url = "http://10.0.2.2/leave_requests/insert_leave_request.php"; // تعديل عنوان الخادم
+        String url = "http://10.0.2.2/worksync/insert_leave_request.php"; // تعديل عنوان الخادم
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(LeaveRequests.this, "Leave request submitted successfully", Toast.LENGTH_SHORT).show();
-                        clearFields();  // Clear all fields after submission
+                        clearFields();
+
+                        //Intent intent = new Intent(LeaveRequests.this, LeaveRequests.class);
+                       // intent.putExtra("leaveType", leaveType);
+                        //intent.putExtra("startDate", startDate);
+                        //intent.putExtra("endDate", endDate);
+                       // intent.putExtra("reason", reason);
+                       // startActivity(intent);
+
+                        setResult(RESULT_OK);
+
                     }
                 },
                 error -> Toast.makeText(LeaveRequests.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show()) {
@@ -119,30 +119,30 @@ public class LeaveRequests extends AppCompatActivity {
                 params.put("start_date", startDate);
                 params.put("end_date", endDate);
                 params.put("reason", reason);
+                params.put("status", status);
                 return params;
             }
+
         };
 
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
     private void openFilePicker() {
-        // فتح مستعرض الملفات لاختيار المستند
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");  // يسمح باختيار أي نوع من الملفات
+        intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(Intent.createChooser(intent, "Choose a file"), 1); // طلب اختيار الملف
+        startActivityForResult(Intent.createChooser(intent, "Choose a file"), 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
-            // عند اختيار الملف
             if (data != null && data.getData() != null) {
-                fileUri = data.getData();  // الحصول على URI للملف
-                String fileName = getFileName(fileUri);  // الحصول على اسم الملف
-                fileNameTextView.setText(fileName); // عرض اسم الملف في TextView
+                fileUri = data.getData();
+                String fileName = getFileName(fileUri);
+                fileNameTextView.setText(fileName);
             }
         }
     }
@@ -201,21 +201,20 @@ public class LeaveRequests extends AppCompatActivity {
     private boolean validateForm() {
         String reason = reasonTextView.getText().toString().trim();
 
-        // التحقق من الحقل نوع الإجازة
         if (leaveTypeSpinner.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a leave type", Toast.LENGTH_SHORT).show();
-            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // تغيير اللون إلى الأحمر
-        } else {
-            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.transparent));  // إعادة اللون الطبيعي
-        }
-
-        // التحقق من تاريخ البداية والنهاية
-        if (startDate.isEmpty() || endDate.isEmpty()) {
-            Toast.makeText(this, "Please select a valid date range", Toast.LENGTH_SHORT).show();
-            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));  // تغيير النص إلى اللون الأحمر
+            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
         } else {
-            selectDateButton.setTextColor(getResources().getColor(android.R.color.black));  // إعادة النص إلى اللون الأسود
+            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        }
+
+        if (startDate.isEmpty() || endDate.isEmpty()) {
+            Toast.makeText(this, "Please select a valid date range", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            return false;
+        } else {
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.black));
         }
 
         Calendar today = Calendar.getInstance();
@@ -238,39 +237,26 @@ public class LeaveRequests extends AppCompatActivity {
             return false;
         }
 
-        // التحقق من الحقل السبب
         if (reason.isEmpty()) {
             Toast.makeText(this, "Please provide a reason for leave", Toast.LENGTH_SHORT).show();
-            reasonTextView.setError("This field is required");  // إضافة رسالة خطأ بجانب الحقل
-            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));  // تغيير خلفية الحقل إلى الأحمر
+            reasonTextView.setError("This field is required");
+            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
         } else {
-            reasonTextView.setError(null);  // إزالة رسالة الخطأ
-            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));  // إعادة خلفية الحقل إلى الطبيعي
+            reasonTextView.setError(null);
+            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
-
-        // إذا كانت جميع الحقول صحيحة، سنواصل إرسال الطلب
-        submitButton.setOnClickListener(v -> {
-            if (!validateForm()) return;
-            sendLeaveRequestToServer();
-
-            // إرسال البيانات إلى صفحة Overview
-            Intent intent = new Intent(LeaveRequests.this, LeaveOverview.class);
-            intent.putExtra("leaveType", leaveTypeSpinner.getSelectedItem().toString());
-            intent.putExtra("startDate", startDate);
-            intent.putExtra("endDate", endDate);
-            intent.putExtra("reason", reasonTextView.getText().toString());
-            startActivity(intent);
-        });
 
         return true;
     }
 
     private void clearFields() {
-        leaveTypeSpinner.setSelection(0);  // Clear overtime hours input
-        reasonTextView.setText("");  // Clear reason input
-        selectDateButton.setText("Select Date");  // Reset the date button
-        fileNameTextView.setText("");  // Clear file name text view
+        leaveTypeSpinner.setSelection(0);
+        reasonTextView.setText("");
+        selectDateButton.setText("Select Date Range");
+        startDate = "";
+        endDate = "";
+        fileUri = null;
+        fileNameTextView.setText("");
     }
-
 }

@@ -15,21 +15,27 @@ public class RequestsActivity extends AppCompatActivity {
     private ImageView backButton;
     private NavigationHelper navigationHelper;  // إنشاء كائن من الـ Helper
 
+    private int userId,company_id;
+    private String email, fullname,role;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests);
 
-        // تفعيل زر الرجوع في ActionBar باستخدام الـ Helper
-        navigationHelper = new NavigationHelper(this);
-        navigationHelper.enableBackButton();  // تفعيل زر الرجوع
 
-        // ربط العناصر في XML بالكود
+// Initialize NavigationHelper and set back button functionality
+        navigationHelper = new NavigationHelper(this,userId,email,fullname,role,company_id);
+        navigationHelper.enableBackButton();
+
+        // Initialize views
         initializeViews();
 
         // إعداد Bottom Navigation باستخدام الـ Helper
         LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
         navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
+
+
 
         // تفعيل النقر على CardView للانتقال إلى الأنشطة المناسبة
         leaveRequestCardView.setOnClickListener(v -> navigateToActivity(LeaveRequest.class));

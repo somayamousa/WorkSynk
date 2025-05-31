@@ -22,9 +22,9 @@
         <activity android:name=".EmployeeDetailsActivity" android:exported="false"/>
         <activity android:name=".EmployeesListActivity" android:exported="false"/>
         <activity android:name=".EmployeeAddActivity" android:exported="false"/>
-        <activity android:name=".MainActivity2" android:exported="false"/>
-        <activity android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name=".MainActivity" android:exported="false"/>
+        <activity android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".MainActivity2" android:exported="false"/>
         <activity android:name=".attendance" android:exported="false"/>
         <activity android:name=".show_holidays" android:exported="false"/>
         <activity android:name=".MapsActivity" android:exported="false"/>
@@ -37,6 +37,10 @@
         <activity android:name=".OvertimeOverview" android:exported="true"/>
         <activity android:name=".LeaveOverview" android:exported="true"/>
         <activity android:name=".LeaveRequest" android:exported="true"/>
+        <activity android:name=".HrLeaveRequest" android:exported="true"/>
+        <activity android:name=".HrLeaveOverview" android:exported="true"/>
+        <activity android:name=".HrOvertimeRequest" android:exported="true"/>
+        <activity android:name=".HrOvertimeOverview" android:exported="true"/>
         <activity android:name=".login" android:exported="true">
 
             <meta-data
