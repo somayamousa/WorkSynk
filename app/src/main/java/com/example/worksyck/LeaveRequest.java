@@ -87,9 +87,14 @@ public class LeaveRequest extends AppCompatActivity {
 
         navigationHelper.setBackButtonListener(backButton);
     }
+    private void navigateToActivity(Class<?> activityClass) {
+        // التنقل إلى الأنشطة المناسبة
+        Intent intent = new Intent(LeaveRequest.this, activityClass);
+        startActivity(intent);
+    }
 
     private void fetchLeaveDataFromServer() {
-        String url = "http://10.0.2.2/worksync/get_leave_request.php";
+        String url = "http://10.0.2.2/worksync/get_leave_request.php?user_id=" + userId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

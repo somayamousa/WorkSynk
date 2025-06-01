@@ -1,14 +1,20 @@
-package com.example.worksyck;
 
+package com.example.worksyck;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,40 +25,55 @@ public class MainActivity extends AppCompatActivity {
     private TextView dateText;
     private TextView hoursText;
     private Handler handler;
-    private int userId,company_id;
-    private String email, fullname,role;
+    private int userId, company_id;
+    private String email, fullname, role;
     private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
     private NavigationHelper navigationHelper;
+    private ImageView notificationBell;
+    private View notificationDot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
-        role=getIntent().getStringExtra("role");
+        role = getIntent().getStringExtra("role");
         userId = getIntent().getIntExtra("user_id", 0);
         company_id = getIntent().getIntExtra("company_id", 0);
 
-        // Initialize NavigationHelper and set back button functionality
-        navigationHelper = new NavigationHelper(this,userId,email,fullname,role,company_id);
+        navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
         navigationHelper.enableBackButton();
 
-        // Initialize views
         initializeViews();
 
-        // إعداد Bottom Navigation باستخدام الـ Helper
         LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
         navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
 
-        // Update date and hours
         updateDate();
         startUpdatingHours();
 
+        // زر الجرس ونقطة الإشعار
+        notificationBell = findViewById(R.id.notificationBell);
+        notificationDot = findViewById(R.id.notificationDot);
+
+        notificationBell.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            intent.putExtra("user_id", userId);
+            startActivity(intent);
+        });
+
+        checkNotifications(); // استدعاء التحقق من الإشعارات
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkNotifications();  // تحديث نقطة الإشعار عند العودة للنشاط
     }
 
     private void initializeViews() {
-        // Link UI elements
         checkInLayout = findViewById(R.id.checkInLayout);
         salaryLayout = findViewById(R.id.salaryLayout);
         homeLayout = findViewById(R.id.homeLayout);
@@ -63,43 +84,45 @@ public class MainActivity extends AppCompatActivity {
         hoursText = findViewById(R.id.hoursText);
         handler = new Handler(Looper.getMainLooper());
     }
-
+    private void navigateToActivity(Class<?> activityClass) {
+        // التنقل إلى الأنشطة المناسبة
+        Intent intent = new Intent(MainActivity.this, activityClass);
+        startActivity(intent);
+    }
     private void updateDate() {
-        // Update the current date in the TextView
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd,MMMM yyyy", Locale.getDefault());
         String currentDate = dateFormat.format(new Date());
         dateText.setText(currentDate);
     }
 
-
     private void startUpdatingHours() {
-        // Create a new thread to update the current time every second
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (!Thread.currentThread().isInterrupted()) {
-                        final String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                hoursText.setText(currentTime + " Hours");
-                            }
-                        });
-                        Thread.sleep(1000); // Sleep for 1 second
-                    }
-                } catch (InterruptedException e) {
-                    // Handle thread interruption
+        new Thread(() -> {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    final String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+                    handler.post(() -> hoursText.setText(currentTime + " Hours"));
+                    Thread.sleep(1000);
                 }
+            } catch (InterruptedException ignored) {
             }
         }).start();
     }
 
+    private void checkNotifications() {
+        SharedPreferences prefs = getSharedPreferences("notifs", MODE_PRIVATE);
+        boolean hasUnread = prefs.getBoolean("hasUnread", false);
 
+        if (hasUnread) {
+            notificationDot.setVisibility(View.VISIBLE);
+            Log.d("NOTIF_CHECK", "Notification dot set to VISIBLE (hasUnread=true)");
+        } else {
+            notificationDot.setVisibility(View.GONE);
+            Log.d("NOTIF_CHECK", "Notification dot set to GONE (hasUnread=false)");
+        }
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Handle thread termination here if needed to avoid memory leaks
     }
 }

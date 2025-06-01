@@ -67,8 +67,8 @@ import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String ATTENDANCE_API_URL = "http://192.168.1.11/worksync/attendence.php";
-    private static final String DEVICE_VERIFICATION_URL = "http://192.168.1.11/worksync/device_verification.php";
+    private static final String ATTENDANCE_API_URL = "http://10.0.2.2/worksync/attendence.php";
+    private static final String DEVICE_VERIFICATION_URL = "http://10.0.2.2/worksync/device_verification.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
@@ -233,7 +233,7 @@ public class attendance extends AppCompatActivity {
 
         JsonObjectRequest locationRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://192.168.1.11/worksync/verify_location.php",
+                "http://10.0.2.2/worksync/verify_location.php",
                 locationRequestBody,
                 response -> {
                     try {
@@ -271,6 +271,22 @@ public class attendance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
+
+        email = getIntent().getStringExtra("email");
+        fullname = getIntent().getStringExtra("fullname");
+        role = getIntent().getStringExtra("role");
+        userId = getIntent().getIntExtra("user_id", 0);
+        company_id = getIntent().getIntExtra("company_id", 0);
+
+        navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
+        navigationHelper.enableBackButton();
+
+        initializeViews();
+
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
+
+
         initializeViews();
         setupUserData();
         initializeNetworkQueue();
@@ -279,9 +295,6 @@ public class attendance extends AppCompatActivity {
         checkCurrentAttendanceStatus(); // Add this line
         updateUI();
 
-        navigationHelper = new NavigationHelper(this);
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
     }
 
     private void initializeViews() {
@@ -295,6 +308,7 @@ public class attendance extends AppCompatActivity {
         checkInLayout = findViewById(R.id.checkInLayout);
         salaryLayout = findViewById(R.id.salaryLayout);
         attendanceLayout = findViewById(R.id.attendanceLayout);
+
 
         // Set current date
         currentDateText.setText(new SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(new Date()));
@@ -321,7 +335,10 @@ public class attendance extends AppCompatActivity {
         });
     }
 
-    private void setupUserData() {
+
+
+
+private void setupUserData() {
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
         role = getIntent().getStringExtra("role");
@@ -659,7 +676,7 @@ public class attendance extends AppCompatActivity {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://192.168.1.11/worksync/check_attendance_status.php",
+                "http://10.0.2.2/worksync/check_attendance_status.php",
                 requestBody,
                 response -> {
                     try {

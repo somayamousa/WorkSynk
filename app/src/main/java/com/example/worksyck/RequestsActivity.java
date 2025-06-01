@@ -24,8 +24,14 @@ public class RequestsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_requests);
 
 
-// Initialize NavigationHelper and set back button functionality
-        navigationHelper = new NavigationHelper(this,userId,email,fullname,role,company_id);
+        email = getIntent().getStringExtra("email");
+        fullname = getIntent().getStringExtra("fullname");
+        role = getIntent().getStringExtra("role");
+        userId = getIntent().getIntExtra("user_id", 0);
+        company_id = getIntent().getIntExtra("company_id", 0);
+
+        // Initialize NavigationHelper and set back button functionality
+        navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
         navigationHelper.enableBackButton();
 
         // Initialize views
@@ -34,7 +40,6 @@ public class RequestsActivity extends AppCompatActivity {
         // إعداد Bottom Navigation باستخدام الـ Helper
         LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
         navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
-
 
 
         // تفعيل النقر على CardView للانتقال إلى الأنشطة المناسبة

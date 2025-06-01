@@ -104,7 +104,9 @@ public class OvertimeRequest extends AppCompatActivity {
     }
 
     private void fetchOvertimeDataFromServer() {
-        String url = "http://10.0.2.2/worksync/get_overtime_data.php";  // استبدل بـ URL الخاص بك
+       // String url = "http://10.0.2.2/worksync/get_overtime_data.php";  // استبدل بـ URL الخاص بك
+        String url = "http://10.0.2.2/worksync/get_overtime_data.php?user_id=" + userId;
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
