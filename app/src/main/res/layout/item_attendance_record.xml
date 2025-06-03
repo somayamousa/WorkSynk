@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@android:color/white"
+    android:gravity="center_vertical">
+
+    <!-- Day -->
+    <TextView
+        android:id="@+id/dayTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"
+        android:text="Mon 2025-05-29"
+        android:textColor="#800080"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <!-- Check In -->
+    <TextView
+        android:id="@+id/checkInTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="08:30 am"
+        android:textSize="14sp" />
+
+    <!-- Check Out -->
+    <TextView
+        android:id="@+id/checkOutTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="08:30 am"
+        android:textSize="14sp" />
+
+    <!-- Total Hrs -->
+    <TextView
+        android:id="@+id/totalHrsTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="9 Hrs"
+        android:textSize="14sp" />
+
+
+</LinearLayout>
