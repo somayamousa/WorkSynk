@@ -32,7 +32,7 @@
                 android:contentDescription="Back"
                 android:padding="8dp"
                 android:src="?attr/actionModeCloseDrawable"
-                app:tint="#4A148C" />
+                app:tint="#000000" />
 
             <!-- Icon -->
             <ImageView

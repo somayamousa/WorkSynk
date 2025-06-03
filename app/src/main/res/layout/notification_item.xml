@@ -27,6 +27,7 @@
             android:id="@+id/textViewNotificationMessage"
             android:text="Notification content"
             android:textSize="16sp"
+            android:textColor="#020202"
             android:fontFamily="@font/poppins_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

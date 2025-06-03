@@ -116,12 +116,18 @@ public class OvertimeRequests extends AppCompatActivity {
         // Check if the overtime date is selected
         if (overtimeDate.isEmpty()) {
             Toast.makeText(this, "Please select a date", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
+        } else {
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.black));
         }
+
 
         // Check if the overtime hours input is empty
         if (hoursStr.isEmpty()) {
             Toast.makeText(this, "Please enter number of hours", Toast.LENGTH_SHORT).show();
+            overtimeHoursEditText.setError("Required");
+            overtimeHoursEditText.setBackgroundResource(R.drawable.edittext_error_border);
             return false;
         }
 
@@ -145,10 +151,15 @@ public class OvertimeRequests extends AppCompatActivity {
         // Check if the reason is provided
         if (overtimeReason.isEmpty()) {
             Toast.makeText(this, "Please enter a reason", Toast.LENGTH_SHORT).show();
+            reasonTextView.setError("Required");
+            reasonTextView.setBackgroundResource(R.drawable.edittext_error_border);
             return false;
-        }
+        } else {
+            reasonTextView.setError(null);
+            reasonTextView.setBackgroundResource(R.drawable.edittext_normal_border);
 
-        return true;
+            return true;
+        }
     }
     // Send the overtime request to the server
     private void sendOvertimeRequestToServer() {

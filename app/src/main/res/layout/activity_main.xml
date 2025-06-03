@@ -195,7 +195,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#F3E5F5"
+                    app:cardBackgroundColor="#EDE7F6"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -231,7 +231,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#F3E5F5"
+                    app:cardBackgroundColor="#EDE7F6"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -267,7 +267,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#F3E5F5"
+                    app:cardBackgroundColor="#EDE7F6"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -303,7 +303,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#F3E5F5"
+                    app:cardBackgroundColor="#EDE7F6"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -339,7 +339,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#F3E5F5"
+                    app:cardBackgroundColor="#EDE7F6"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 
@@ -375,7 +375,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardBackgroundColor="#F3E5F5"
+                    app:cardBackgroundColor="#EDE7F6"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp">
 

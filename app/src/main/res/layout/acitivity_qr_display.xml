@@ -98,7 +98,7 @@
 
     <LinearLayout
         android:id="@+id/buttonsContainer"
-        android:layout_width="310dp"
+        android:layout_width="289dp"
         android:layout_height="55dp"
         android:layout_marginTop="24dp"
         android:gravity="center"

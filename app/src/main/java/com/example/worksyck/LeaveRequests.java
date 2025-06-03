@@ -62,6 +62,8 @@ public class LeaveRequests extends AppCompatActivity {
                 "Sick Leave",
                 "Annual Leave",
                 "Emergency Leave",
+                "Marriage Leave",
+                "Bereavement Leave",
                 "Maternity Leave"
         };
 
@@ -203,7 +205,7 @@ public class LeaveRequests extends AppCompatActivity {
 
         if (leaveTypeSpinner.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a leave type", Toast.LENGTH_SHORT).show();
-            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+            leaveTypeSpinner.setBackgroundResource(R.drawable.spinner_error_border);
             return false;
         } else {
             leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -240,11 +242,11 @@ public class LeaveRequests extends AppCompatActivity {
         if (reason.isEmpty()) {
             Toast.makeText(this, "Please provide a reason for leave", Toast.LENGTH_SHORT).show();
             reasonTextView.setError("This field is required");
-            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+            reasonTextView.setBackgroundResource(R.drawable.edittext_error_border);
             return false;
         } else {
             reasonTextView.setError(null);
-            reasonTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            reasonTextView.setBackgroundResource(R.drawable.edittext_normal_border);
         }
 
         return true;
