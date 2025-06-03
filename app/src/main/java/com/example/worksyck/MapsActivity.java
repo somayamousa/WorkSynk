@@ -49,9 +49,9 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private static final String SAVE_LOCATION_URL = "http://10.0.2.2/worksync/save_location.php";
-    private static final String GET_LOCATIONS_URL = "http://10.0.2.2/worksync/get_locations.php";
-    private static final String DELETE_LOCATION_URL = "http://10.0.2.2/worksync/delete_location.php";
+    private static final String SAVE_LOCATION_URL = "http://10.2.2/worksync/save_location.php";
+    private static final String GET_LOCATIONS_URL = "http://10.2.2/worksync/get_locations.php";
+    private static final String DELETE_LOCATION_URL = "http://10.2.2/worksync/delete_location.php";
     private static final String TAG = "MapsActivity";
 
     private MapView map;
@@ -136,7 +136,7 @@ public class MapsActivity extends AppCompatActivity {
                 @Override
                 public boolean longPressHelper(GeoPoint p) {
                     if (currentLocationItem != null) {
-                        Toast.makeText(MapsActivity.this, "يوجد موقع محفوظ بالفعل", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "A location is already saved.", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                     showShapeSelectionDialog(p);
@@ -246,7 +246,7 @@ public class MapsActivity extends AppCompatActivity {
     private void showShapeSelectionDialog(GeoPoint center) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("اختر الشكل");
+            builder.setTitle("Choose the shape");
 
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -262,70 +262,70 @@ public class MapsActivity extends AppCompatActivity {
             layout.addView(shapeSpinner);
 
             builder.setView(layout);
-            builder.setPositiveButton("التالي", (dialog, which) -> {
+            builder.setPositiveButton("Next", (dialog, which) -> {
                 String selectedShape = shapeSpinner.getSelectedItem().toString();
                 showDimensionInputDialog(center, selectedShape);
             });
-            builder.setNegativeButton("إلغاء", null);
+            builder.setNegativeButton("Cancel", null);
             builder.show();
         } catch (Exception e) {
             Log.e(TAG, "Error showing shape selection dialog", e);
-            Toast.makeText(this, "فشل في عرض خيارات الشكل", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to display format options", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showDimensionInputDialog(GeoPoint center, String shapeType) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("أدخل الأبعاد");
+            builder.setTitle("Enter the dimensions");
 
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
             layout.setPadding(50, 20, 50, 20);
 
-            if (shapeType.equals("مربع/مستطيل")) {
-                final EditText inputWidth = createNumberInput("العرض (متر)");
-                final EditText inputHeight = createNumberInput("الطول (متر)");
+            if (shapeType.equals("square/rectangle")) {
+                final EditText inputWidth = createNumberInput("Width (meters)");
+                final EditText inputHeight = createNumberInput("Length (meters)");
                 layout.addView(inputWidth);
                 layout.addView(inputHeight);
 
                 builder.setView(layout);
-                builder.setPositiveButton("موافق", (dialog, which) -> {
+                builder.setPositiveButton("OK", (dialog, which) -> {
                     try {
                         double width = Double.parseDouble(inputWidth.getText().toString());
                         double height = Double.parseDouble(inputHeight.getText().toString());
                         validateAndCreateShape(center, shapeType, width, height);
                     } catch (NumberFormatException e) {
-                        Toast.makeText(this, "أدخل أرقام صحيحة", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Enter valid numbers", Toast.LENGTH_SHORT).show();
                     }
                 });
             } else { // Circle
-                final EditText inputRadius = createNumberInput("نصف القطر (متر)");
+                final EditText inputRadius = createNumberInput("Radius (meters)");
                 layout.addView(inputRadius);
 
                 builder.setView(layout);
-                builder.setPositiveButton("موافق", (dialog, which) -> {
+                builder.setPositiveButton("OK", (dialog, which) -> {
                     try {
                         double radius = Double.parseDouble(inputRadius.getText().toString());
                         validateAndCreateShape(center, shapeType, radius, 0);
                     } catch (NumberFormatException e) {
-                        Toast.makeText(this, "أدخل رقم صحيح", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Enter a valid number", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
-            builder.setNegativeButton("إلغاء", null);
+            builder.setNegativeButton("Cancel", null);
             builder.show();
         } catch (Exception e) {
             Log.e(TAG, "Error showing dimension input dialog", e);
-            Toast.makeText(this, "فشل في عرض إدخال الأبعاد", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to display dimension input", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void validateAndCreateShape(GeoPoint center, String shapeType, double dimension1, double dimension2) {
         try {
-            if (dimension1 <= 0 || (shapeType.equals("مربع/مستطيل") && dimension2 <= 0)) {
-                Toast.makeText(this, "يجب أن تكون الأبعاد أكبر من الصفر", Toast.LENGTH_SHORT).show();
+            if (dimension1 <= 0 || (shapeType.equals("square/rectangle") && dimension2 <= 0)) {
+                Toast.makeText(this, "Dimensions must be greater than zero.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -333,7 +333,7 @@ public class MapsActivity extends AppCompatActivity {
             addShapeOnMap(center, shapeType, dimension1, dimension2);
         } catch (Exception e) {
             Log.e(TAG, "Error creating shape", e);
-            Toast.makeText(this, "فشل في إنشاء الشكل", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to create shape", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -355,7 +355,7 @@ public class MapsActivity extends AppCompatActivity {
             Marker marker = createCenterMarker(center);
             Polyline shape = null;
 
-            if (shapeType.equals("مربع/مستطيل")) {
+            if (shapeType.equals("square/rectangle")) {
                 shape = createRectanglePolygon(center, dimension1, dimension2);
             } else { // Circle
                 shape = createCirclePolygon(center, dimension1);
@@ -379,7 +379,7 @@ public class MapsActivity extends AppCompatActivity {
             map.invalidate();
         } catch (Exception e) {
             Log.e(TAG, "Error adding shape to map", e);
-            Toast.makeText(this, "فشل في إضافة الشكل", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to add shape", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -424,7 +424,7 @@ public class MapsActivity extends AppCompatActivity {
     private Marker createCenterMarker(GeoPoint center) {
         Marker marker = new Marker(map);
         marker.setPosition(center);
-        marker.setTitle("موقعي");
+        marker.setTitle("My Location");
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         return marker;
     }
@@ -432,8 +432,8 @@ public class MapsActivity extends AppCompatActivity {
     private void showMarkerOptions() {
         try {
             new AlertDialog.Builder(this)
-                    .setTitle("خيارات النقطة")
-                    .setItems(new CharSequence[]{"حذف من الخريطة", "حذف نهائي", "إلغاء"}, (dialog, which) -> {
+                    .setTitle("Marker Options")
+                    .setItems(new CharSequence[]{"Remove from map", "Delete permanently", "Cancel"}, (dialog, which) -> {
                         if (which == 0) {
                             // Remove from map only
                             clearCurrentLocation();
@@ -450,7 +450,7 @@ public class MapsActivity extends AppCompatActivity {
                     .show();
         } catch (Exception e) {
             Log.e(TAG, "Error showing marker options", e);
-            Toast.makeText(this, "فشل في عرض خيارات النقطة", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to show marker options", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -464,11 +464,11 @@ public class MapsActivity extends AppCompatActivity {
                 btnSaveLocation.setEnabled(false);
                 btnClearLocation.setEnabled(false);
 
-                Toast.makeText(this, "تم حذف الموقع", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Location removed", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Log.e(TAG, "Error clearing location", e);
-            Toast.makeText(this, "فشل في حذف الموقع", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to remove location", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -484,7 +484,7 @@ public class MapsActivity extends AppCompatActivity {
 
     private void saveCurrentLocation() {
         if (currentLocationItem == null) {
-            Toast.makeText(this, "لا يوجد موقع لحفظه", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No location to save", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -513,7 +513,7 @@ public class MapsActivity extends AppCompatActivity {
                 jsonParam.put("longitude", item.center.getLongitude());
 
                 // Fixed: Proper circle handling
-                if (item.shapeType.equals("دائرة")) {
+                if (item.shapeType.equals("circle")) {
                     jsonParam.put("width", item.radius); // Save radius in width field
                     jsonParam.put("height", -1); // -1 indicates circle
                 } else {
@@ -582,9 +582,9 @@ public class MapsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                Toast.makeText(MapsActivity.this, "تم حفظ الموقع بنجاح", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsActivity.this, "Location saved successfully", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MapsActivity.this, "فشل في حفظ الموقع", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsActivity.this, "Failed to save location", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -624,10 +624,10 @@ public class MapsActivity extends AppCompatActivity {
                     // Fixed: Proper circle detection and handling
                     if (height == -1) {
                         // It's a circle
-                        return new LocationItem(id, center, "دائرة", width, -1, width, null, null);
+                        return new LocationItem(id, center, "circle", width, -1, width, null, null);
                     } else {
                         // It's a rectangle
-                        return new LocationItem(id, center, "مربع/مستطيل", width, height, 0, null, null);
+                        return new LocationItem(id, center, "square/rectangle", width, height, 0, null, null);
                     }
                 }
             } catch (Exception e) {
@@ -644,7 +644,7 @@ public class MapsActivity extends AppCompatActivity {
         protected void onPostExecute(LocationItem result) {
             if (result != null) {
                 // Load the saved location onto the map
-                if (result.shapeType.equals("دائرة")) {
+                if (result.shapeType.equals("circle")) {
                     addShapeOnMap(result.center, result.shapeType, result.radius, 0);
                 } else {
                     addShapeOnMap(result.center, result.shapeType, result.width, result.height);
@@ -694,9 +694,9 @@ public class MapsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             if (success) {
-                Toast.makeText(MapsActivity.this, "تم حذف الموقع نهائياً", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsActivity.this, "Location deleted permanently", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MapsActivity.this, "فشل في حذف الموقع", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsActivity.this, "Failed to delete location", Toast.LENGTH_SHORT).show();
             }
         }
     }

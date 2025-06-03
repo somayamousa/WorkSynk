@@ -57,6 +57,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -67,14 +68,18 @@ import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String ATTENDANCE_API_URL = "http://10.0.2.2/worksync/attendence.php";
-    private static final String DEVICE_VERIFICATION_URL = "http://10.0.2.2/worksync/device_verification.php";
+    private static final String ATTENDANCE_API_URL = "http://192.168.1.6/worksync/attendence.php";
+    private static final String DEVICE_VERIFICATION_URL = "http://192.168.1.6/worksync/device_verification.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
     private static final String ATTENDANCE_PREFS = "AttendancePrefs";
-
+    private TextView[] dateTextViews;
+    private TextView checkInStatus, checkOutStatus;
+    private SimpleDateFormat monthYearFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+    private Calendar calendar = Calendar.getInstance();
     // UI Components
     private Button startButton, stopButton;
     private TextView currentDateText, checkInTimeText, checkOutTimeText;
@@ -233,7 +238,7 @@ public class attendance extends AppCompatActivity {
 
         JsonObjectRequest locationRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://10.0.2.2/worksync/verify_location.php",
+                "http://192.168.1.6/worksync/verify_location.php",
                 locationRequestBody,
                 response -> {
                     try {
@@ -271,22 +276,6 @@ public class attendance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
-
-        email = getIntent().getStringExtra("email");
-        fullname = getIntent().getStringExtra("fullname");
-        role = getIntent().getStringExtra("role");
-        userId = getIntent().getIntExtra("user_id", 0);
-        company_id = getIntent().getIntExtra("company_id", 0);
-
-        navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
-        navigationHelper.enableBackButton();
-
-        initializeViews();
-
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
-
-
         initializeViews();
         setupUserData();
         initializeNetworkQueue();
@@ -295,6 +284,9 @@ public class attendance extends AppCompatActivity {
         checkCurrentAttendanceStatus(); // Add this line
         updateUI();
 
+        navigationHelper = new NavigationHelper(this);
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
     }
 
     private void initializeViews() {
@@ -308,10 +300,19 @@ public class attendance extends AppCompatActivity {
         checkInLayout = findViewById(R.id.checkInLayout);
         salaryLayout = findViewById(R.id.salaryLayout);
         attendanceLayout = findViewById(R.id.attendanceLayout);
-
-
-        // Set current date
-        currentDateText.setText(new SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(new Date()));
+        checkInStatus = findViewById(R.id.checkInStatus);
+        checkOutStatus = findViewById(R.id.checkOutStatus);
+        // Initialize date TextViews
+        dateTextViews = new TextView[]{
+                findViewById(R.id.date1Text),
+                findViewById(R.id.date2Text),
+                findViewById(R.id.date3Text),
+                findViewById(R.id.date4Text),
+                findViewById(R.id.date5Text),
+                findViewById(R.id.date6Text),
+                findViewById(R.id.date7Text)
+        };
+        updateDateAndCalendar();
 
         homeLayout.setOnClickListener(v -> {
             Intent intent = new Intent(attendance.this, MainActivity.class);
@@ -334,11 +335,43 @@ public class attendance extends AppCompatActivity {
             }
         });
     }
+    private void updateDateAndCalendar() {
+        // Update month/year text
+        currentDateText.setText(monthYearFormat.format(calendar.getTime()));
 
+        // Highlight today's date
+        Calendar today = Calendar.getInstance();
+        int todayDay = today.get(Calendar.DAY_OF_MONTH);
+        int todayMonth = today.get(Calendar.MONTH);
+        int todayYear = today.get(Calendar.YEAR);
 
+        // Set the calendar to the first day of the current week
+        Calendar weekCalendar = (Calendar) calendar.clone();
+        weekCalendar.set(Calendar.DAY_OF_WEEK, weekCalendar.getFirstDayOfWeek());
 
+        // Update date numbers for the week
+        for (int i = 0; i < 7; i++) {
+            int dayOfMonth = weekCalendar.get(Calendar.DAY_OF_MONTH);
+            dateTextViews[i].setText(String.valueOf(dayOfMonth));
 
-private void setupUserData() {
+            // Highlight today's date
+            if (weekCalendar.get(Calendar.DAY_OF_MONTH) == todayDay &&
+                    weekCalendar.get(Calendar.MONTH) == todayMonth &&
+                    weekCalendar.get(Calendar.YEAR) == todayYear) {
+                dateTextViews[i].setBackgroundResource(R.drawable.circle_background_today);
+                dateTextViews[i].setTextColor(ContextCompat.getColor(this, android.R.color.white));
+            } else {
+                dateTextViews[i].setBackgroundResource(R.drawable.circle_background);
+                dateTextViews[i].setTextColor(ContextCompat.getColor(this, android.R.color.black));
+            }
+
+            weekCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+    }
+    private String formatTime(long time) {
+        return timeFormat.format(new Date(time));
+    }
+    private void setupUserData() {
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
         role = getIntent().getStringExtra("role");
@@ -676,7 +709,7 @@ private void setupUserData() {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://10.0.2.2/worksync/check_attendance_status.php",
+                "http://192.168.1.6/worksync/check_attendance_status.php",
                 requestBody,
                 response -> {
                     try {
@@ -854,17 +887,30 @@ private void setupUserData() {
             stopButton.setEnabled(isWorking);
 
             if (isWorking) {
-                checkInTimeText.setText("Working - started at " + formatTime(startTime));
+                checkInTimeText.setText("Checked in at " + formatTime(startTime));
+                checkInStatus.setText("Working");
+                checkInStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
             } else {
-                checkInTimeText.setText("Ready to check in");
-                checkOutTimeText.setText("");
+                checkInTimeText.setText("Not checked in yet");
+                checkInStatus.setText("Pending");
+                checkInStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+            }
+
+            // Update check-out time
+            if (checkOutTimeText != null) {
+                if (!isWorking && startTime > 0) {
+                    checkOutTimeText.setText("Checked out at " + formatTime(startTime + (8 * 60 * 60 * 1000))); // Assuming 8 hour work day
+                    checkOutStatus.setText("Completed");
+                    checkOutStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
+                } else {
+                    checkOutTimeText.setText("--:--:--");
+                    checkOutStatus.setText("Pending");
+                    checkOutStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+                }
             }
         });
     }
 
-    private String formatTime(long time) {
-        return new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date(time));
-    }
 
     private void showToast(String message) {
         runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
