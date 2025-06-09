@@ -3,8 +3,8 @@
     <string name="title_activity_login">login</string>
     <string name="password">password</string>
     <string-array name="shape_types">
-        <item>مربع/مستطيل</item>
-        <item>دائرة</item>
+        <item>Square/Rectangle</item>
+        <item>Circle</item>
     </string-array>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

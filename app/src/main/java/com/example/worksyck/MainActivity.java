@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void fetchAttendanceData() {
-        String url = "http://10.0.2.2/worksync/get_attendance_summary.php";
+        String url = "http://192.168.1.6/worksync/get_attendance_summary.php";
 
         // For emulator use: "http://10.0.2.2/worksync/get_attendance_summary.php"
 

@@ -67,8 +67,8 @@ import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String ATTENDANCE_API_URL = "http://10.0.2.2/worksync/attendence.php";
-    private static final String DEVICE_VERIFICATION_URL = "http://10.0.2.2/worksync/device_verification.php";
+    private static final String ATTENDANCE_API_URL = "http://192.168.1.6/worksync/attendence.php";
+    private static final String DEVICE_VERIFICATION_URL = "http://192.168.1.6/worksync/device_verification.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
@@ -233,7 +233,7 @@ public class attendance extends AppCompatActivity {
 
         JsonObjectRequest locationRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://10.0.2.2/worksync/verify_location.php",
+                "http://192.168.1.6/worksync/verify_location.php",
                 locationRequestBody,
                 response -> {
                     try {
@@ -656,7 +656,7 @@ public class attendance extends AppCompatActivity {
         saveState();
         sendAttendanceRecord("end");
         updateUI();
-        showToast("Work ended at " + formatTime(endTime));
+        showToast("" + formatTime(endTime));
         checkOutTimeText.setText(formatTime(endTime));
     }
     private void checkCurrentAttendanceStatus() {
@@ -674,7 +674,7 @@ public class attendance extends AppCompatActivity {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://192.168.1.11/worksync/check_attendance_status.php",
+                "http://192.168.1.6/worksync/check_attendance_status.php",
                 requestBody,
                 response -> {
                     try {
@@ -852,9 +852,9 @@ public class attendance extends AppCompatActivity {
             stopButton.setEnabled(isWorking);
 
             if (isWorking) {
-                checkInTimeText.setText("Working - started at " + formatTime(startTime));
+                checkInTimeText.setText("" + formatTime(startTime));
             } else {
-                checkInTimeText.setText("Ready to check in");
+                checkInTimeText.setText("check in");
                 checkOutTimeText.setText("");
             }
         });
