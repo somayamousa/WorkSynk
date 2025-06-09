@@ -31,7 +31,6 @@ public class login extends AppCompatActivity {
     private RequestQueue requestQueue;
     private static final String TAG = "LoginActivity";
     private static final String LOGIN_URL = "http://10.0.2.2/worksync/loginapi.php";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +38,7 @@ public class login extends AppCompatActivity {
         editTextUsername = findViewById(R.id.inputEmail);
         editTextPassword = findViewById(R.id.inputPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
-
         requestQueue = Volley.newRequestQueue(this);
-
         btnLogin.setOnClickListener(v -> userLogin());
     }
     private void userLogin() {

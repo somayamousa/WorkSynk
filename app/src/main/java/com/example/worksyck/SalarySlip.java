@@ -297,7 +297,7 @@ public class SalarySlip extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void fetchWorkingsDays(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary, double totalSalaryIncrease, List<SalaryIncrease> temporaryIncreases, List<SalaryIncrease> permanentIncreases) {
+    private void fetchWorkingsDays(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary, double totalSalaryIncrease, List<SalaryIncrease> temporaryIncreases, List<SalaryIncrease> permanentIncreases, ArrayList<Leave> paidLeaves) {
         Log.d("Debug", "specialDayPolicy = " + specialDayPolicy);
         Log.d("Hi Fetch Workings Days","Hi");
         {
@@ -326,47 +326,73 @@ public class SalarySlip extends AppCompatActivity {
                                                 double DayRate = 0;
                                                 double overTimeWorkedHourPerDay = 0;
                                                 double normalWorkedHour = 0;
-                                                double totalWorkedHourPerDay = 0;
+
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
                                                 for (int i = 0; i < attendanceList.size(); i++) {
                                                     AttendanceRecord record = attendanceList.get(i);
-                                                    totalWorkedHourPerDay = record.getWorkedHours();
+                                                    double totalWorkedHourPerDay = record.getWorkedHours();
+
                                                     try {
                                                         String dateStr = record.getDate();
-                                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                                         Date date = sdf.parse(dateStr);
                                                         Calendar calendar = Calendar.getInstance();
                                                         calendar.setTime(date);
-                                                        int numOfDay = calendar.get(Calendar.DAY_OF_WEEK);
-                                                        boolean isWeekend = workDay.get(numOfDay) != null && workDay.get(numOfDay) == 0;
+
+                                                        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                                                        boolean isWeekend = workDay.get(dayOfWeek) != null && workDay.get(dayOfWeek) == 0;
                                                         boolean isHoliday = holidaysDates.contains(dateStr);
                                                         boolean isSpecialDay = isHoliday || isWeekend;
-                                                        if (!isSpecialDay || specialDayPolicy.equalsIgnoreCase("normal")) {
-                                                            overTimeWorkedHourPerDay = totalWorkedHourPerDay - expectedHoursPerDay;
-                                                            if (overTimeWorkedHourPerDay < 0) {
-                                                                overTimeWorkedHourPerDay = 0;
+
+                                                        boolean isPaidLeave = false;
+                                                        for (Leave leave : paidLeaves) {
+                                                            try {
+                                                                Date leaveStart = sdf.parse(leave.getStartDate());
+                                                                Date leaveEnd = sdf.parse(leave.getEndDate());
+                                                                if (!date.before(leaveStart) && !date.after(leaveEnd)) {
+                                                                    if (leave.getIsPaid().trim().equalsIgnoreCase("1")) {
+                                                                        isPaidLeave = true;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            } catch (ParseException e) {
+                                                                e.printStackTrace();
                                                             }
-                                                            normalWorkedHour = totalWorkedHourPerDay - overTimeWorkedHourPerDay;
-                                                            DayRate = (normalWorkedHour * normalHourRate) + (overTimeWorkedHourPerDay * overtimeHourRate);
-                                                        } else if (specialDayPolicy.equalsIgnoreCase("overtime")) {
-
-                                                            DayRate = (totalWorkedHourPerDay * overtimeHourRate);
-
-
-                                                        } else if (specialDayPolicy.equalsIgnoreCase("custom_rate")) {
-                                                            DayRate = totalWorkedHourPerDay * normalHourRate * holidayHourRate;
-                                                            Log.d("Holiday rate", String.valueOf(holidayHourRate));
                                                         }
+
+                                                        if (isPaidLeave) {
+                                                            DayRate = expectedHoursPerDay * normalHourRate;
+                                                        } else {
+                                                            if (!isSpecialDay || specialDayPolicy.equalsIgnoreCase("normal")) {
+                                                                overTimeWorkedHourPerDay = totalWorkedHourPerDay - expectedHoursPerDay;
+                                                                if (overTimeWorkedHourPerDay < 0) {
+                                                                    overTimeWorkedHourPerDay = 0;
+                                                                }
+                                                                normalWorkedHour = totalWorkedHourPerDay - overTimeWorkedHourPerDay;
+                                                                DayRate = (normalWorkedHour * normalHourRate) + (overTimeWorkedHourPerDay * overtimeHourRate);
+                                                            } else if (specialDayPolicy.equalsIgnoreCase("overtime")) {
+                                                                DayRate = (totalWorkedHourPerDay * overtimeHourRate);
+                                                            } else if (specialDayPolicy.equalsIgnoreCase("custom_rate")) {
+                                                                DayRate = totalWorkedHourPerDay * normalHourRate * holidayHourRate;
+                                                                Log.d("Holiday rate", String.valueOf(holidayHourRate));
+                                                            }
+                                                        }
+
                                                         if (isSpecialDay) {
                                                             Log.d("Special Day", "Date: " + dateStr + " | Policy: " + specialDayPolicy);
                                                         }
+
                                                         finalSalary += DayRate;
 
                                                         Log.d("Daily Rate", "Date: " + dateStr + " | Worked: " + totalWorkedHourPerDay + " | Rate: " + DayRate);
+
                                                     } catch (Exception e) {
                                                         throw new RuntimeException(e);
                                                     }
                                                 }
+
                                                 finalSalary += totalSalaryIncrease;
+
                                                 generateSalarySlipPdf("Sojood Salah Aldeen", "Jun", 2800, 2800);
                                                 Log.d("Salary", "Employee ID: " + employeeId + " | Final Salary: " + finalSalary);
                                                 Log.d("totalSalaryIncrease", "Employee ID: " + employeeId + " | totalSalaryIncrease: " + totalSalaryIncrease);
@@ -393,11 +419,27 @@ public class SalarySlip extends AppCompatActivity {
                                                     Date currentDate = cal.getTime();
                                                     String dateStr = sdf.format(currentDate);
                                                     int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-
                                                     boolean isWorkDay = workDay.get(dayOfWeek) != null && workDay.get(dayOfWeek) == 1;
                                                     boolean isHoliday = holidaysDates.contains(dateStr);
                                                     boolean isWeekend = !isWorkDay;
                                                     boolean isPresent = false;
+                                                    boolean isPaidLeave = false;
+                                                    for (Leave leave : paidLeaves) {
+                                                        try {
+                                                            Date leaveStart = sdf.parse(leave.getStartDate());
+                                                            Date leaveEnd = sdf.parse(leave.getEndDate());
+                                                            if (!currentDate.before(leaveStart) && !currentDate.after(leaveEnd)) {
+                                                                if (leave.getIsPaid().trim().equalsIgnoreCase("1")) {
+                                                                    isPaidLeave = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        } catch (ParseException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+
+
 
                                                     AttendanceRecord todayRecord = null;
                                                     for (AttendanceRecord record : attendanceList) {
@@ -411,7 +453,6 @@ public class SalarySlip extends AppCompatActivity {
                                                     double workedHours = isPresent ? todayRecord.getWorkedHours() : 0;
 
                                                     if (isWorkDay && !isHoliday) {
-                                                        // يوم عمل عادي
                                                         if (isPresent) {
                                                             double diff = workedHours - expectedHoursPerDay;
                                                             if (diff > 0) {
@@ -423,9 +464,13 @@ public class SalarySlip extends AppCompatActivity {
                                                                 totalMissingRate += missing * normalHourRate;
                                                             }
                                                         } else {
-                                                            totalMissingHours += expectedHoursPerDay;
-                                                            totalMissingRate += expectedHoursPerDay * normalHourRate;
-                                                            absentDates.add(dateStr);
+                                                            if (!isPaidLeave) {
+                                                                // اليوم غياب فعلي، ينقص من الراتب
+                                                                totalMissingHours += expectedHoursPerDay;
+                                                                totalMissingRate += expectedHoursPerDay * normalHourRate;
+                                                                absentDates.add(dateStr);
+                                                            }
+                                                            // إذا إجازة مدفوعة ما في خصم ولا نضيف يوم غياب
                                                         }
                                                     } else if (isHoliday || isWeekend) {
                                                         if (isPresent) {
@@ -696,7 +741,46 @@ public class SalarySlip extends AppCompatActivity {
         });
         requestQueue.add(stringRequest);
     }
+    private void fetchPaidLeaveDates(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary, double totalSalaryIncrease, List<SalaryIncrease> temporaryIncreases, List<SalaryIncrease> permanentIncreases) {
+            ArrayList<Leave> paidLeaves = new ArrayList<Leave>();
+        String url = "http://10.0.2.2/worksync/get_paid_leave_inPeriod.php?employee_id=" + employeeId
+                + "&start_date=" + startDate + "&end_date=" + endDate;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
+                            Log.d("PaidLeaves", "Fetched: " + response );
 
+            try {
+                JSONObject object = new JSONObject(response);
+                if (object.getString("status").equals("success")) {
+                    JSONArray datesArray = object.getJSONArray("data");
+                    for (int i = 0; i < datesArray.length(); i++) {
+                    String  id=    datesArray.getJSONObject(i).getString("id");
+                        String leave_type =  datesArray.getJSONObject(i).getString("leave_type");
+                        String start_date=    datesArray.getJSONObject(i).getString("start_date");
+                        String end_date =    datesArray.getJSONObject(i).getString("end_date");
+                        String status =    datesArray.getJSONObject(i).getString("status");
+                        String is_paid=    datesArray.getJSONObject(i).getString("is_paid");
+                        String reason=     datesArray.getJSONObject(i).getString("reason");
+                        Leave leave = new Leave(id,leave_type,start_date,end_date,status,is_paid,reason);
+                        paidLeaves.add(leave);
+                    }
+                }
+                else{
+
+                }
+                fetchWorkingsDays(employeeId, expectedHoursPerDay, normalHourRate, overtimeHourRate, attendanceList, holidaysDates, salaryStructureType, baseSalary,totalSalaryIncrease,temporaryIncreases,permanentIncreases,paidLeaves);
+
+//there is call methods
+//                Log.d("PaidLeaves", "Fetched: " + paidLeaveDates.size() + " days");
+
+            } catch (JSONException e) {
+                Log.e("Leave JSON Error", e.getMessage());
+            }
+        }, error -> {
+            Log.e("Volley Error", error.getMessage());
+        });
+
+        requestQueue.add(stringRequest);
+    }
 
     private void fetchSalaryIncreases(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary) {
         String url = "http://10.0.2.2/worksync/get_salary_increases.php?employee_id=" + String.valueOf(employeeId);
@@ -752,7 +836,7 @@ public class SalarySlip extends AppCompatActivity {
                 else{
 
                 }
-                fetchWorkingsDays(employeeId, expectedHoursPerDay, normalHourRate, overtimeHourRate, attendanceList, holidaysDates, salaryStructureType, baseSalary,totalSalaryIncrease,temporaryIncreases,permanentIncreases);
+                fetchPaidLeaveDates(employeeId, expectedHoursPerDay, normalHourRate, overtimeHourRate, attendanceList, holidaysDates, salaryStructureType, baseSalary,totalSalaryIncrease,temporaryIncreases,permanentIncreases);
 
 
             } catch (JSONException e) {
