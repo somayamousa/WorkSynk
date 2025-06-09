@@ -1,5 +1,7 @@
 package com.example.worksyck;
 
+import java.time.LocalDate;
+
 public class SalaryIncrease {
     private int id;
     private int employeeId;
@@ -38,6 +40,22 @@ public class SalaryIncrease {
         this.notes = notes;
         this.updated_at=updated_at;
         this.createdAt = createdAt;
+    }
+
+    public SalaryIncrease(String type, String durationType,double amount, String increasestartDate) {
+        this.increaseAmount=amount;
+        this.durationType=durationType;
+        this.increaseType=type;
+        this.startDate=increasestartDate;
+    }
+
+    public SalaryIncrease(String type, String durationType, double applicableAmount, String s, String s1) {
+
+        this.increaseAmount=applicableAmount;
+        this.durationType=durationType;
+        this.increaseType=type;
+        this.startDate=s;
+        this.endDate=s1;
     }
 
     // Getters and Setters
