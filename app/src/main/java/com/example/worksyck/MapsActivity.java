@@ -49,9 +49,9 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private static final String SAVE_LOCATION_URL = "http://10.2.2/worksync/save_location.php";
-    private static final String GET_LOCATIONS_URL = "http://10.2.2/worksync/get_locations.php";
-    private static final String DELETE_LOCATION_URL = "http://10.2.2/worksync/delete_location.php";
+    private static final String SAVE_LOCATION_URL = "http://192.168.1.6/worksync/save_location.php";
+    private static final String GET_LOCATIONS_URL = "http://192.168.1.6/worksync/get_locations.php";
+    private static final String DELETE_LOCATION_URL = "http://192.168.1.6/worksync/delete_location.php";
     private static final String TAG = "MapsActivity";
 
     private MapView map;
@@ -136,7 +136,7 @@ public class MapsActivity extends AppCompatActivity {
                 @Override
                 public boolean longPressHelper(GeoPoint p) {
                     if (currentLocationItem != null) {
-                        Toast.makeText(MapsActivity.this, "A location is already saved.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "There is already a saved location", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                     showShapeSelectionDialog(p);
@@ -246,7 +246,7 @@ public class MapsActivity extends AppCompatActivity {
     private void showShapeSelectionDialog(GeoPoint center) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Choose the shape");
+            builder.setTitle("Select Shape");
 
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -270,22 +270,22 @@ public class MapsActivity extends AppCompatActivity {
             builder.show();
         } catch (Exception e) {
             Log.e(TAG, "Error showing shape selection dialog", e);
-            Toast.makeText(this, "Failed to display format options", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to show shape options", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showDimensionInputDialog(GeoPoint center, String shapeType) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Enter the dimensions");
+            builder.setTitle("Enter Dimensions");
 
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
             layout.setPadding(50, 20, 50, 20);
 
-            if (shapeType.equals("square/rectangle")) {
+            if (shapeType.equals("Square/Rectangle")) {
                 final EditText inputWidth = createNumberInput("Width (meters)");
-                final EditText inputHeight = createNumberInput("Length (meters)");
+                final EditText inputHeight = createNumberInput("Height (meters)");
                 layout.addView(inputWidth);
                 layout.addView(inputHeight);
 
@@ -318,14 +318,14 @@ public class MapsActivity extends AppCompatActivity {
             builder.show();
         } catch (Exception e) {
             Log.e(TAG, "Error showing dimension input dialog", e);
-            Toast.makeText(this, "Failed to display dimension input", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to show dimension input", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void validateAndCreateShape(GeoPoint center, String shapeType, double dimension1, double dimension2) {
         try {
-            if (dimension1 <= 0 || (shapeType.equals("square/rectangle") && dimension2 <= 0)) {
-                Toast.makeText(this, "Dimensions must be greater than zero.", Toast.LENGTH_SHORT).show();
+            if (dimension1 <= 0 || (shapeType.equals("Square/Rectangle") && dimension2 <= 0)) {
+                Toast.makeText(this, "Dimensions must be greater than zero", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -355,7 +355,7 @@ public class MapsActivity extends AppCompatActivity {
             Marker marker = createCenterMarker(center);
             Polyline shape = null;
 
-            if (shapeType.equals("square/rectangle")) {
+            if (shapeType.equals("Square/Rectangle")) {
                 shape = createRectanglePolygon(center, dimension1, dimension2);
             } else { // Circle
                 shape = createCirclePolygon(center, dimension1);
@@ -513,7 +513,7 @@ public class MapsActivity extends AppCompatActivity {
                 jsonParam.put("longitude", item.center.getLongitude());
 
                 // Fixed: Proper circle handling
-                if (item.shapeType.equals("circle")) {
+                if (item.shapeType.equals("Circle")) {
                     jsonParam.put("width", item.radius); // Save radius in width field
                     jsonParam.put("height", -1); // -1 indicates circle
                 } else {
@@ -624,10 +624,10 @@ public class MapsActivity extends AppCompatActivity {
                     // Fixed: Proper circle detection and handling
                     if (height == -1) {
                         // It's a circle
-                        return new LocationItem(id, center, "circle", width, -1, width, null, null);
+                        return new LocationItem(id, center, "Circle", width, -1, width, null, null);
                     } else {
                         // It's a rectangle
-                        return new LocationItem(id, center, "square/rectangle", width, height, 0, null, null);
+                        return new LocationItem(id, center, "Square/Rectangle", width, height, 0, null, null);
                     }
                 }
             } catch (Exception e) {
@@ -644,7 +644,7 @@ public class MapsActivity extends AppCompatActivity {
         protected void onPostExecute(LocationItem result) {
             if (result != null) {
                 // Load the saved location onto the map
-                if (result.shapeType.equals("circle")) {
+                if (result.shapeType.equals("Circle")) {
                     addShapeOnMap(result.center, result.shapeType, result.radius, 0);
                 } else {
                     addShapeOnMap(result.center, result.shapeType, result.width, result.height);
