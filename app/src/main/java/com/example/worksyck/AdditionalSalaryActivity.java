@@ -777,10 +777,8 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
                                 );
                                 increaseList.add(increase);
                             }
-                            // تخزين القائمة الأصلية
                             originalIncreaseList.clear();
                             originalIncreaseList.addAll(increaseList);
-                            // تحديث القائمة في الـ Adapter
                             adapter.setList(increaseList);
                             adapter.notifyDataSetChanged();
                         } else {

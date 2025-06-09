@@ -13,13 +13,16 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,7 +32,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,13 +51,22 @@ import java.util.Map;
 import java.util.Set;
 
 public class SalarySlip extends AppCompatActivity {
-    private TextView startDateText, endDateText;
     private Button createSalarySlipBtn;
     private String startDate, endDate;
     private RequestQueue requestQueue;
     private String specialDayPolicy;
     private EditText holidayHourRateInput;
-    double holidayHourRate ;
+    private   double holidayHourRate ;
+    private TextView startDateText, endDateText, holidayHourRateLabel;
+    private RadioGroup employeeTypeGroup, salaryTypeGroup;
+    private Spinner departmentSpinner;
+    private RadioButton radioAllEmployees, radioByDepartment, radioByEmployee;
+    private RadioButton radioFixed, radioHourly;
+
+    private ArrayList<String> departments = new ArrayList<>();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +74,18 @@ public class SalarySlip extends AppCompatActivity {
         setContentView(R.layout.activity_salary_slip);
         /**** Set Views*/
         startDateText = findViewById(R.id.startDateText);
-        endDateText = findViewById(R.id.endDateText);
         createSalarySlipBtn = findViewById(R.id.createSalarySlipBtn);
         holidayHourRateInput = findViewById(R.id.holidayHourRateInput);
+        holidayHourRateLabel = findViewById(R.id.holidayHourRateLabel);
+        departmentSpinner = findViewById(R.id.departmentSpinner);
+
+        employeeTypeGroup = findViewById(R.id.employeeTypeGroup);
+        salaryTypeGroup = findViewById(R.id.salaryTypeGroup);
+        radioAllEmployees = findViewById(R.id.radioAllEmployees);
+        radioByDepartment = findViewById(R.id.radioByDepartment);
+        radioByEmployee = findViewById(R.id.radioByEmployee);
+        radioFixed = findViewById(R.id.radioFixed);
+        radioHourly = findViewById(R.id.radioHourly);
         /** initialized Parameters**/
         requestQueue = Volley.newRequestQueue(this);
         startDate = "";
@@ -75,11 +95,17 @@ public class SalarySlip extends AppCompatActivity {
         specialDayPolicy = "normal"; // default
         if (selectedHolidayPolicyId == R.id.holiday_normal) {
             specialDayPolicy = "normal";
+            holidayHourRateInput.setVisibility(View.GONE);
+            holidayHourRateLabel.setVisibility(View.GONE);
         } else if (selectedHolidayPolicyId == R.id.holiday_overtime) {
             specialDayPolicy = "overtime";
+            holidayHourRateInput.setVisibility(View.GONE);
+            holidayHourRateLabel.setVisibility(View.GONE);
         } else if (selectedHolidayPolicyId == R.id.holiday_special) {
             specialDayPolicy = "custom_rate";
             holidayHourRateInput.setVisibility(View.VISIBLE);
+            holidayHourRateLabel.setVisibility(View.VISIBLE);
+
         }
 /**choose Start Date**/
         startDateText.setOnClickListener(v -> {
@@ -121,6 +147,17 @@ public class SalarySlip extends AppCompatActivity {
             );
             datePickerDialog.show();
         });
+
+        departments.add("All Departments");
+        departments.add("HR");
+        departments.add("IT");
+        departments.add("Finance");
+
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        departmentSpinner.setAdapter(adapter);
+
+
 ///**choose End Date**/
 //        endDateText.setOnClickListener(v -> {
 //            Calendar calendar = Calendar.getInstance();
@@ -137,6 +174,21 @@ public class SalarySlip extends AppCompatActivity {
 //            );
 //            datePickerDialog.show();
 //        });
+
+//        employeeTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
+//            switch (checkedId) {
+//                case R.id.radioAllEmployees:
+//                    // Hide department/employee filters
+//                    break;
+//                case R.id.radioByDepartment:
+//                    // Show departmentSpinner
+//                    break;
+//                case R.id.radioByEmployee:
+//                    // Show employee spinner or search input
+//                    break;
+//            }
+//        });
+
         createSalarySlipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,7 +261,31 @@ public class SalarySlip extends AppCompatActivity {
             return false;
         }
     }
-
+    private void fetchAllDepartments() {
+        String url = "http://10.0.2.2/worksync/fetch_all_departments.php";
+        StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
+            try {
+                departments.clear();
+                departments.add("All Departments");
+                JSONObject json = new JSONObject(response);
+                if (json.getString("status").equals("success")){
+                    JSONArray data = json.getJSONArray("data");
+                    for (int i = 0; i < data.length(); i++) {
+                        JSONObject dep = data.getJSONObject(i);
+                        String id = dep.getString("id");
+                        String name = dep.getString("name");
+                        departments.add(name);
+                    }
+                } else {
+                    Log.d("Departments", json.getString("message"));
+//                    Toast.makeText(this, json.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                Log.e("JSON Error", e.toString());
+            }
+        }, error -> Log.e("Volley Error", error.toString()));
+        requestQueue.add(request);
+    }
     public void  fetchAttendanceRecord(int employee_id, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, String salaryStructureType, double baseSalary) {
         String url = "http://10.0.2.2/worksync/fetch_employee_attendance_records.php" + "?employee_id=" + employee_id + "&start_date=" + startDate + "&end_date=" + endDate;
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -296,7 +372,42 @@ public class SalarySlip extends AppCompatActivity {
                 });
         requestQueue.add(stringRequest);
     }
-
+    private void fetchEmployees(String departmentId,String company_id) {
+        String url;
+        if (departmentId == null) {
+            url = "http://10.0.2.2/worksync/fetch_all_employees.php?company_id=" + company_id;
+        } else {
+            url = "http://10.0.2.2/worksync/fetch_employees_by_department.php?department_id=" + departmentId + "&company_id=" + company_id;
+        }
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+            ArrayList<Employee> employeeList = new ArrayList<Employee>();
+                         try {
+                        Log.d("Response", response);
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getString("status").equals("success") && !jsonObject.getString("message").equals("No employee found")) {
+                            JSONArray data = jsonObject.getJSONArray("data");
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject obj = data.getJSONObject(i);
+                                String id = obj.optString("id", "");
+                                String full_name = obj.optString("fullname", "");
+                                String email = obj.optString("email", "");
+                                String department = obj.optString("department_name", "");
+                                String company = obj.optString("company_name", "");
+                                String designation = obj.optString("designation_name", "");
+                                employeeList.add(new Employee(id, full_name, email, department, company, designation));
+                            }
+                        } else {
+                            Log.d("No Employee Found", "No employee found");
+                        }
+                    } catch (JSONException e) {
+                        Log.e("JSON Error", e.getMessage());
+                    }
+                },
+                error -> Log.e("Volley Error", error.toString())
+        );
+        requestQueue.add(request);
+    }
     private void fetchWorkingsDays(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary, double totalSalaryIncrease, List<SalaryIncrease> temporaryIncreases, List<SalaryIncrease> permanentIncreases, ArrayList<Leave> paidLeaves) {
         Log.d("Debug", "specialDayPolicy = " + specialDayPolicy);
         Log.d("Hi Fetch Workings Days","Hi");
@@ -631,8 +742,51 @@ public class SalarySlip extends AppCompatActivity {
         }
         document.close();
     }
-
-
+    private void getSpescficEmployee( int employee_id) {
+        String employeeDetailsUrl = "http://10.0.2.2/worksync/get_spesfic_employee.php?employee_id=" + employee_id;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, employeeDetailsUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Employee Details", response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if (status.equals("success")) {
+                        String message = jsonObject.getString("message");
+                        if (!message.equals("No employee found")) {
+                            /**Fetch the employee Information*/
+                            JSONObject employeeDetailsObj = jsonObject.getJSONObject("data");
+                            String full_name = employeeDetailsObj.getString("fullname");
+                            String phone = employeeDetailsObj.getString("phone");
+                            String employee_status = employeeDetailsObj.getString("status");
+                            String email = employeeDetailsObj.getString("email");
+                            String base_salary = employeeDetailsObj.getString("base_salary");
+                            String salary_structure_type = employeeDetailsObj.getString("salary_structure_type");
+                            String overtime_hour_rate = employeeDetailsObj.getString("overtime_hour_rate");
+                            String normal_hour_rate = employeeDetailsObj.getString("normal_hour_rate");
+                            String expected_hours_per_day = employeeDetailsObj.getString("expected_hours_per_day");
+                            String working_day_per_week = employeeDetailsObj.getString("working_day_per_week");
+                            String company_name = employeeDetailsObj.getString("company_name");
+                            String designation_name = employeeDetailsObj.getString("designation_name");
+                            String department_name = employeeDetailsObj.getString("department_name");
+                        }else {
+                            Log.d("Employee Details ", "No employee found with this Id");
+                        }
+                    } else {
+                        Log.e("Employee Details Error", "Failed to fetch employee details (Error in Query or data base and so on ");
+                    }
+                } catch (JSONException e) {
+                    Log.d("Exception", String.valueOf(e));
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError", String.valueOf(error));
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
     private void fetchEmployeeDetails( int employee_id) {
         String employeeDetailsUrl = "http://10.0.2.2/worksync/get_spesfic_employee.php?employee_id=" + employee_id;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, employeeDetailsUrl, new Response.Listener<String>() {
@@ -741,6 +895,7 @@ public class SalarySlip extends AppCompatActivity {
         });
         requestQueue.add(stringRequest);
     }
+
     private void fetchPaidLeaveDates(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary, double totalSalaryIncrease, List<SalaryIncrease> temporaryIncreases, List<SalaryIncrease> permanentIncreases) {
             ArrayList<Leave> paidLeaves = new ArrayList<Leave>();
         String url = "http://10.0.2.2/worksync/get_paid_leave_inPeriod.php?employee_id=" + employeeId
@@ -870,5 +1025,6 @@ public class SalarySlip extends AppCompatActivity {
 
         return totalIncreaseAmount * ((double) overlappingDays / totalIncreaseDays);
     }
+
 
 }

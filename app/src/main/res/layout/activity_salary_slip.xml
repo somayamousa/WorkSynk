@@ -1,12 +1,132 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/main" android:layout_width="match_parent" android:padding="30dp" android:layout_height="match_parent" android:orientation="vertical" tools:context=".SalarySlip">
-    <TextView android:id="@+id/startDateText" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:padding="12dp" android:text="Select Start Date" android:textSize="18sp"/>
-    <TextView android:id="@+id/endDateText"
-        android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Select End Date" android:textSize="18sp" android:padding="12dp" android:layout_marginTop="16dp" android:gravity="center"/>
-    <!--     &lt;!&ndash; Label for Holiday Hourly Rate &ndash;&gt; -->
-    <TextView android:id="@+id/holidayHourRateLabel"
-        android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Vacation hourly rate" android:textSize="16sp" android:visibility="gone" android:layout_marginTop="24dp" android:paddingBottom="8dp"/>
-    <!--  Input for Holiday Hourly Rate  -->
-    <EditText android:id="@+id/holidayHourRateInput"
-        android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" android:inputType="numberDecimal" android:hint="for example 2.0 " android:padding="12dp"/>
-    <Button android:id="@+id/createSalarySlipBtn" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="Create Salary Slip"/>
-</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    tools:context=".SalarySlip">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Generate Employees' Salaries"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="20dp" />
+
+        <TextView
+            android:id="@+id/startDateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="Select Start Date"
+            android:textSize="18sp" />
+        <Spinner
+            android:id="@+id/departmentSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Employee Type:"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/employeeTypeGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioAllEmployees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Employees"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioByDepartment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="By Department" />
+
+            <RadioButton
+                android:id="@+id/radioByEmployee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Specific Employee" />
+        </RadioGroup>
+
+        <!-- Salary Type -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salary Type:"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp"
+            android:paddingBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/salaryTypeGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioFixed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fixed"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioHourly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hourly" />
+        </RadioGroup>
+        <!-- Holiday Hourly Rate Label -->
+        <TextView
+            android:id="@+id/holidayHourRateLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vacation hourly rate"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp"
+            android:paddingBottom="8dp"
+            android:visibility="gone" />
+
+        <!-- Holiday Hourly Rate Input -->
+        <EditText
+            android:id="@+id/holidayHourRateInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="For example: 2.0"
+            android:inputType="numberDecimal"
+            android:padding="12dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/createSalarySlipBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Generate Salary Slips" />
+
+    </LinearLayout>
+</ScrollView>
