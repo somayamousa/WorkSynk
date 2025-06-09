@@ -121,7 +121,7 @@ public class LeaveOverview extends AppCompatActivity {
             long diffInMillies = end.getTime() - start.getTime();
 
             // تحويل الفرق إلى عدد الأيام (تقسيم على 86400000 = عدد الميلي ثانية في اليوم)
-            return TimeUnit.MILLISECONDS.toDays(diffInMillies);
+            return TimeUnit.MILLISECONDS.toDays(diffInMillies) + 1;
 
         } catch (Exception e) {
             e.printStackTrace();
