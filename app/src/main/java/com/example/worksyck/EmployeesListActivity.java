@@ -29,7 +29,7 @@ public class EmployeesListActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private ArrayList<HashMap<String, String>> employeesList;
     private static final String TAG = "EmployeesListActivity";
-    private static final String GET_EMPLOYEES_URL = "http://192.168.1.101/worksync/get_employees.php";
+    private static final String GET_EMPLOYEES_URL = "http://10.0.2.2/worksync/get_employees.php";
     private int companyId;
 
     @Override

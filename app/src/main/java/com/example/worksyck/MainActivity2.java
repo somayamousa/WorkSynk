@@ -1,5 +1,6 @@
 package com.example.worksyck;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +33,7 @@ public class MainActivity2 extends AppCompatActivity {
         Button btnQr = findViewById(R.id.btnQr);
         Button btnAddEmployee = findViewById(R.id.btnAddEmployee);
         Button   Employee= findViewById(R.id.Employee);
-        Button   payroll_entry= findViewById(R.id.payroll_entry);
+        Button   Additional_Salary= findViewById(R.id.Additional_Salary);
         Button   add_holiday= findViewById(R.id.add_holiday);
         Button   cont_holiday= findViewById(R.id.cont_holidays);
         Button       btnDepartment= findViewById(R.id.departmentBtn);
@@ -57,12 +58,12 @@ public class MainActivity2 extends AppCompatActivity {
             Intent qrIntent = new Intent(MainActivity2.this, QrDisplayActivity.class);
             startActivity(qrIntent);
         });
-        payroll_entry.setOnClickListener(v -> {
+        Additional_Salary.setOnClickListener(v -> {
 
-            Intent     payroll_entry_Intent = new Intent(MainActivity2.this, Payroll_Entry.class);
-            payroll_entry_Intent.putExtra("company_id",company_id);
-            payroll_entry_Intent.putExtra("user_id",userId);
-            startActivity(payroll_entry_Intent);
+            Intent      Additional_Salary_Intent = new Intent(MainActivity2.this, AdditionalSalaryActivity.class);
+            Additional_Salary_Intent.putExtra("company_id",company_id);
+            Additional_Salary_Intent.putExtra("user_id",userId);
+            startActivity( Additional_Salary_Intent);
         });
 
         add_holiday.setOnClickListener(v -> {
@@ -79,13 +80,13 @@ public class MainActivity2 extends AppCompatActivity {
             startActivity(cont_holiday_Intent);
 
         });
-        createSalarySlip.setOnClickListener(v -> {
-
-            Intent     salary_slip_Intent = new Intent(MainActivity2.this,SalarySlip.class);
-
-            startActivity(salary_slip_Intent);
-
-        });
+//        createSalarySlip.setOnClickListener(v -> {
+//
+//            Intent     salary_slip_Intent = new Intent(MainActivity2.this,SalarySlip.class);
+//
+//            startActivity(salary_slip_Intent);
+//
+//        });
 
         btnDepartment.setOnClickListener(v -> {
             Intent DepartmentIntent = new Intent(MainActivity2.this, DepartmentsActivity.class);
@@ -113,9 +114,9 @@ public class MainActivity2 extends AppCompatActivity {
         // Add Employee Button Click
         btnAddEmployee.setOnClickListener(v -> {
 
-            Intent addIntent = new Intent(MainActivity2.this, EmployeeAddActivity.class);
-            addIntent.putExtra("company_id",company_id);
-            startActivity(addIntent);
+//            Intent addIntent = new Intent(MainActivity2.this, EmployeeAddActivity.class);
+//            addIntent.putExtra("company_id",company_id);
+//            startActivity(addIntent);
         });Employee.setOnClickListener(v -> {
             Intent addIntent = new Intent(MainActivity2.this, EmployeesListActivity.class);
             startActivity(addIntent);
