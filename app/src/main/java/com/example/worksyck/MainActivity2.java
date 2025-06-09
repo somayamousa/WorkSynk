@@ -40,8 +40,10 @@ public class MainActivity2 extends AppCompatActivity {
         Button      btnDesignations= findViewById(R.id.jobTitleBtn);
         Button  createSalarySlip=findViewById(R.id.salary_slip);
         Button  gps=findViewById(R.id.gps);
+        Button  workPolicy=findViewById(R.id.workPolicy);
 
-       Button btnLeaveRequest = findViewById(R.id.HrLeaveRequest);
+
+        Button btnLeaveRequest = findViewById(R.id.HrLeaveRequest);
         Button btnOverRequest = findViewById(R.id.HrOverRequest);
 
 
@@ -65,11 +67,14 @@ public class MainActivity2 extends AppCompatActivity {
             Additional_Salary_Intent.putExtra("user_id",userId);
             startActivity( Additional_Salary_Intent);
         });
-
+        workPolicy.setOnClickListener(v -> {
+            Intent      workPolicy_Intent = new Intent(MainActivity2.this, workPolicySettingsActivity.class);
+            workPolicy_Intent.putExtra("company_id",company_id);
+            workPolicy_Intent.putExtra("user_id",userId);
+            startActivity( workPolicy_Intent);
+        });
         add_holiday.setOnClickListener(v -> {
-
             Intent     Add_holiday_Intent = new Intent(MainActivity2.this, AddHoliday.class);
-
             startActivity(Add_holiday_Intent);
 
         });
@@ -86,12 +91,10 @@ public class MainActivity2 extends AppCompatActivity {
             salary_slip_Intent .putExtra("company_id",company_id);
             salary_slip_Intent .putExtra("user_id",userId);
             startActivity(salary_slip_Intent);
-
         });
 
         btnDepartment.setOnClickListener(v -> {
             Intent DepartmentIntent = new Intent(MainActivity2.this, DepartmentsActivity.class);
-
             startActivity(DepartmentIntent);
         });
 
