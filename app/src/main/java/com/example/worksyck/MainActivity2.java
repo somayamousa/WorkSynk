@@ -80,13 +80,14 @@ public class MainActivity2 extends AppCompatActivity {
             startActivity(cont_holiday_Intent);
 
         });
-//        createSalarySlip.setOnClickListener(v -> {
-//
-//            Intent     salary_slip_Intent = new Intent(MainActivity2.this,SalarySlip.class);
-//
-//            startActivity(salary_slip_Intent);
-//
-//        });
+        createSalarySlip.setOnClickListener(v -> {
+
+            Intent     salary_slip_Intent = new Intent(MainActivity2.this,SalarySlip.class);
+            salary_slip_Intent .putExtra("company_id",company_id);
+            salary_slip_Intent .putExtra("user_id",userId);
+            startActivity(salary_slip_Intent);
+
+        });
 
         btnDepartment.setOnClickListener(v -> {
             Intent DepartmentIntent = new Intent(MainActivity2.this, DepartmentsActivity.class);

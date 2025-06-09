@@ -1,0 +1,18 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/policySettingsLayout" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="24dp">
+    <!--  Holiday Work Hours Policy Title  -->
+    <TextView android:id="@+id/holidayPolicyTitle"
+
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Work Hour Policy for Holidays" android:textSize="16sp" android:textStyle="bold" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
+    <!--  Holiday Policy Radio Group  -->
+    <RadioGroup android:id="@+id/holidayPolicyGroup"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" app:layout_constraintTop_toBottomOf="@id/holidayPolicyTitle" app:layout_constraintStart_toStartOf="parent">
+        <RadioButton android:id="@+id/holiday_normal"
+
+
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Regular Hour Rate"/>
+        <RadioButton android:id="@+id/holiday_overtime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Hour Rate"/>
+        <RadioButton android:id="@+id/holiday_special"
+
+            android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Special Holiday Rate"/>
+    </RadioGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>

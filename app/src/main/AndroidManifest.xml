@@ -33,6 +33,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".workPolicySettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Ws" />
+        <activity
+            android:name=".SalarySlip"
+            android:exported="false" />
+        <activity
             android:name=".AdditionalSalaryActivity"
             android:exported="false" />
         <activity

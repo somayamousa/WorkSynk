@@ -32,7 +32,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -211,22 +210,7 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -235,7 +219,6 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
         isSpinnerInitialized = false; // Reset flag on resume
         FetchAllDepartments();
     }
-
     private void showEditDialog(SalaryIncrease increase) {
         // Inflate the dialog view
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_salary_increase, null);
@@ -246,11 +229,6 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
         EditText etStartDate = dialogView.findViewById(R.id.etStartDate);
         EditText etEndDate = dialogView.findViewById(R.id.etEndDate);
         EditText etNotes = dialogView.findViewById(R.id.etNotes);
-
-
-
-
-
         // Set initial values
         etIncreaseAmount.setText(String.valueOf(increase.getIncreaseAmount()));
         etIncreaseType.setText(increase.getIncreaseType());
