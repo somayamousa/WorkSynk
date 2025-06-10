@@ -11,6 +11,14 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <!-- res/values/strings.xml -->
+    <string name="employee_details_title">Employee Details</string>
+    <string name="employee_details_message">
+    🔹 Job Number: %1$s\n\n
+    📧 Email: %2$s\n\n
+    🏢 Department: %3$s\n\n
+    💼 Job Title: %4$s
+</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

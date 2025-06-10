@@ -60,7 +60,6 @@ public class show_holidays extends AppCompatActivity {
 
         fetchDataFromServer();
 
-        // البحث حسب السنة
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

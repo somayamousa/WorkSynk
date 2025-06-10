@@ -651,20 +651,21 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
 
         dialog.show();
     }
-    private void addSalaryIncreaseToDatabase(String employeeId, String increaseType, double amount, String duration, String startDate, String endDate,String notes) {
+    private void addSalaryIncreaseToDatabase(String employeeId, String increaseType, double amount, String duration, String startDate, String endDate, String notes) {
         String url = BASE_URL + "add_salary_increase.php";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     try {
-                        Log.d("type",increaseType);
-                        Log.d("Response",response);
+                        Log.d("type", increaseType);
+                        Log.d("Response", response);
                         JSONObject jsonResponse = new JSONObject(response);
                         String status = jsonResponse.getString("status");
                         String message = jsonResponse.getString("message");
                         if (status.equals("success")) {
                             Toast.makeText(AdditionalSalaryActivity.this, message, Toast.LENGTH_SHORT).show();
-                        }
-                        else{
+                            // Refresh the salary increases list
+                            fetchSalaryIncreases(employeeId);
+                        } else {
                             Toast.makeText(AdditionalSalaryActivity.this, message, Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {

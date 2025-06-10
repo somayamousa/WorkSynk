@@ -86,7 +86,6 @@ public class MainActivity2 extends AppCompatActivity {
 
         });
         createSalarySlip.setOnClickListener(v -> {
-
             Intent     salary_slip_Intent = new Intent(MainActivity2.this,SalarySlip.class);
             salary_slip_Intent .putExtra("company_id",company_id);
             salary_slip_Intent .putExtra("user_id",userId);

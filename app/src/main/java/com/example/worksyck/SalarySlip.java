@@ -1,7 +1,10 @@
 package com.example.worksyck;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,9 +14,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -23,6 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -56,15 +64,21 @@ public class SalarySlip extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String specialDayPolicy;
     private EditText holidayHourRateInput;
-    private   double holidayHourRate ;
+    private double holidayHourRate;
     private TextView startDateText, endDateText, holidayHourRateLabel;
     private RadioGroup employeeTypeGroup, salaryTypeGroup;
     private Spinner departmentSpinner;
+    private int processedEmployees = 0;
+    private int totalEmployeesToProcess = 0;
+
+
     private RadioButton radioAllEmployees, radioByDepartment, radioByEmployee;
-    private RadioButton radioFixed, radioHourly;
+    private ArrayList<Employee> employeeList = new ArrayList<Employee>();
+
 
     private ArrayList<String> departments = new ArrayList<>();
-
+    private Set<Integer> selectedIds;
+    private int company_id;
 
 
     @Override
@@ -77,15 +91,10 @@ public class SalarySlip extends AppCompatActivity {
         createSalarySlipBtn = findViewById(R.id.createSalarySlipBtn);
         holidayHourRateInput = findViewById(R.id.holidayHourRateInput);
         holidayHourRateLabel = findViewById(R.id.holidayHourRateLabel);
-        departmentSpinner = findViewById(R.id.departmentSpinner);
-
         employeeTypeGroup = findViewById(R.id.employeeTypeGroup);
-        salaryTypeGroup = findViewById(R.id.salaryTypeGroup);
         radioAllEmployees = findViewById(R.id.radioAllEmployees);
-        radioByDepartment = findViewById(R.id.radioByDepartment);
-        radioByEmployee = findViewById(R.id.radioByEmployee);
-        radioFixed = findViewById(R.id.radioFixed);
-        radioHourly = findViewById(R.id.radioHourly);
+
+        selectedIds = new HashSet<Integer>();
         /** initialized Parameters**/
         requestQueue = Volley.newRequestQueue(this);
         startDate = "";
@@ -147,11 +156,23 @@ public class SalarySlip extends AppCompatActivity {
             );
             datePickerDialog.show();
         });
+        // Fetch The Company Id
+        Intent intent = getIntent();
+        String companyIdStr = intent.getStringExtra("company_id");
+        int companyId = -1;
+        if (companyIdStr != null) {
+            try {
+                companyId = Integer.parseInt(companyIdStr);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (companyId != -1) {
+            company_id = companyId;
+        } else {
+            Log.d("Error", "No Company Id assigned For The Hr");
+        }
 
-        departments.add("All Departments");
-        departments.add("HR");
-        departments.add("IT");
-        departments.add("Finance");
 
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
 //        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -174,44 +195,32 @@ public class SalarySlip extends AppCompatActivity {
 //            );
 //            datePickerDialog.show();
 //        });
-
-//        employeeTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
-//            switch (checkedId) {
-//                case R.id.radioAllEmployees:
-//                    // Hide department/employee filters
-//                    break;
-//                case R.id.radioByDepartment:
-//                    // Show departmentSpinner
-//                    break;
-//                case R.id.radioByEmployee:
-//                    // Show employee spinner or search input
-//                    break;
-//            }
-//        });
-
+        employeeTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioAllEmployees) {
+                fetchEmployees(null, String.valueOf(company_id));
+                // Hide department/employee filters
+            }
+        });
         createSalarySlipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 /**Validation Fields**/
-                //  Check start date and end date are not empty
+                // Check start date and end date are not empty
                 if (startDate.isEmpty() || endDate.isEmpty()) {
                     Toast.makeText(SalarySlip.this, "Please select both start and end dates", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //  Check that startDate is before endDate
+                // Check that startDate is before endDate
                 if (!isStartBeforeEnd(startDate, endDate)) {
                     Toast.makeText(SalarySlip.this, "Start date must be before end date", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //  Check that dates are not in the future
+                // Check that dates are not in the future
                 if (isDateInFuture(startDate) || isDateInFuture(endDate)) {
                     Toast.makeText(SalarySlip.this, "Dates cannot be in the future", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (specialDayPolicy.equalsIgnoreCase("custom_rate")) {
-
                     String holidayRateStr = holidayHourRateInput.getText().toString().trim();
                     Log.d("DEBUG", "holidayRateStr = " + holidayRateStr);
                     if (holidayRateStr.isEmpty()) {
@@ -220,7 +229,6 @@ public class SalarySlip extends AppCompatActivity {
                     }
 
                     holidayHourRate = 0.0;
-
                     try {
                         holidayHourRate = Double.parseDouble(holidayRateStr);
                         Log.d("DEBUG", "holidayRateStr = " + holidayHourRate);
@@ -234,11 +242,64 @@ public class SalarySlip extends AppCompatActivity {
                         return;
                     }
                 }
-                /**fetch employee information from the server**/
-                int employee_id = 9;
-                fetchEmployeeDetails(employee_id);
+                if (selectedIds.isEmpty()) {
+                    Toast.makeText(SalarySlip.this, "No employees selected", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                processedEmployees = 0;
+                totalEmployeesToProcess = selectedIds.size();
+                for (Integer employeeId : selectedIds) {
+                    fetchEmployeeDetails(employeeId);
+                }
             }
         });
+    }
+    private void showEmployeeSelectionDialog(List<Employee> employeesList) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_select_employees, null);
+
+        EditText searchInput = dialogView.findViewById(R.id.searchInput);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.employeesRecyclerView);
+        List<Employee> originalList = new ArrayList<>(employeesList);
+        // Pass selectedIds to the adapter
+        EmployeeSelectionAdapter adapter = new EmployeeSelectionAdapter(employeesList, selectedIds);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filter(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Select Employees")
+                .setView(dialogView)
+                .setPositiveButton("Confirm", (dialogInterface, which) -> {
+                    selectedIds.clear(); // Clear previous selections
+                    selectedIds.addAll(adapter.getSelectedEmployeeIds()); // Update with new selections
+                    if (selectedIds.isEmpty()) {
+                        Toast.makeText(SalarySlip.this, "Please select at least one employee", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Log.d("Confirmed Employees", selectedIds.toString());
+                })
+                .setNegativeButton("Cancel", (dialogInterface, which) -> {
+                    employeesList.clear();
+                    employeesList.addAll(originalList);
+                    adapter.notifyDataSetChanged();
+                    Log.d("Canceled Selection", "Reverted to original selection.");
+                    dialogInterface.dismiss();
+                })
+                .create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.rounded_dialog);
+        }
+        dialog.show();
     }
     /******Check If An Date Is In Future*******/
     private boolean isDateInFuture(String dateStr) {
@@ -250,6 +311,7 @@ public class SalarySlip extends AppCompatActivity {
             return false;
         }
     }
+
     /*****Check If The Start Date Greater Than End Date****/
     private boolean isStartBeforeEnd(String start, String end) {
         try {
@@ -261,6 +323,7 @@ public class SalarySlip extends AppCompatActivity {
             return false;
         }
     }
+
     private void fetchAllDepartments() {
         String url = "http://10.0.2.2/worksync/fetch_all_departments.php";
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
@@ -268,7 +331,7 @@ public class SalarySlip extends AppCompatActivity {
                 departments.clear();
                 departments.add("All Departments");
                 JSONObject json = new JSONObject(response);
-                if (json.getString("status").equals("success")){
+                if (json.getString("status").equals("success")) {
                     JSONArray data = json.getJSONArray("data");
                     for (int i = 0; i < data.length(); i++) {
                         JSONObject dep = data.getJSONObject(i);
@@ -286,7 +349,8 @@ public class SalarySlip extends AppCompatActivity {
         }, error -> Log.e("Volley Error", error.toString()));
         requestQueue.add(request);
     }
-    public void  fetchAttendanceRecord(int employee_id, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, String salaryStructureType, double baseSalary) {
+
+    public void fetchAttendanceRecord(int employee_id, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, String salaryStructureType, double baseSalary) {
         String url = "http://10.0.2.2/worksync/fetch_employee_attendance_records.php" + "?employee_id=" + employee_id + "&start_date=" + startDate + "&end_date=" + endDate;
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -336,6 +400,7 @@ public class SalarySlip extends AppCompatActivity {
         });
         requestQueue.add(request);
     }
+
     private void fetchHolidaysInPeriod(int employeeId, List<AttendanceRecord> attendanceList, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, String salaryStructureType, double baseSalary) {
         String url = "http://10.0.2.2/worksync/get_holidays_InPeriod.php?start_date=" + startDate + "&end_date=" + endDate;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -354,7 +419,7 @@ public class SalarySlip extends AppCompatActivity {
                                     String date = holiday.getString("date");
                                     holidaysDates.add(date);
                                 }
-                                Log.d("holidays" , holidaysDates.toString());
+                                Log.d("holidays", holidaysDates.toString());
                             } else {
                                 Log.d("Holidays", "No holidays found");
                             }
@@ -372,7 +437,8 @@ public class SalarySlip extends AppCompatActivity {
                 });
         requestQueue.add(stringRequest);
     }
-    private void fetchEmployees(String departmentId,String company_id) {
+
+    private void fetchEmployees(String departmentId, String company_id) {
         String url;
         if (departmentId == null) {
             url = "http://10.0.2.2/worksync/fetch_all_employees.php?company_id=" + company_id;
@@ -381,8 +447,8 @@ public class SalarySlip extends AppCompatActivity {
         }
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
-            ArrayList<Employee> employeeList = new ArrayList<Employee>();
-                         try {
+                    employeeList.clear();
+                    try {
                         Log.d("Response", response);
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.getString("status").equals("success") && !jsonObject.getString("message").equals("No employee found")) {
@@ -397,6 +463,7 @@ public class SalarySlip extends AppCompatActivity {
                                 String designation = obj.optString("designation_name", "");
                                 employeeList.add(new Employee(id, full_name, email, department, company, designation));
                             }
+                            showEmployeeSelectionDialog(employeeList);
                         } else {
                             Log.d("No Employee Found", "No employee found");
                         }
@@ -408,48 +475,117 @@ public class SalarySlip extends AppCompatActivity {
         );
         requestQueue.add(request);
     }
+
     private void fetchWorkingsDays(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary, double totalSalaryIncrease, List<SalaryIncrease> temporaryIncreases, List<SalaryIncrease> permanentIncreases, ArrayList<Leave> paidLeaves) {
+
+
+        double totalPermanentIncrease = 0;
+        for (SalaryIncrease increase : permanentIncreases) {
+            totalPermanentIncrease += increase.getIncreaseAmount();
+        }
+
+        double totalTemporaryIncrease = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        for (SalaryIncrease increase : temporaryIncreases) {
+            try {
+                Date startDate = sdf.parse(increase.getStartDate());
+                Date endDate = increase.getEndDate() == null || increase.getEndDate().equals("null") ? null : sdf.parse(increase.getEndDate());
+
+                if (!today.before(startDate) && (endDate == null || !today.after(endDate))) {
+                    totalTemporaryIncrease += increase.getIncreaseAmount();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Log.d("SalaryIncrease", "Total Permanent Increase: " + totalPermanentIncrease);
+        Log.d("SalaryIncrease", "Total Temporary Increase: " + totalTemporaryIncrease);
+
+        String permanentIncreasesString = "";
+        if (!permanentIncreases.isEmpty()) {
+            StringBuilder permanentIncreasesStr = new StringBuilder();
+            for (SalaryIncrease increase : permanentIncreases) {
+                permanentIncreasesStr.append(increase.getIncreaseType())
+                        .append(";")
+                        .append(increase.getIncreaseAmount())
+                        .append(";")
+                        .append(increase.getStartDate())
+                        .append(";")
+                        .append(increase.getDurationType())
+                        .append("|");
+            }
+            permanentIncreasesString = permanentIncreasesStr.toString();
+        } else {
+            permanentIncreasesString = "";
+        }
+
+        String temporaryIncreasesString = "";
+        if (!temporaryIncreases.isEmpty()) {
+            StringBuilder temporaryIncreasesStr = new StringBuilder();
+            for (SalaryIncrease increase : temporaryIncreases) {
+                temporaryIncreasesStr.append(increase.getIncreaseType())
+                        .append(";")
+                        .append(increase.getIncreaseAmount())
+                        .append(";")
+                        .append(increase.getStartDate())
+                        .append(";")
+                        .append(increase.getEndDate() == null ? "null" : increase.getEndDate())
+                        .append(";")
+                        .append(increase.getDurationType())
+                        .append("|");
+            }
+            temporaryIncreasesString = temporaryIncreasesStr.toString();
+        } else {
+            temporaryIncreasesString = "";
+        }
         Log.d("Debug", "specialDayPolicy = " + specialDayPolicy);
-        Log.d("Hi Fetch Workings Days","Hi");
+        Log.d("Hi Fetch Workings Days", "Hi");
         {
-            String url = "http://10.0.2.2/worksync/get_working_days.php?employee_id="+employeeId;
-            Log.d("Hi Fetch Workings Days","Hi");
+            String url = "http://10.0.2.2/worksync/get_working_days.php?employee_id=" + employeeId;
+            Log.d("Hi Fetch Workings Days", "Hi");
+            double finalTotalTemporaryIncrease = totalTemporaryIncrease;
+            double finalTotalPermanentIncrease = totalPermanentIncrease;
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d("Hi Fetch Workings Days",response);
+                            Log.d("Hi Fetch Workings Days", response);
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 String status = jsonObject.getString("status");
                                 if (status.equals("success")) {
-                                    if (!jsonObject.getString("message").equals("No working days found")){
+                                    if (!jsonObject.getString("message").equals("No working days found")) {
                                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                                         HashMap<Integer, Integer> workDay = new HashMap<>();
-                                        for (int i =0; i<jsonArray.length();i++){
-                                            int dayOfWeek=  Integer.parseInt(jsonArray.getJSONObject(i).getString("day_of_week"));
-                                            int isWorkDay=Integer.parseInt(jsonArray.getJSONObject(i).getString("is_working_day"));
-                                            workDay.put(dayOfWeek,isWorkDay);
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            int dayOfWeek = Integer.parseInt(jsonArray.getJSONObject(i).getString("day_of_week"));
+                                            int isWorkDay = Integer.parseInt(jsonArray.getJSONObject(i).getString("is_working_day"));
+                                            workDay.put(dayOfWeek, isWorkDay);
                                         }
-                                        switch(salaryStructureType.toLowerCase()) {
+                                        switch (salaryStructureType.toLowerCase()) {
                                             case "per hour": {
                                                 double finalSalary = 0;
                                                 double DayRate = 0;
-                                                double overTimeWorkedHourPerDay = 0;
-                                                double normalWorkedHour = 0;
+                                                double totalWorkingHours = 0;
+                                                double totalOvertimeHours = 0;
+                                                double totalNormalHours = 0;
+                                                double totalNormalHourSalary = 0;
+                                                double totalOvertimeSalary = 0;
 
                                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
                                                 for (int i = 0; i < attendanceList.size(); i++) {
                                                     AttendanceRecord record = attendanceList.get(i);
                                                     double totalWorkedHourPerDay = record.getWorkedHours();
+                                                    totalWorkingHours += totalWorkedHourPerDay;
 
                                                     try {
                                                         String dateStr = record.getDate();
                                                         Date date = sdf.parse(dateStr);
                                                         Calendar calendar = Calendar.getInstance();
                                                         calendar.setTime(date);
-
                                                         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
                                                         boolean isWeekend = workDay.get(dayOfWeek) != null && workDay.get(dayOfWeek) == 0;
                                                         boolean isHoliday = holidaysDates.contains(dateStr);
@@ -471,22 +607,43 @@ public class SalarySlip extends AppCompatActivity {
                                                             }
                                                         }
 
+                                                        double normalWorkedHour = 0;
+                                                        double overTimeWorkedHourPerDay = 0;
+
                                                         if (isPaidLeave) {
                                                             DayRate = expectedHoursPerDay * normalHourRate;
-                                                        } else {
-                                                            if (!isSpecialDay || specialDayPolicy.equalsIgnoreCase("normal")) {
+                                                            normalWorkedHour = expectedHoursPerDay; // Count paid leave as normal hours
+                                                            totalNormalHours += normalWorkedHour;
+                                                            totalNormalHourSalary += DayRate;
+                                                        } else if (!isSpecialDay || specialDayPolicy.equalsIgnoreCase("normal")) {
+                                                            // Calculate normal and overtime hours
+                                                            if (totalWorkedHourPerDay > expectedHoursPerDay) {
+                                                                normalWorkedHour = expectedHoursPerDay;
                                                                 overTimeWorkedHourPerDay = totalWorkedHourPerDay - expectedHoursPerDay;
-                                                                if (overTimeWorkedHourPerDay < 0) {
-                                                                    overTimeWorkedHourPerDay = 0;
-                                                                }
-                                                                normalWorkedHour = totalWorkedHourPerDay - overTimeWorkedHourPerDay;
-                                                                DayRate = (normalWorkedHour * normalHourRate) + (overTimeWorkedHourPerDay * overtimeHourRate);
-                                                            } else if (specialDayPolicy.equalsIgnoreCase("overtime")) {
-                                                                DayRate = (totalWorkedHourPerDay * overtimeHourRate);
-                                                            } else if (specialDayPolicy.equalsIgnoreCase("custom_rate")) {
-                                                                DayRate = totalWorkedHourPerDay * normalHourRate * holidayHourRate;
-                                                                Log.d("Holiday rate", String.valueOf(holidayHourRate));
+                                                            } else {
+                                                                normalWorkedHour = totalWorkedHourPerDay;
+                                                                overTimeWorkedHourPerDay = 0;
                                                             }
+
+                                                            totalNormalHours += normalWorkedHour;
+                                                            totalOvertimeHours += overTimeWorkedHourPerDay;
+
+                                                            double normalSalary = normalWorkedHour * normalHourRate;
+                                                            double overtimeSalary = overTimeWorkedHourPerDay * overtimeHourRate;
+
+                                                            totalNormalHourSalary += normalSalary;
+                                                            totalOvertimeSalary += overtimeSalary;
+
+                                                            DayRate = normalSalary + overtimeSalary;
+                                                        } else if (specialDayPolicy.equalsIgnoreCase("overtime")) {
+                                                            DayRate = totalWorkedHourPerDay * overtimeHourRate;
+                                                            totalOvertimeHours += totalWorkedHourPerDay;
+                                                            totalOvertimeSalary += DayRate;
+                                                        } else if (specialDayPolicy.equalsIgnoreCase("custom_rate")) {
+                                                            DayRate = totalWorkedHourPerDay * normalHourRate * holidayHourRate;
+                                                            totalNormalHours += totalWorkedHourPerDay; // Treat as normal hours for tracking
+                                                            totalNormalHourSalary += DayRate;
+                                                            Log.d("Holiday rate", String.valueOf(holidayHourRate));
                                                         }
 
                                                         if (isSpecialDay) {
@@ -501,12 +658,45 @@ public class SalarySlip extends AppCompatActivity {
                                                         throw new RuntimeException(e);
                                                     }
                                                 }
-
                                                 finalSalary += totalSalaryIncrease;
-
-                                                generateSalarySlipPdf("Sojood Salah Aldeen", "Jun", 2800, 2800);
-                                                Log.d("Salary", "Employee ID: " + employeeId + " | Final Salary: " + finalSalary);
+                                                generateSalarySlipPdf(
+                                                        "full_name", // تمرير اسم الموظف من fetchEmployeeDetails
+                                                        new SimpleDateFormat("MMM").format(sdf.parse(startDate)), // استخراج الشهر من startDate
+                                                        0,
+                                                        finalSalary,
+                                                        totalNormalHours,
+                                                        normalHourRate,
+                                                        totalNormalHourSalary,
+                                                        totalOvertimeHours,
+                                                        overtimeHourRate,
+                                                        totalOvertimeSalary,
+                                                        finalTotalPermanentIncrease,
+                                                        finalTotalTemporaryIncrease,
+                                                        startDate,
+                                                        endDate
+                                                );                                                Log.d("Salary", "Employee ID: " + employeeId + " | Final Salary: " + finalSalary);
                                                 Log.d("totalSalaryIncrease", "Employee ID: " + employeeId + " | totalSalaryIncrease: " + totalSalaryIncrease);
+                                                Log.d("Total Working Hours", "Employee ID: " + employeeId + " | Total Hours: " + totalWorkingHours);
+                                                Log.d("Total Overtime Hours", "Employee ID: " + employeeId + " | Total Overtime: " + totalOvertimeHours);
+                                                Log.d("Summary", "Total Normal Hours: " + totalNormalHours + " | Salary: $" + totalNormalHourSalary);
+                                                Log.d("Summary", "Total Overtime Hours: " + totalOvertimeHours + " | Overtime Salary: $" + totalOvertimeSalary);
+                                                Log.d("Summary", "Total Salary Increase: $" + totalSalaryIncrease);
+                                                Log.d("Summary", "Final Salary (including increases): $" + finalSalary);
+                                                StoreSalaryInDataBase(
+                                                        SalarySlip.this,
+                                                        employeeId,
+                                                        finalSalary,
+                                                        startDate,
+                                                        endDate,
+                                                        finalTotalPermanentIncrease,
+                                                        finalTotalTemporaryIncrease,
+                                                        totalNormalHours,
+                                                        normalHourRate,
+                                                        totalNormalHourSalary,
+                                                        totalOvertimeHours,
+                                                        overtimeHourRate,
+                                                        totalOvertimeSalary
+                                                );
                                             }
                                             break;
                                             case "base salary": {
@@ -517,10 +707,10 @@ public class SalarySlip extends AppCompatActivity {
                                                 List<String> absentDates = new ArrayList<>();
                                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                                                 Date start = null;
-                                                Date end=null;
+                                                Date end = null;
                                                 try {
                                                     start = sdf.parse(startDate);
-                                                    end=sdf.parse(endDate);
+                                                    end = sdf.parse(endDate);
                                                 } catch (ParseException e) {
                                                     throw new RuntimeException(e);
                                                 }
@@ -551,7 +741,6 @@ public class SalarySlip extends AppCompatActivity {
                                                     }
 
 
-
                                                     AttendanceRecord todayRecord = null;
                                                     for (AttendanceRecord record : attendanceList) {
                                                         if (record.getDate().equals(dateStr)) {
@@ -576,12 +765,10 @@ public class SalarySlip extends AppCompatActivity {
                                                             }
                                                         } else {
                                                             if (!isPaidLeave) {
-                                                                // اليوم غياب فعلي، ينقص من الراتب
                                                                 totalMissingHours += expectedHoursPerDay;
                                                                 totalMissingRate += expectedHoursPerDay * normalHourRate;
                                                                 absentDates.add(dateStr);
                                                             }
-                                                            // إذا إجازة مدفوعة ما في خصم ولا نضيف يوم غياب
                                                         }
                                                     } else if (isHoliday || isWeekend) {
                                                         if (isPresent) {
@@ -643,7 +830,7 @@ public class SalarySlip extends AppCompatActivity {
                                                     cal.add(Calendar.DAY_OF_MONTH, 1);
                                                 }
 
-                                                double PeriodSalary = baseSalary - totalMissingRate + totalOvertimeRate +totalSalaryIncrease;
+                                                double PeriodSalary = baseSalary - totalMissingRate + totalOvertimeRate + totalSalaryIncrease;
 
                                                 Log.d("Final Salary", "Final Salary = " + PeriodSalary);
                                                 Log.d("OverTime Rate", " = " + totalOvertimeRate);
@@ -652,7 +839,7 @@ public class SalarySlip extends AppCompatActivity {
                                                 Log.d("Absent Dates", "Absent Days: " + absentDates.toString());
 
                                                 if (PeriodSalary < 0) {
-                                                    Log.w("SalaryCalc", "Salary is negative! Adjusting to zero The Employee Does not Working Any Day."+ employeeId);
+                                                    Log.w("SalaryCalc", "Salary is negative! Adjusting to zero The Employee Does not Working Any Day." + employeeId);
                                                     PeriodSalary = 0;
                                                 }
                                             }
@@ -662,13 +849,13 @@ public class SalarySlip extends AppCompatActivity {
                                             }
                                             break;
                                         }
-                                    }else {
-                                        Log.d("Message",jsonObject.getString("message"));
+                                    } else {
+                                        Log.d("Message", jsonObject.getString("message"));
                                     }
                                 } else {
                                     Log.d("WorkDays", jsonObject.getString("message"));
                                 }
-                            } catch (JSONException e) {
+                            } catch (JSONException | ParseException e) {
                                 Log.e("WorkDays_JSONError", e.getMessage());
                             }
                         }
@@ -689,25 +876,132 @@ public class SalarySlip extends AppCompatActivity {
             requestQueue.add(stringRequest);
         }
     }
-    private void generateSalarySlipPdf(String employeeName, String month, double baseSalary, double totalSalary) {
+
+    private void StoreSalaryInDataBase(Context context, int employeeId, double finalSalary, String startDate, String endDate, double finalTotalPermanentIncrease, double finalTotalTemporaryIncrease, double normalHours, double normalHourRate, double normalSalary, double overtimeHours, double overtimeHourRate, double overtimeSalary) {
+        LocalDate end = LocalDate.parse(endDate);
+        int month = end.getMonthValue();
+        int year = end.getYear();
+        String url = "http://10.0.2.2/worksync/store_salaries.php";
+        Map<String, String> params = new HashMap<>();
+        params.put("employee_id", String.valueOf(employeeId));
+        params.put("net_salary", String.valueOf(finalSalary));
+        params.put("period_start", startDate);
+        params.put("period_end", endDate);
+        params.put("month", String.valueOf(month));
+        params.put("year", String.valueOf(year));
+        params.put("bonus", String.valueOf(finalTotalTemporaryIncrease));
+        params.put("salary_increment", String.valueOf(finalTotalPermanentIncrease));
+
+        params.put("regular_hours", String.valueOf(normalHours)); // عدد ساعات العمل العادية
+        params.put("regular_hour_rate", String.valueOf(normalHourRate)); // سعر الساعة العادية
+        params.put("regular_salary", String.valueOf(normalSalary)); // الراتب الناتج من الساعات العادية
+
+        params.put("overtime_hours", String.valueOf(overtimeHours)); // عدد ساعات العمل الإضافية
+        params.put("overtime_hour_rate", String.valueOf(overtimeHourRate)); // سعر الساعة الإضافية
+        params.put("overtime_salary", String.valueOf(overtimeSalary)); // الراتب الناتج من الساعات الإضافية
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    Log.d("Response salary", response);
+                    processedEmployees++;
+                    // عرض رسالة Toast تُظهر عدد الموظفين المعالجين
+                    Toast.makeText(context, processedEmployees + " out of " + totalEmployeesToProcess + " salaries processed", Toast.LENGTH_SHORT).show();
+                    // إذا اكتملت معالجة جميع الموظفين، اعرض رسالة نهائية
+                    if (processedEmployees == totalEmployeesToProcess) {
+                        Toast.makeText(SalarySlip.this, "All salary slips generated successfully", Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    processedEmployees++; // زيادة العداد حتى في حالة الخطأ لضمان المتابعة
+                    Toast.makeText(context, "Error while storing salary for employee " + employeeId + ": " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    // إذا اكتملت معالجة جميع الموظفين (بما في ذلك الأخطاء)، اعرض رسالة نهائية
+                    if (processedEmployees == totalEmployeesToProcess) {
+                        Toast.makeText(SalarySlip.this, "Processing completed with some errors", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    private void generateSalarySlipPdf(
+            String employeeName,
+            String month,
+            double baseSalary,
+            double totalSalary,
+            double normalHours,
+            double normalHourRate,
+            double normalHourSalary,
+            double overtimeHours,
+            double overtimeHourRate,
+            double overtimeSalary,
+            double permanentIncrease,
+            double temporaryIncrease,
+            String startDate,
+            String endDate
+    ) {
         PdfDocument document = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(300, 400, 1).create();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4 size in points
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         Paint paint = new Paint();
+        paint.setTextSize(14);
+        paint.setFakeBoldText(true);
+
+        int y = 50;
+        int x = 50;
+
+        // Title
+        canvas.drawText("Salary Slip", x, y, paint);
+        y += 30;
+
+        // Employee Details
+        paint.setFakeBoldText(false);
         paint.setTextSize(12);
-        int y = 25;
-        canvas.drawText("Salary Slip", 80, y, paint);
-        y += 25;
-        canvas.drawText("Employee Name: " + employeeName, 10, y, paint);
+        canvas.drawText("Employee Name: " + employeeName, x, y, paint);
         y += 20;
-        canvas.drawText("Month: " + month, 10, y, paint);
+        canvas.drawText("Period: " + startDate + " to " + endDate, x, y, paint);
         y += 20;
-        canvas.drawText("Base Salary: $" + baseSalary, 10, y, paint);
+        canvas.drawText("Month: " + month, x, y, paint);
+        y += 30;
+
+        // Salary Breakdown
+        paint.setFakeBoldText(true);
+        canvas.drawText("Salary Breakdown", x, y, paint);
         y += 20;
-        canvas.drawText("Total Salary: $" + totalSalary, 10, y, paint);
+        paint.setFakeBoldText(false);
+
+        if (baseSalary > 0) { // For base salary structure
+            canvas.drawText("Base Salary: $" + String.format("%.2f", baseSalary), x, y, paint);
+            y += 20;
+        } else { // For per hour structure
+            canvas.drawText("Regular Hours: " + String.format("%.2f", normalHours) + " @ $" + String.format("%.2f", normalHourRate) + "/hr", x, y, paint);
+            y += 20;
+            canvas.drawText("Regular Salary: $" + String.format("%.2f", normalHourSalary), x, y, paint);
+            y += 20;
+            canvas.drawText("Overtime Hours: " + String.format("%.2f", overtimeHours) + " @ $" + String.format("%.2f", overtimeHourRate) + "/hr", x, y, paint);
+            y += 20;
+            canvas.drawText("Overtime Salary: $" + String.format("%.2f", overtimeSalary), x, y, paint);
+            y += 20;
+        }
+
+        // Increases
+        canvas.drawText("Permanent Increase: $" + String.format("%.2f", permanentIncrease), x, y, paint);
+        y += 20;
+        canvas.drawText("Temporary Increase: $" + String.format("%.2f", temporaryIncrease), x, y, paint);
+        y += 30;
+
+        // Total
+        paint.setFakeBoldText(true);
+        canvas.drawText("Net Salary: $" + String.format("%.2f", totalSalary), x, y, paint);
+
         document.finishPage(page);
-        String fileName = "SalarySlip_" + employeeName.replace(" ", "_") + ".pdf";
+
+        String fileName = "SalarySlip_" + employeeName.replace(" ", "_") + "_" + month + ".pdf";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentValues contentValues = new ContentValues();
@@ -721,7 +1015,7 @@ public class SalarySlip extends AppCompatActivity {
             if (pdfUri != null) {
                 try (OutputStream outputStream = resolver.openOutputStream(pdfUri)) {
                     document.writeTo(outputStream);
-                    Toast.makeText(this, "PDF saved to Downloads", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "PDF saved to Downloads: " + fileName, Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(this, "Error writing PDF", Toast.LENGTH_SHORT).show();
@@ -740,8 +1034,10 @@ public class SalarySlip extends AppCompatActivity {
                 Toast.makeText(this, "Error writing PDF", Toast.LENGTH_SHORT).show();
             }
         }
+
         document.close();
     }
+
     private void getSpescficEmployee( int employee_id) {
         String employeeDetailsUrl = "http://10.0.2.2/worksync/get_spesfic_employee.php?employee_id=" + employee_id;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, employeeDetailsUrl, new Response.Listener<String>() {
@@ -897,6 +1193,13 @@ public class SalarySlip extends AppCompatActivity {
     }
 
     private void fetchPaidLeaveDates(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary, double totalSalaryIncrease, List<SalaryIncrease> temporaryIncreases, List<SalaryIncrease> permanentIncreases) {
+        StringBuilder permanentIncreasesStr = new StringBuilder();
+
+
+
+
+
+
             ArrayList<Leave> paidLeaves = new ArrayList<Leave>();
         String url = "http://10.0.2.2/worksync/get_paid_leave_inPeriod.php?employee_id=" + employeeId
                 + "&start_date=" + startDate + "&end_date=" + endDate;
@@ -938,6 +1241,10 @@ public class SalarySlip extends AppCompatActivity {
     }
 
     private void fetchSalaryIncreases(int employeeId, double expectedHoursPerDay, double normalHourRate, double overtimeHourRate, List<AttendanceRecord> attendanceList, Set<String> holidaysDates, String salaryStructureType, double baseSalary) {
+
+
+
+
         String url = "http://10.0.2.2/worksync/get_salary_increases.php?employee_id=" + String.valueOf(employeeId);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
