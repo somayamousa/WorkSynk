@@ -30,22 +30,22 @@ public class login extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
     private RequestQueue requestQueue;
     private static final String TAG = "LoginActivity";
+<<<<<<< HEAD
     private static final String LOGIN_URL = "http://10.2.2/worksync/loginapi.php";
 
+=======
+    private static final String LOGIN_URL = "http://10.0.2.2/worksync/loginapi.php";
+>>>>>>> 27f3b6ef8deb264ac8238e4e972f9acdb1100a5e
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         editTextUsername = findViewById(R.id.inputEmail);
         editTextPassword = findViewById(R.id.inputPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
-
         requestQueue = Volley.newRequestQueue(this);
-
         btnLogin.setOnClickListener(v -> userLogin());
     }
-
     private void userLogin() {
         String email = editTextUsername.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -91,7 +91,6 @@ public class login extends AppCompatActivity {
                 }
             }
         };
-
         request.setRetryPolicy(new DefaultRetryPolicy(
                 15000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
@@ -109,15 +108,12 @@ public class login extends AppCompatActivity {
             if ("success".equalsIgnoreCase(status)) {
                 JSONObject user = response.getJSONObject("data").getJSONObject("user");
                 Log.d("HR",String.valueOf(user));
-                // استخراج بيانات المستخدم
+
                 int id = user.optInt("id");
                 String email = user.optString("email");
                 String fullname = user.optString("fullname");
                 String role = user.optString("role");
-                String macAddress = user.optString("mac_address", "");
-                int company_id = user.optInt("company_id");
-                String companyCode = user.optString("company_code", "");
-
+                String company_id = user.optString("company_id", "");
                 Intent intent;
                 if ("hr".equalsIgnoreCase(role)) {
                     intent = new Intent(this, MainActivity2.class);
@@ -126,14 +122,12 @@ public class login extends AppCompatActivity {
                     intent = new Intent(this, MainActivity.class);
                     Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show();
                 }
-
                 intent.putExtra("user_id", id);
                 intent.putExtra("email", email);
                 intent.putExtra("fullname", fullname);
                 intent.putExtra("role", role);
-                intent.putExtra("mac_address", macAddress);
                 intent.putExtra("company_id", company_id);
-                intent.putExtra("company_code", companyCode);
+                Log.d("Login",company_id);
 
                 startActivity(intent);
                 finish();

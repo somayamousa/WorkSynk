@@ -1,5 +1,8 @@
 package com.example.worksyck;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Employee {
     private String id;
     private String email;
@@ -13,6 +16,11 @@ public class Employee {
 
     private int designationId;
 
+    private String company_name;
+    private String department_name;
+
+    private String designation_name;
+
     private double baseSalary;
 
     private  double hourCost;
@@ -20,8 +28,48 @@ public class Employee {
     private  String SalaryStructureType;
     private double normalHourRate;
     private double overtimeHourRate;
+    private double reqularWorkingHour;
+    private int workingDaysPerWeek;
 
-    public Employee(String id, String email, String password, String fullname, String phone, String macAddress, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate) {
+
+
+
+    public Employee(String id, String full_name, String email, String department, String company, String designation) {
+        this.id = id;
+        this.email = email;
+        this.fullname = full_name;
+        this.department_name=department;
+        this.designation_name=designation;
+        this.company_name=company;
+    }
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
+    }
+
+    public String getDepartment_name() {
+        return department_name;
+    }
+
+    public void setDepartment_name(String department_name) {
+        this.department_name = department_name;
+    }
+
+    public String getDesignation_name() {
+        return designation_name;
+    }
+
+    public void setDesignation_name(String designation_name) {
+        this.designation_name = designation_name;
+    }
+
+
+
+    public Employee(String id, String email, String password, String fullname, String phone, String macAddress, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate, double reqularWorkingHour, int workingDaysPerWeek) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -37,9 +85,11 @@ public class Employee {
         SalaryStructureType = salaryStructureType;
         this.normalHourRate = normalHourRate;
         this.overtimeHourRate = overtimeHourRate;
+        this.reqularWorkingHour=reqularWorkingHour;
+        this.workingDaysPerWeek = workingDaysPerWeek;
     }
 
-    public Employee(String email, String password, String fullname, String phone, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate) {
+    public Employee(String email, String password, String fullname, String phone, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate,double reqularWorkingHour ,int workingDaysPerWeek) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -55,8 +105,17 @@ public class Employee {
         SalaryStructureType = salaryStructureType;
         this.normalHourRate = normalHourRate;
         this.overtimeHourRate = overtimeHourRate;
+        this.reqularWorkingHour=reqularWorkingHour;
+        this.workingDaysPerWeek = workingDaysPerWeek;
     }
 
+    public int getWorkingDaysPerWeek() {
+        return workingDaysPerWeek;
+    }
+
+    public void setWorkingDaysPerWeek(int workingDaysPerWeek) {
+        this.workingDaysPerWeek = workingDaysPerWeek;
+    }
 
     public String getSalaryStructureType() {
         return SalaryStructureType;
@@ -68,6 +127,14 @@ public class Employee {
 
     public double getNormalHourRate() {
         return normalHourRate;
+    }
+
+    public double getReqularWorkingHour() {
+        return reqularWorkingHour;
+    }
+
+    public void setReqularWorkingHour(double reqularWorkingHour) {
+        this.reqularWorkingHour = reqularWorkingHour;
     }
 
     public void setNormalHourRate(double normalHourRate) {

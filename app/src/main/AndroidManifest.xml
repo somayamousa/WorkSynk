@@ -33,9 +33,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ShowAttendanceRecord"
+            android:name=".workPolicySettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Ws" />
+        <activity
+            android:name=".SalarySlip"
             android:exported="false" />
-        <!-- Google Maps API Key -->
+        <activity
+            android:name=".AdditionalSalaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShowAttendanceRecord"
+            android:exported="false" /> <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCpzIkiEei_glULWKIxQ6fraCDBpQl5l98" /> <!-- Google Play Services version -->

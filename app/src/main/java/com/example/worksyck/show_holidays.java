@@ -1,6 +1,8 @@
 package com.example.worksyck;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -58,7 +60,6 @@ public class show_holidays extends AppCompatActivity {
 
         fetchDataFromServer();
 
-        // البحث حسب السنة
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -251,6 +252,11 @@ public class show_holidays extends AppCompatActivity {
         EditText editDescription = dialog.findViewById(R.id.editHolidayDescription);
         MaterialButton btnSave = dialog.findViewById(R.id.btnSave);
         MaterialButton btnCancel = dialog.findViewById(R.id.btnCancel);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.WHITE);
+        drawable.setCornerRadius(30f);
+
+        dialog.getWindow().setBackgroundDrawable(drawable);
 
         editName.setText(holiday.getName());
         editDate.setText(holiday.getDate());

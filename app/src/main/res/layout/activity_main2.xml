@@ -165,7 +165,7 @@
 
         <!-- Payroll Entry and Salary Slip Buttons -->
         <Button
-            android:id="@+id/payroll_entry"
+            android:id="@+id/Additional_Salary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -173,7 +173,7 @@
             android:layout_marginEnd="4dp"
             android:backgroundTint="#4A148C"
             android:padding="16dp"
-            android:text="Payroll Entry"
+            android:text="Additional Salary"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@id/salary_slip"
@@ -197,21 +197,42 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/payroll_entry"
+            app:layout_constraintStart_toEndOf="@id/Additional_Salary"
             app:layout_constraintTop_toBottomOf="@id/payroll_header" />
 
         <!-- Holiday Divider -->
+
+        <!-- Holiday Header -->
+
+        <Button
+            android:id="@+id/workPolicy"
+            android:layout_width="127dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="113dp"
+            android:layout_marginEnd="140dp"
+            android:layout_marginBottom="48dp"
+            android:backgroundTint="#4A148C"
+            android:padding="16dp"
+            android:text="Work Policy"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/cont_holidays"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.44"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="@+id/Additional_Salary" />
+
         <View
             android:id="@+id/holiday_divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="64dp"
             android:background="#D1C4E9"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/payroll_entry" />
+            app:layout_constraintTop_toBottomOf="@id/Additional_Salary" />
 
-        <!-- Holiday Header -->
         <TextView
             android:id="@+id/holiday_header"
             android:layout_width="wrap_content"
