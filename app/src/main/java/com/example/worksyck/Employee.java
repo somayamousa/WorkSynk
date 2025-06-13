@@ -43,6 +43,14 @@ public class Employee {
         this.company_name=company;
     }
 
+    public Employee(String email, String password, String fullName, String phone, String selectedStatusValue, Integer integer, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructure, double normalHourRate, double overTimeRate) {
+
+
+
+
+
+    }
+
     public String getCompany_name() {
         return company_name;
     }

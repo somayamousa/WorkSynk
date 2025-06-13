@@ -41,6 +41,7 @@ public class MainActivity2 extends AppCompatActivity {
         Button  createSalarySlip=findViewById(R.id.salary_slip);
         Button  gps=findViewById(R.id.gps);
         Button  workPolicy=findViewById(R.id.workPolicy);
+        Button  salary_drafts=findViewById(R.id.salary_drafts);
 
 
         Button btnLeaveRequest = findViewById(R.id.HrLeaveRequest);
@@ -67,6 +68,16 @@ public class MainActivity2 extends AppCompatActivity {
             Additional_Salary_Intent.putExtra("user_id",userId);
             startActivity( Additional_Salary_Intent);
         });
+        salary_drafts.setOnClickListener(v -> {
+
+            Intent      salary_drafts_Intent = new Intent(MainActivity2.this, SalaryDraftsActivity.class);
+            salary_drafts_Intent.putExtra("company_id",company_id);
+            salary_drafts_Intent.putExtra("user_id",userId);
+            startActivity( salary_drafts_Intent);
+        });
+
+
+
         workPolicy.setOnClickListener(v -> {
             Intent      workPolicy_Intent = new Intent(MainActivity2.this, workPolicySettingsActivity.class);
             workPolicy_Intent.putExtra("company_id",company_id);

@@ -235,7 +235,7 @@
 //                        Toast.makeText(EmployeeAddActivity.this, "normal hour Cost is required", Toast.LENGTH_SHORT).show();
 //                    }
 //                }
-////                Employee employee = new Employee(email, password, fullName, phone, selectedStatusValue, Integer.valueOf(company_id), department_id, designation_id,base_salary,hourCost,salary_structure,normalHourRate,overTimeRate);
+//                Employee employee = new Employee(email, password, fullName, phone, selectedStatusValue, Integer.valueOf(company_id), department_id, designation_id,base_salary,hourCost,salary_structure,normalHourRate,overTimeRate);
 //                Log.d("Dep_id" , String.valueOf(department_id));
 ////                Log.d("Salary type" , SalaryStructureType);
 //                Add_new_Employeee(employee);
