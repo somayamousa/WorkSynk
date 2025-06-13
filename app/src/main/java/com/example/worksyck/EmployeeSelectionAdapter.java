@@ -30,22 +30,20 @@ public class EmployeeSelectionAdapter extends RecyclerView.Adapter<EmployeeSelec
         this.employeeList = employees;
         this.filteredList = new ArrayList<>(employees);
         this.selectedEmployeeIds = new HashSet<>();
-        // If selectedIds is empty, select all employees by default
-        if (selectedIds == null || selectedIds.isEmpty()) {
-            for (Employee e : employees) {
-                try {
-                    selectedEmployeeIds.add(Integer.parseInt(e.getId()));
-                } catch (NumberFormatException ex) {
-                    Log.e("EmployeeSelectionAdapter", "Invalid employee ID: " + e.getId());
-                }
+        // Initialize with all employees selected by default
+        for (Employee e : employees) {
+            try {
+                selectedEmployeeIds.add(Integer.parseInt(e.getId()));
+            } catch (NumberFormatException ex) {
+                Log.e("EmployeeSelectionAdapter", "Invalid employee ID: " + e.getId());
             }
-        } else {
-            // Otherwise, use the provided selectedIds
-            this.selectedEmployeeIds.addAll(selectedIds);
         }
-
+        // If selectedIds is provided and not empty, override with it
+        if (selectedIds != null && !selectedIds.isEmpty()) {
+            selectedEmployeeIds.retainAll(selectedIds); // Keep only IDs in selectedIds
+        }
     }
-    ///////////////////
+
     public Set<Integer> getSelectedEmployeeIds() {
         return selectedEmployeeIds;
     }
@@ -53,7 +51,7 @@ public class EmployeeSelectionAdapter extends RecyclerView.Adapter<EmployeeSelec
     public void filter(String query) {
         filteredList.clear();
         if (query.isEmpty()) {
-            filteredList.addAll(employeeList); // إذا كان البحث فارغ، اعرض الكل
+            filteredList.addAll(employeeList);
         } else {
             for (Employee employee : employeeList) {
                 if (employee.getFullname().toLowerCase().contains(query.toLowerCase())) {
@@ -80,10 +78,11 @@ public class EmployeeSelectionAdapter extends RecyclerView.Adapter<EmployeeSelec
         try {
             int empId = Integer.parseInt(emp.getId());
             holder.checkBox.setChecked(selectedEmployeeIds.contains(empId));
+            holder.checkBox.setEnabled(true);
         } catch (NumberFormatException ex) {
-            Log.e("EmployeeSelectionAdapter", "Invalid employee ID in onBind: " + emp.getId());
+            Log.e("EmployeeSelectionAdapter", "Invalid employee ID: " + emp.getId());
             holder.checkBox.setChecked(false);
-            holder.checkBox.setEnabled(false); // Disable checkbox for invalid IDs
+            holder.checkBox.setEnabled(false);
         }
 
         // Reset listener to avoid duplicate listeners
@@ -122,21 +121,19 @@ public class EmployeeSelectionAdapter extends RecyclerView.Adapter<EmployeeSelec
             int width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.85);
             window.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
-
         title.setText("Employee Details");
-        message.setText("🔹 Job Number: " + emp.getId() + "\n\n" +
+        message.setText("🔹 Employee Code: " + emp.getEmployee_code()
+                + "\n\n" +
                 "📧 Email: " + emp.getEmail() + "\n\n" +
                 "🏢 Department: " + emp.getDepartment_name() + "\n\n" +
                 "💼 Job Title: " + emp.getDesignation_name());
-
         closeButton.setOnClickListener(v -> dialog.dismiss());
-
         dialog.show();
     }
+
     static class EmployeeViewHolder extends RecyclerView.ViewHolder {
         CheckBox checkBox;
         ImageButton detailsButton;
-
         public EmployeeViewHolder(@NonNull View itemView) {
             super(itemView);
             checkBox = itemView.findViewById(R.id.checkBox);

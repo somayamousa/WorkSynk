@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/employeeNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:enabled="false" />
+
+        <TextView
+            android:id="@+id/employeeCodeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false" />
+
+        <TextView
+            android:id="@+id/departmentText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false" />
+
+        <TextView
+            android:id="@+id/designationText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false" />
+
+        <TextView
+            android:id="@+id/salaryTypeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false" />
+
+        <TextView
+            android:id="@+id/expectedWorkDaysText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/absentDaysText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/hourlyRateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/overtimeRateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/allowancesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/netSalaryText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

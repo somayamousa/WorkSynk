@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/searchEmployeeInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search Employee"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/selectMonthBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Month"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/deleteAllBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete All Drafts"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#FF0000"
+        android:textColor="#FFFFFF"/>
+    <!-- Add this below the deleteAllBtn -->
+    <Button
+        android:id="@+id/approveAllBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Approve All"
+        android:layout_toRightOf="@id/deleteAllBtn"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/noDraftsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No salary drafts found"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/draftsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>
