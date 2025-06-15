@@ -1,7 +1,6 @@
 package com.example.worksyck;
 
 public class Departments {
-
     private String id;
     private String name;
 
@@ -24,5 +23,10 @@ public class Departments {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name; // For spinner display
     }
 }

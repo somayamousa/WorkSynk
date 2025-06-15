@@ -9,178 +9,108 @@ public class Employee {
     private String password;
     private String fullname;
     private String phone;
-    private String macAddress;
+    private String androidId; // Changed from macAddress to androidId for consistency
     private String status;
     private int companyId;
     private int departmentId;
-
     private int designationId;
-
-    private String company_name;
-    private String department_name;
-
-    private String designation_name;
-
+    private String companyName;
+    private String departmentName;
+    private String designationName;
     private double baseSalary;
-
-    private  double hourCost;
-
-    private  String SalaryStructureType;
+    private double hourDeductionCost; // Changed from hourCost for clarity
+    private String salaryStructureType;
     private double normalHourRate;
     private double overtimeHourRate;
-    private double reqularWorkingHour;
+    private double expectedHoursPerDay; // Changed from reqularWorkingHour for clarity
     private int workingDaysPerWeek;
+    private String employeeCode;
+    private List<String> workingDays;
 
-    private String employee_code;
-
-
-
-
-    public Employee(String id, String full_name, String email, String department, String company, String designation) {
+    // Constructor for minimal employee data (e.g., for display purposes)
+    public Employee(String id, String fullname, String email, String departmentName, String companyName, String designationName) {
         this.id = id;
+        this.fullname = fullname;
         this.email = email;
-        this.fullname = full_name;
-        this.department_name=department;
-        this.designation_name=designation;
-        this.company_name=company;
+        this.departmentName = departmentName;
+        this.companyName = companyName;
+        this.designationName = designationName;
+        this.workingDays = new ArrayList<>();
     }
-    public Employee(String id, String full_name, String email, String department, String company, String designation,String employee_code) {
+
+    // Constructor with employee code
+    public Employee(String id, String fullname, String email, String departmentName, String companyName, String designationName, String employeeCode) {
         this.id = id;
+        this.fullname = fullname;
         this.email = email;
-        this.fullname = full_name;
-        this.department_name=department;
-        this.designation_name=designation;
-        this.company_name=company;
-        this.employee_code=employee_code;
+        this.departmentName = departmentName;
+        this.companyName = companyName;
+        this.designationName = designationName;
+        this.employeeCode = employeeCode;
+        this.workingDays = new ArrayList<>();
     }
 
-    public String getEmployee_code() {
-        return employee_code;
-    }
-
-    public void setEmployee_code(String employee_code) {
-        this.employee_code = employee_code;
-    }
-
-    public String getCompany_name() {
-        return company_name;
-    }
-
-    public void setCompany_name(String company_name) {
-        this.company_name = company_name;
-    }
-
-    public String getDepartment_name() {
-        return department_name;
-    }
-
-    public void setDepartment_name(String department_name) {
-        this.department_name = department_name;
-    }
-
-    public String getDesignation_name() {
-        return designation_name;
-    }
-
-    public void setDesignation_name(String designation_name) {
-        this.designation_name = designation_name;
-    }
-
-
-
-    public Employee(String id, String email, String password, String fullname, String phone, String macAddress, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate, double reqularWorkingHour, int workingDaysPerWeek) {
-        this.id = id;
+    // Full constructor for employee creation
+    public Employee(String email, String password, String fullname, String phone, String status, int companyId,
+                    int departmentId, int designationId, double baseSalary, double hourDeductionCost,
+                    String salaryStructureType, double normalHourRate, double overtimeHourRate,
+                    double expectedHoursPerDay, int workingDaysPerWeek, List<String> workingDays) {
         this.email = email;
         this.password = password;
         this.fullname = fullname;
         this.phone = phone;
-        this.macAddress = macAddress;
         this.status = status;
         this.companyId = companyId;
         this.departmentId = departmentId;
         this.designationId = designationId;
         this.baseSalary = baseSalary;
-        this.hourCost = hourCost;
-        SalaryStructureType = salaryStructureType;
+        this.hourDeductionCost = hourDeductionCost;
+        this.salaryStructureType = salaryStructureType;
         this.normalHourRate = normalHourRate;
         this.overtimeHourRate = overtimeHourRate;
-        this.reqularWorkingHour=reqularWorkingHour;
+        this.expectedHoursPerDay = expectedHoursPerDay;
         this.workingDaysPerWeek = workingDaysPerWeek;
+        this.workingDays = workingDays != null ? workingDays : new ArrayList<>();
+        this.employeeCode = "";
+        this.androidId = "";
     }
 
-    public Employee(String email, String password, String fullname, String phone, String status, int companyId, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructureType, double normalHourRate, double overtimeHourRate,double reqularWorkingHour ,int workingDaysPerWeek) {
+    // Full constructor with androidId and employeeCode
+    public Employee(String id, String email, String password, String fullname, String phone, String androidId,
+                    String status, int companyId, int departmentId, int designationId, double baseSalary,
+                    double hourDeductionCost, String salaryStructureType, double normalHourRate,
+                    double overtimeHourRate, double expectedHoursPerDay, int workingDaysPerWeek,
+                    String employeeCode, List<String> workingDays) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.fullname = fullname;
         this.phone = phone;
-        this.macAddress = macAddress;
+        this.androidId = androidId;
         this.status = status;
         this.companyId = companyId;
         this.departmentId = departmentId;
         this.designationId = designationId;
         this.baseSalary = baseSalary;
-        this.hourCost = hourCost;
-        SalaryStructureType = salaryStructureType;
+        this.hourDeductionCost = hourDeductionCost;
+        this.salaryStructureType = salaryStructureType;
         this.normalHourRate = normalHourRate;
         this.overtimeHourRate = overtimeHourRate;
-        this.reqularWorkingHour=reqularWorkingHour;
+        this.expectedHoursPerDay = expectedHoursPerDay;
         this.workingDaysPerWeek = workingDaysPerWeek;
+        this.employeeCode = employeeCode;
+        this.workingDays = workingDays != null ? workingDays : new ArrayList<>();
     }
-
-    public int getWorkingDaysPerWeek() {
-        return workingDaysPerWeek;
-    }
-
-    public void setWorkingDaysPerWeek(int workingDaysPerWeek) {
-        this.workingDaysPerWeek = workingDaysPerWeek;
-    }
-
-    public String getSalaryStructureType() {
-        return SalaryStructureType;
-    }
-
-    public double getHourCost() {
-        return hourCost;
-    }
-
-    public double getNormalHourRate() {
-        return normalHourRate;
-    }
-
-    public double getReqularWorkingHour() {
-        return reqularWorkingHour;
-    }
-
-    public void setReqularWorkingHour(double reqularWorkingHour) {
-        this.reqularWorkingHour = reqularWorkingHour;
-    }
-
-    public void setNormalHourRate(double normalHourRate) {
-        this.normalHourRate = normalHourRate;
-    }
-
-    public double getOvertimeHourRate() {
-        return overtimeHourRate;
-    }
-
-    public void setOvertimeHourRate(double overtimeHourRate) {
-        this.overtimeHourRate = overtimeHourRate;
-    }
-
-    public void setSalaryStructureType(String salaryStructureType) {
-        SalaryStructureType = salaryStructureType;
-    }
-
-    public void setHourCost(double hourCost) {
-        this.hourCost = hourCost;
-    }
-    // Constructor
-
-
-
 
     // Getters and Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -213,12 +143,12 @@ public class Employee {
         this.phone = phone;
     }
 
-    public String getMacAddress() {
-        return macAddress;
+    public String getAndroidId() {
+        return androidId;
     }
 
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
+    public void setAndroidId(String androidId) {
+        this.androidId = androidId;
     }
 
     public String getStatus() {
@@ -253,13 +183,28 @@ public class Employee {
         this.designationId = designationId;
     }
 
-
-    public String getId() {
-        return id;
+    public String getCompany_name() {
+        return companyName;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getDepartment_name() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getDesignation_name() {
+        return designationName;
+    }
+
+    public void setDesignationName(String designationName) {
+        this.designationName = designationName;
     }
 
     public double getBaseSalary() {
@@ -269,5 +214,67 @@ public class Employee {
     public void setBaseSalary(double baseSalary) {
         this.baseSalary = baseSalary;
     }
-}
 
+    public double getHourDeductionCost() {
+        return hourDeductionCost;
+    }
+
+    public void setHourDeductionCost(double hourDeductionCost) {
+        this.hourDeductionCost = hourDeductionCost;
+    }
+
+    public String getSalaryStructureType() {
+        return salaryStructureType;
+    }
+
+    public void setSalaryStructureType(String salaryStructureType) {
+        this.salaryStructureType = salaryStructureType;
+    }
+
+    public double getNormalHourRate() {
+        return normalHourRate;
+    }
+
+    public void setNormalHourRate(double normalHourRate) {
+        this.normalHourRate = normalHourRate;
+    }
+
+    public double getOvertimeHourRate() {
+        return overtimeHourRate;
+    }
+
+    public void setOvertimeHourRate(double overtimeHourRate) {
+        this.overtimeHourRate = overtimeHourRate;
+    }
+
+    public double getExpectedHoursPerDay() {
+        return expectedHoursPerDay;
+    }
+
+    public void setExpectedHoursPerDay(double expectedHoursPerDay) {
+        this.expectedHoursPerDay = expectedHoursPerDay;
+    }
+
+    public int getWorkingDaysPerWeek() {
+        return workingDaysPerWeek;
+    }
+
+    public void setWorkingDaysPerWeek(int workingDaysPerWeek) {
+        this.workingDaysPerWeek = workingDaysPerWeek;
+    }
+
+    public String getEmployee_code() {
+        return employeeCode;
+    }
+
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
+    }
+    public List<String> getWorkingDays() {
+        return workingDays;
+    }
+
+    public void setWorkingDays(List<String> workingDays) {
+        this.workingDays = workingDays != null ? workingDays : new ArrayList<>();
+    }
+}

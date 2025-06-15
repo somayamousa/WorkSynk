@@ -83,7 +83,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         setDefaultMonth();
         fetchSalaryDrafts();
     }
-
     private void showMonthPickerDialog() {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
@@ -94,7 +93,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
-
         // Hide day field
         try {
             DatePicker datePicker = datePickerDialog.getDatePicker();

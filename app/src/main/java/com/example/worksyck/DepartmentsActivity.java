@@ -186,9 +186,23 @@ public class DepartmentsActivity extends AppCompatActivity {
     private void deleteDepartment(String id) {
         String url = BASE_URL + "delete_department.php";
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            fetchAllDepartments();
-            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
-        }, error -> Log.e("Delete Error", error.toString())) {
+            try {
+                Log.d("Response" , response);
+                JSONObject jsonObject = new JSONObject(response);
+                String status = jsonObject.getString("status");
+                String message = jsonObject.getString("message");
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                if (status.equals("success")) {
+                    fetchAllDepartments();
+                }
+            } catch (JSONException e) {
+                Log.e("Delete Error", e.toString());
+                Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
+            }
+        }, error -> {
+            Log.e("Delete Error", error.toString());
+            Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+        }) {
             @Override
             protected Map<String, String> getParams() {
                 return Collections.singletonMap("department_id", id);
@@ -196,7 +210,6 @@ public class DepartmentsActivity extends AppCompatActivity {
         };
         requestQueue.add(request);
     }
-
     private void updateDepartment(String id, String name, int position) {
         String url = BASE_URL + "update_department.php";
 
