@@ -231,6 +231,7 @@ public class DesignationsActivity extends AppCompatActivity {
                 return params;
             }
         };
+
         requestQueue.add(request);
     }
     private void FetchAllDesignations() {

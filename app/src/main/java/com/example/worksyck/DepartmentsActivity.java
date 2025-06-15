@@ -187,7 +187,6 @@ public class DepartmentsActivity extends AppCompatActivity {
         String url = BASE_URL + "delete_department.php";
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             try {
-                Log.d("Response" , response);
                 JSONObject jsonObject = new JSONObject(response);
                 String status = jsonObject.getString("status");
                 String message = jsonObject.getString("message");
