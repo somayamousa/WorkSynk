@@ -208,15 +208,22 @@ public class DesignationsActivity extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             try {
                 JSONObject obj = new JSONObject(response);
+                String status = obj.getString("status");
                 String message = obj.getString("message");
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-                designations.remove(position);
-                adapter.notifyItemRemoved(position);
+                if (status.equals("success")) {
+                    designations.remove(position);
+                    adapter.notifyItemRemoved(position);
+                }
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e("Delete Error", e.toString());
+                Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
             }
-        }, error -> Log.e("Delete Error", error.toString())) {
+        }, error -> {
+            Log.e("Delete Error", error.toString());
+            Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+        }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -227,7 +234,6 @@ public class DesignationsActivity extends AppCompatActivity {
 
         requestQueue.add(request);
     }
-
     private void FetchAllDesignations() {
         String url = "http://10.0.2.2/worksync/fetch_all_job_titiles.php";
 

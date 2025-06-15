@@ -1,11 +1,14 @@
 package com.example.worksyck;
+
 public class Designations {
     private String id;
     private String name;
+
     public Designations(String id, String name) {
         this.id = id;
         this.name = name;
     }
+
     public Designations(String name) {
         this.name = name;
     }
@@ -19,10 +22,15 @@ public class Designations {
     }
 
     public String getName() {
-        return  name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name; // For spinner display
     }
 }
