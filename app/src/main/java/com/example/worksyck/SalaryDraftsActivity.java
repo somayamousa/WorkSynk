@@ -41,7 +41,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
     private EditText searchEmployeeInput;
     private Button selectMonthBtn, deleteAllBtn;
     private int selectedMonth = 0, selectedYear = 0;
-    private Button approveAllBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         selectMonthBtn = findViewById(R.id.selectMonthBtn);
         deleteAllBtn = findViewById(R.id.deleteAllBtn);
         draftList = new ArrayList<>();
-        approveAllBtn = findViewById(R.id.approveAllBtn); // Initialize new button
         filteredDraftList = new ArrayList<>();
         adapter = new SalaryDraftAdapter(filteredDraftList, this::onViewDetailsClick, this::onApproveClick, this::onCancelClick);
         draftsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -68,8 +66,7 @@ public class SalaryDraftsActivity extends AppCompatActivity {
 
         // Setup delete all button
         deleteAllBtn.setOnClickListener(v -> showDeleteAllConfirmation());
-// Setup approve all button
-        approveAllBtn.setOnClickListener(v -> showApproveAllConfirmation());
+
         // Setup search filter
         searchEmployeeInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -85,57 +82,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         // Fetch drafts for the current month by default
         setDefaultMonth();
         fetchSalaryDrafts();
-    }
-
-    private void showApproveAllConfirmation() {
-        if (filteredDraftList.isEmpty()) {
-            Toast.makeText(this, "No drafts to approve", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        new AlertDialog.Builder(this)
-                .setTitle("Confirm Approve All")
-                .setMessage("Are you sure you want to approve all salary drafts for the selected month?")
-                .setPositiveButton("Yes", (dialog, which) -> approveAllSalaryDrafts())
-                .setNegativeButton("No", null)
-                .show();
-    }
-
-    private void approveAllSalaryDrafts() {
-        String url = "http://10.0.2.2/worksync/approve_all_salary_drafts.php";
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                response -> {
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        if (jsonObject.getString("status").equals("success")) {
-                            JSONArray payslipNumbers = jsonObject.getJSONArray("payslip_numbers");
-                            StringBuilder message = new StringBuilder("All drafts approved successfully. Payslips: ");
-                            for (int i = 0; i < payslipNumbers.length(); i++) {
-                                message.append(payslipNumbers.getString(i)).append(", ");
-                            }
-                            Toast.makeText(this, message.toString(), Toast.LENGTH_LONG).show();
-                            fetchSalaryDrafts(); // Refresh list to clear approved drafts
-                        } else {
-                            Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        Log.e("JSON Error", e.getMessage());
-                        Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
-                    }
-                },
-                error -> {
-                    Log.e("Volley Error", error.getMessage());
-                    Toast.makeText(this, "Error approving drafts", Toast.LENGTH_SHORT).show();
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("month", String.valueOf(selectedMonth));
-                params.put("year", String.valueOf(selectedYear));
-                return params;
-            }
-        };
-        requestQueue.add(request);
     }
 
     private void showMonthPickerDialog() {

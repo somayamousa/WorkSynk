@@ -26,6 +26,7 @@ public class SalaryDraftAdapter extends RecyclerView.Adapter<SalaryDraftAdapter.
     public interface OnCancelClickListener {
         void onCancelClick(SalaryDraft draft);
     }
+
     public SalaryDraftAdapter(List<SalaryDraft> draftList, OnViewDetailsClickListener viewDetailsListener,
                               OnApproveClickListener approveListener, OnCancelClickListener cancelListener) {
         this.draftList = draftList;
@@ -33,6 +34,7 @@ public class SalaryDraftAdapter extends RecyclerView.Adapter<SalaryDraftAdapter.
         this.approveListener = approveListener;
         this.cancelListener = cancelListener;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -10,94 +10,463 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/employeeNameText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:text="Salary Draft Details"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:enabled="false" />
+            android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:id="@+id/employeeCodeText"
+        <!-- Display Views -->
+        <LinearLayout
+            android:id="@+id/displayLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false" />
+            android:orientation="vertical"
+            android:visibility="visible">
 
-        <TextView
-            android:id="@+id/departmentText"
+            <TextView
+                android:id="@+id/paySlipCodeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pay Slip Code: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/employeeCodeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employee Code: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/employeeNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employee Name: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/departmentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Department: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/designationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Designation: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/employeeIdText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employee ID: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/netSalaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Net Salary: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/baseSalaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Base Salary: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/periodStartText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Period Start: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/periodEndText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Period End: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/monthText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Month: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/yearText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Year: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/bonusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bonus: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/salaryIncrementText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Salary Increment: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/salaryStructureTypeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Salary Structure Type: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/regularHoursText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regular Hours: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/regularHourRateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regular Hour Rate: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/regularSalaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regular Salary: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/overtimeHoursText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overtime Hours: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/overtimeHourRateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overtime Hour Rate: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/overtimeSalaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overtime Salary: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/expectedWorkingDaysText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expected Working Days: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/absentDaysText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Absent Days: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/createdAtText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Created At: "
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/editBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Draft"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/generatePdfBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generate PDF"/>
+        </LinearLayout>
+
+        <!-- Edit Views -->
+        <LinearLayout
+            android:id="@+id/editLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false" />
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/designationText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false" />
+            <TextView
+                android:id="@+id/paySlipCodeEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pay Slip Code: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/salaryTypeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false" />
+            <TextView
+                android:id="@+id/employeeCodeEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employee Code: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/expectedWorkDaysText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginTop="16dp" />
+            <TextView
+                android:id="@+id/employeeNameEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employee Name: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/absentDaysText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <TextView
+                android:id="@+id/departmentEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Department: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/hourlyRateText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <TextView
+                android:id="@+id/designationEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Designation: "
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/overtimeRateText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/employeeIdInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Employee ID"
+                android:inputType="number"
+                android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/allowancesText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/netSalaryInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Net Salary"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:id="@+id/netSalaryText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginTop="8dp" />
+            <EditText
+                android:id="@+id/baseSalaryInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Base Salary"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
 
-        <Button
-            android:id="@+id/editButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit"
-            android:layout_marginTop="16dp" />
+            <EditText
+                android:id="@+id/periodStartInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Period Start (YYYY-MM-DD)"
+                android:inputType="date"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/periodEndInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Period End (YYYY-MM-DD)"
+                android:inputType="date"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/monthInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Month (1-12)"
+                android:inputType="number"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/yearInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Year"
+                android:inputType="number"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/bonusInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Bonus"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/salaryIncrementInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Salary Increment"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/salaryStructureTypeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Salary Structure Type"
+                android:inputType="text"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/regularHoursInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Regular Hours"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/regularHourRateInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Regular Hour Rate"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/regularSalaryInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Regular Salary"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/overtimeHoursInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Overtime Hours"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/overtimeHourRateInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Overtime Hour Rate"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/overtimeSalaryInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Overtime Salary"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/expectedWorkingDaysInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Expected Working Days"
+                android:inputType="number"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/absentDaysInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Absent Days"
+                android:inputType="number"
+                android:layout_marginBottom="8dp"/>
+
+            <Spinner
+                android:id="@+id/statusSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/createdAtEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Created At: "
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/confirmBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Confirm"
+                    android:layout_marginEnd="4dp"/>
+
+                <Button
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cancel"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
