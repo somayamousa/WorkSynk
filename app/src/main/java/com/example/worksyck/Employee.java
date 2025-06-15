@@ -31,6 +31,8 @@ public class Employee {
     private double reqularWorkingHour;
     private int workingDaysPerWeek;
 
+    private String employee_code;
+
 
 
 
@@ -42,13 +44,22 @@ public class Employee {
         this.designation_name=designation;
         this.company_name=company;
     }
+    public Employee(String id, String full_name, String email, String department, String company, String designation,String employee_code) {
+        this.id = id;
+        this.email = email;
+        this.fullname = full_name;
+        this.department_name=department;
+        this.designation_name=designation;
+        this.company_name=company;
+        this.employee_code=employee_code;
+    }
 
-    public Employee(String email, String password, String fullName, String phone, String selectedStatusValue, Integer integer, int departmentId, int designationId, double baseSalary, double hourCost, String salaryStructure, double normalHourRate, double overTimeRate) {
+    public String getEmployee_code() {
+        return employee_code;
+    }
 
-
-
-
-
+    public void setEmployee_code(String employee_code) {
+        this.employee_code = employee_code;
     }
 
     public String getCompany_name() {
