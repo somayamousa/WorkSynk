@@ -32,6 +32,7 @@
         android:theme="@style/Theme.Ws"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".SalaryDraftDetailsActivity"
             android:exported="false" />
@@ -67,18 +68,14 @@
         <activity
             android:name=".DepartmentsActivity"
             android:exported="false" />
-        <activity
-            android:name=".Payroll_Entry"
-            android:exported="false" />
+
         <activity
             android:name=".EmployeeDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".EmployeesListActivity"
             android:exported="false" />
-        <activity
-            android:name=".EmployeeAddActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity2"
             android:exported="false" />

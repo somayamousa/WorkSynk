@@ -41,6 +41,7 @@ dependencies {
     implementation ("com.google.zxing:core:3.5.2")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("androidx.cardview:cardview:1.0.0")
+    implementation ("com.itextpdf:itext7-core:7.2.5")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

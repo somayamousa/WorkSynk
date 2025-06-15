@@ -153,14 +153,25 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                                         draft.getString("employee_name"),
                                         draft.getString("employee_code"),
                                         draft.getDouble("net_salary"),
+                                        draft.optDouble("base_salary", 0.0),
                                         draft.getString("period_start"),
                                         draft.getString("period_end"),
                                         draft.getString("salary_structure_type"),
                                         draft.getString("department_name"),
-                                        draft.getString("designation_name")
+                                        draft.getString("designation_name"),
+                                        draft.optDouble("regular_hours", 0.0),
+                                        draft.optDouble("regular_hour_rate", 0.0),
+                                        draft.optDouble("regular_salary", 0.0),
+                                        draft.optDouble("overtime_hours", 0.0),
+                                        draft.optDouble("overtime_hour_rate", 0.0),
+                                        draft.optDouble("overtime_salary", 0.0),
+                                        draft.optDouble("bonus", 0.0),
+                                        draft.optDouble("salary_increment", 0.0),
+                                        draft.optInt("expected_working_days", 0),
+                                        draft.optInt("absent_days", 0),
+                                        draft.getString("status")
                                 );
                                 draftList.add(salaryDraft);
-
                             }
                             filteredDraftList.addAll(draftList);
                             adapter.notifyDataSetChanged();
@@ -182,6 +193,7 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                         Log.e("JSON Error", e.getMessage());
                         draftsRecyclerView.setVisibility(View.GONE);
                         noDraftsText.setVisibility(View.VISIBLE);
+                        Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
@@ -192,7 +204,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                 });
         requestQueue.add(request);
     }
-
     private void filterDrafts(String query) {
         filteredDraftList.clear();
         if (query.isEmpty()) {
@@ -217,9 +228,9 @@ public class SalaryDraftsActivity extends AppCompatActivity {
     }
 
     private void onViewDetailsClick(SalaryDraft draft) {
-//        Intent intent = new Intent(this, SalaryDraftDetailsActivity.class);
-//        intent.putExtra("salary_draft", draft);
-//        startActivity(intent);
+        Intent intent = new Intent(this, SalaryDraftDetailsActivity.class);
+        intent.putExtra("salary_draft", draft);
+        startActivity(intent);
     }
 
     private void onApproveClick(SalaryDraft draft) {

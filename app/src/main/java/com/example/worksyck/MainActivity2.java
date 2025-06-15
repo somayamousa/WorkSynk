@@ -11,10 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 public class MainActivity2 extends AppCompatActivity {
-
-
     private int userId;
     private String email, fullname,role,company_id;
     @Override
@@ -22,7 +19,6 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main2);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -42,12 +38,8 @@ public class MainActivity2 extends AppCompatActivity {
         Button  gps=findViewById(R.id.gps);
         Button  workPolicy=findViewById(R.id.workPolicy);
         Button  salary_drafts=findViewById(R.id.salary_drafts);
-
-
         Button btnLeaveRequest = findViewById(R.id.HrLeaveRequest);
         Button btnOverRequest = findViewById(R.id.HrOverRequest);
-
-
         Intent intent = getIntent();
 
         email = getIntent().getStringExtra("email");
@@ -75,9 +67,6 @@ public class MainActivity2 extends AppCompatActivity {
             salary_drafts_Intent.putExtra("user_id",userId);
             startActivity( salary_drafts_Intent);
         });
-
-
-
         workPolicy.setOnClickListener(v -> {
             Intent      workPolicy_Intent = new Intent(MainActivity2.this, workPolicySettingsActivity.class);
             workPolicy_Intent.putExtra("company_id",company_id);
@@ -87,7 +76,6 @@ public class MainActivity2 extends AppCompatActivity {
         add_holiday.setOnClickListener(v -> {
             Intent     Add_holiday_Intent = new Intent(MainActivity2.this, AddHoliday.class);
             startActivity(Add_holiday_Intent);
-
         });
         cont_holiday.setOnClickListener(v -> {
 
@@ -118,16 +106,12 @@ public class MainActivity2 extends AppCompatActivity {
             Intent LeaveRequestIntent = new Intent(MainActivity2.this, HrLeaveRequest.class);
             startActivity(LeaveRequestIntent);
         });
-
         btnOverRequest.setOnClickListener(v -> {
             Intent OvertimeRequestIntent = new Intent(MainActivity2.this, HrOvertimeRequest.class);
             startActivity(OvertimeRequestIntent);
         });
-
-
         // Add Employee Button Click
         btnAddEmployee.setOnClickListener(v -> {
-
 //            Intent addIntent = new Intent(MainActivity2.this, EmployeeAddActivity.class);
 //            addIntent.putExtra("company_id",company_id);
 //            startActivity(addIntent);
