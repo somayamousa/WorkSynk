@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.2"
         android:text="Mon 2025-05-29"
-        android:textColor="#800080"
+        android:textColor="#4A148C"
         android:textSize="14sp"
         android:textStyle="bold" />
 

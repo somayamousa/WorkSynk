@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+    </group>
+
+    <item
+        android:id="@+id/nav_add_employee"
+        android:title="Add Employee" />
+    <item
+        android:id="@+id/nav_employees"
+        android:title="Employees" />
+    <item
+        android:id="@+id/nav_manage_departments"
+        android:title="Manage Departments" />
+    <item
+        android:id="@+id/nav_manage_designations"
+    android:title="Manage Designations" />
+
+    <item
+        android:id="@+id/nav_additional_salary"
+        android:title="Additional Salary" />
+    <item
+        android:id="@+id/nav_create_salary_slip"
+        android:title="Create Salary Slip" />
+
+    <item
+        android:id="@+id/nav_add_holiday"
+        android:title="Add Holiday" />
+    <item
+        android:id="@+id/nav_manage_holidays"
+        android:title="Manage Holidays" />
+
+    <item
+        android:id="@+id/nav_leave_request"
+        android:title="Leave Request" />
+    <item
+        android:id="@+id/nav_overtime_request"
+        android:title="Overtime Request" />
+
+    <item
+        android:id="@+id/nav_scan_qr"
+        android:title="Scan QR Code" />
+    <item
+        android:id="@+id/nav_gps_tracking"
+        android:title="GPS Tracking" />
+
+    <item
+        android:id="@+id/nav_work_policy"
+        android:title="Work Policy" />
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Log Out" />
+    </group>
+
+</menu>

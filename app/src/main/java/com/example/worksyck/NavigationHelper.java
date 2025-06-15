@@ -30,11 +30,11 @@ public  class NavigationHelper {
     }
 
     // إعداد مستمعات الأزرار في Bottom Navigation
-    public void setBottomNavigationListeners(LinearLayout[] bottomNavItems, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout) {
+    public void setBottomNavigationListeners(LinearLayout[] bottomNavItems, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout, LinearLayout attendanceLayout) {
         for (LinearLayout item : bottomNavItems) {
             item.setOnClickListener(v -> {
-                navigateToActivity(getActivityClass(item, homeLayout, requestsLayout, checkInLayout));  // التنقل للنشاط المناسب
-                updateSelection(item, homeLayout, requestsLayout, checkInLayout);  // تحديث حالة التحديد
+                navigateToActivity(getActivityClass(item, homeLayout, requestsLayout, checkInLayout,  attendanceLayout));  // التنقل للنشاط المناسب
+                updateSelection(item, homeLayout, requestsLayout, checkInLayout,  attendanceLayout);  // تحديث حالة التحديد
             });
         }
     }
@@ -52,19 +52,21 @@ public  class NavigationHelper {
     }
 
     // تحديد النشاط المناسب بناءً على العنصر الذي تم النقر عليه
-    private Class<?> getActivityClass(LinearLayout item, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout) {
+    private Class<?> getActivityClass(LinearLayout item, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout, LinearLayout attendanceLayout) {
         if (item == homeLayout) return MainActivity.class;
         if (item == requestsLayout) return RequestsActivity.class;
         if (item == checkInLayout) return attendance.class;  // إضافة التنقل إلى CheckInActivity
+        if (item == attendanceLayout) return ShowAttendanceRecord.class;
         return null;
     }
 
     // تحديث حالة التحديد للـ Bottom Navigation Items
-    private void updateSelection(LinearLayout selectedLayout, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout) {
+    private void updateSelection(LinearLayout selectedLayout, LinearLayout homeLayout, LinearLayout requestsLayout, LinearLayout checkInLayout, LinearLayout attendanceLayout) {
         homeLayout.setSelected(false);
         requestsLayout.setSelected(false);
         checkInLayout.setSelected(false);  // إضافة التحديد لـ checkInLayout
         selectedLayout.setSelected(true);
+         attendanceLayout.setSelected(false);
     }
 
     // تعيين مستمع للضغط على زر الرجوع

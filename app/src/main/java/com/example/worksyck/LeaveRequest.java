@@ -59,8 +59,8 @@ public class LeaveRequest extends AppCompatActivity {
 
         initializeViews();
 
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, attendanceLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, attendanceLayout);
 
         leaveRequestsRecyclerView = findViewById(R.id.leaveRequestsRecyclerView);
         leaveRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -30,12 +30,7 @@ public class login extends AppCompatActivity {
     private EditText editTextUsername, editTextPassword;
     private RequestQueue requestQueue;
     private static final String TAG = "LoginActivity";
-<<<<<<< HEAD
-    private static final String LOGIN_URL = "http://10.2.2/worksync/loginapi.php";
-
-=======
     private static final String LOGIN_URL = "http://10.0.2.2/worksync/loginapi.php";
->>>>>>> 27f3b6ef8deb264ac8238e4e972f9acdb1100a5e
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
