@@ -1,11 +1,11 @@
 package com.example.worksyck;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,19 +16,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 public class MainActivity extends AppCompatActivity {
     private TextView txtMonthDays, txtPresentDays, txtAbsentDays, txtBadRecords, txtLeaves, txtHolidays;
     private ProgressBar hoursProgress;
@@ -41,34 +37,33 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
     private NavigationHelper navigationHelper;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
-        role=getIntent().getStringExtra("role");
+        role = getIntent().getStringExtra("role");
         userId = getIntent().getIntExtra("user_id", 0);
         company_id = getIntent().getIntExtra("company_id", 0);
 
-        // Initialize NavigationHelper and set back button functionality
-        navigationHelper = new NavigationHelper(this,userId,email,fullname,role,company_id);
+        // Initialize NavigationHelper
+        navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
         navigationHelper.enableBackButton();
 
         // Initialize views
         initializeViews();
 
-        // إعداد Bottom Navigation باستخدام الـ Helper
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
-
-        // Update date and hours
+        // Set up Bottom Navigation
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout); // Update date and hours
         updateDate();
         startUpdatingHours();
         fetchAttendanceData();
 
     }
-
     private void initializeViews() {
         checkInLayout = findViewById(R.id.checkInLayout);
         salaryLayout = findViewById(R.id.salaryLayout);
@@ -78,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
         dateText = findViewById(R.id.dateText);
         hoursText = findViewById(R.id.hoursText);
         handler = new Handler(Looper.getMainLooper());
-
-        // New views for attendance summary
         txtMonthDays = findViewById(R.id.txtMonthDays);
         txtPresentDays = findViewById(R.id.txtPresentDays);
         txtAbsentDays = findViewById(R.id.txtAbsentDays);
@@ -88,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         txtHolidays = findViewById(R.id.txtHolidays);
         hoursProgress = findViewById(R.id.hoursProgress);
         requestQueue = Volley.newRequestQueue(this);
-
     }
     private void fetchAttendanceData() {
         String url = "http://192.168.1.6/worksync/get_attendance_summary.php";

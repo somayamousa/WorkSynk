@@ -31,12 +31,12 @@ import java.util.List;
 
 public class OvertimeRequest extends AppCompatActivity {
 
-    private static final int VIEW_Overtime_REQUEST_CODE = 100; // كود طلب رجوع من إضافة طلب جديد
+    private static final int VIEW_OVERTIME_REQUEST_CODE = 100; // Request code for new overtime request
 
     private RecyclerView overtimeRequestsRecyclerView;
     private OvertimeRequestAdapter overtimeRequestAdapter;
     private List<OvertimeRequestModel> overtimeRequestList;
-    private NavigationHelper navigationHelper; // استخدام NavigationHelper
+    private NavigationHelper navigationHelper;
     private ImageView backButton;
     private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
     private int userId, company_id;
@@ -47,45 +47,43 @@ public class OvertimeRequest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listofovertime);
 
-
+        // Retrieve intent extras
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
         role = getIntent().getStringExtra("role");
         userId = getIntent().getIntExtra("user_id", 0);
         company_id = getIntent().getIntExtra("company_id", 0);
 
-        // Initialize NavigationHelper and set back button functionality
+        // Initialize NavigationHelper
         navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
         navigationHelper.enableBackButton();
 
         // Initialize views
         initializeViews();
 
-        // إعداد Bottom Navigation باستخدام الـ Helper
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout);
+        // Set up Bottom Navigation using NavigationHelper
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout);
 
-        // تهيئة الـ RecyclerView
+        // Initialize RecyclerView
         overtimeRequestsRecyclerView = findViewById(R.id.overtimeRequestsRecyclerView);
         overtimeRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         overtimeRequestList = new ArrayList<>();
 
-        // جلب البيانات من الخادم
+        // Fetch data from server
         fetchOvertimeDataFromServer();
 
-        // زر إنشاء طلب إجازة جديدة - استخدم startActivityForResult ليتم استدعاء onActivityResult بعد العودة
+        // Set up New Overtime Request button
         findViewById(R.id.newOvertimeRequestButton).setOnClickListener(v -> {
             Intent intent = new Intent(OvertimeRequest.this, OvertimeRequests.class);
-            startActivityForResult(intent, VIEW_Overtime_REQUEST_CODE);
+            startActivityForResult(intent, VIEW_OVERTIME_REQUEST_CODE);
         });
 
-        // تفعيل زر الرجوع
+        // Back button listener
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
     }
 
     private void initializeViews() {
-        // ربط العناصر في XML بالكود
         backButton = findViewById(R.id.backButton);
         checkInLayout = findViewById(R.id.checkInLayout);
         salaryLayout = findViewById(R.id.salaryLayout);
@@ -93,28 +91,26 @@ public class OvertimeRequest extends AppCompatActivity {
         attendanceLayout = findViewById(R.id.attendanceLayout);
         requestsLayout = findViewById(R.id.requestsLayout);
 
-        // تفعيل زر الرجوع باستخدام الـ Helper
-        navigationHelper.setBackButtonListener(backButton);  // استدعاء زر الرجوع
+        navigationHelper.setBackButtonListener(backButton);
     }
 
     private void navigateToActivity(Class<?> activityClass) {
-        // التنقل إلى الأنشطة المناسبة
         Intent intent = new Intent(OvertimeRequest.this, activityClass);
+        intent.putExtra("user_id", userId);
+        intent.putExtra("email", email);
+        intent.putExtra("fullname", fullname);
+        intent.putExtra("role", role);
+        intent.putExtra("company_id", company_id);
         startActivity(intent);
     }
 
     private void fetchOvertimeDataFromServer() {
-       // String url = "http://10.0.2.2/worksync/get_overtime_data.php";  // استبدل بـ URL الخاص بك
         String url = "http://10.0.2.2/worksync/get_overtime_data.php?user_id=" + userId;
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
-                        // تفريغ القائمة قبل الإضافة لتجنب التكرار
                         overtimeRequestList.clear();
-
-                        // تحليل JSON
                         JSONArray jsonArray = new JSONArray(response);
 
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -123,12 +119,9 @@ public class OvertimeRequest extends AppCompatActivity {
                             String overtimeDate = overtimeRequest.optString("overtime_date");
                             String reason = overtimeRequest.optString("reason");
                             String status = capitalizeFirstLetter(overtimeRequest.optString("status", "Pending"));
-
-                            // إضافة البيانات إلى القائمة
                             overtimeRequestList.add(new OvertimeRequestModel(id, overtimeDate, reason, status));
                         }
 
-                        // تحديث الـ Adapter إذا موجود، أو إنشاؤه لأول مرة
                         if (overtimeRequestAdapter == null) {
                             overtimeRequestAdapter = new OvertimeRequestAdapter(overtimeRequestList);
                             overtimeRequestsRecyclerView.setAdapter(overtimeRequestAdapter);
@@ -144,27 +137,23 @@ public class OvertimeRequest extends AppCompatActivity {
                 error -> Toast.makeText(OvertimeRequest.this, "Error fetching data: " + error.toString(), Toast.LENGTH_SHORT).show()
         );
 
-        // إضافة الطلب إلى صف الانتظار
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
     private String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) return input;
         return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 
-
-    // استقبال النتيجة من صفحة إضافة طلب العمل الإضافي
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == VIEW_Overtime_REQUEST_CODE) {
-            // عند العودة من صفحة إضافة الطلب، جلب البيانات مجددًا لتحديث القائمة
+        if (requestCode == VIEW_OVERTIME_REQUEST_CODE && resultCode == RESULT_OK) {
             fetchOvertimeDataFromServer();
         }
     }
 
-    // Adapter class لـ RecyclerView
     class OvertimeRequestAdapter extends RecyclerView.Adapter<OvertimeRequestAdapter.OvertimeRequestViewHolder> {
 
         private List<OvertimeRequestModel> overtimeRequests;
@@ -185,7 +174,7 @@ public class OvertimeRequest extends AppCompatActivity {
             holder.overtimeDateRange.setText(overtimeRequest.getOvertimeDate());
             holder.overtimeReason.setText(overtimeRequest.getReason());
             holder.statusTextView.setText(overtimeRequest.getStatus());
-            Log.d("LeaveRequest", "Status value: " + overtimeRequest.getStatus());
+            Log.d("OvertimeRequest", "Status value: " + overtimeRequest.getStatus());
 
             String status = overtimeRequest.getStatus().toLowerCase();
 
@@ -201,9 +190,8 @@ public class OvertimeRequest extends AppCompatActivity {
                     holder.statusTextView.setTextColor(ContextCompat.getColor(holder.statusTextView.getContext(), R.color.status_pending));
                     break;
             }
-            // تعيين OnClickListener على CardView
+
             holder.itemView.setOnClickListener(v -> {
-                // إرسال ID طلب العمل الإضافي إلى صفحة OvertimeOverview
                 Intent intent = new Intent(OvertimeRequest.this, OvertimeOverview.class);
                 intent.putExtra("overtimeRequestId", overtimeRequest.getId());
                 startActivity(intent);
@@ -215,9 +203,8 @@ public class OvertimeRequest extends AppCompatActivity {
             return overtimeRequests.size();
         }
 
-        // ViewHolder لعرض طلبات العمل الإضافي
         class OvertimeRequestViewHolder extends RecyclerView.ViewHolder {
-            TextView overtimeDateRange, overtimeReason,statusTextView;
+            TextView overtimeDateRange, overtimeReason, statusTextView;
 
             public OvertimeRequestViewHolder(View itemView) {
                 super(itemView);
@@ -228,14 +215,12 @@ public class OvertimeRequest extends AppCompatActivity {
         }
     }
 
-    // نموذج طلب العمل الإضافي
     class OvertimeRequestModel {
         private String id;
         private String overtimeDate;
         private String reason;
         private String status;
 
-        // Constructor
         public OvertimeRequestModel(String id, String overtimeDate, String reason, String status) {
             this.id = id;
             this.overtimeDate = overtimeDate;
@@ -254,8 +239,9 @@ public class OvertimeRequest extends AppCompatActivity {
         public String getReason() {
             return reason;
         }
-            public String getStatus() {
-                return status;
+
+        public String getStatus() {
+            return status;
         }
     }
 }
