@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:background="@android:color/white"
     android:gravity="center_vertical">
 
-    <!-- Day -->
+    <!-- Day and Date -->
     <TextView
         android:id="@+id/dayTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.2"
-        android:text="Mon 2025-05-29"
+        android:layout_weight="1.5"
+        android:text="03 Tue"
         android:textColor="#800080"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -24,7 +24,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="08:30 am"
+        android:gravity="center"
+        android:text="08:30 AM"
         android:textSize="14sp" />
 
     <!-- Check Out -->
@@ -33,7 +34,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="08:30 am"
+        android:gravity="center"
+        android:text="05:30 PM"
         android:textSize="14sp" />
 
     <!-- Total Hrs -->
@@ -42,8 +44,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="9 Hrs"
         android:textSize="14sp" />
 
-
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: Present"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:paddingTop="4dp"/>
 </LinearLayout>

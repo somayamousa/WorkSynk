@@ -139,7 +139,7 @@ public class ShowAttendanceRecord extends AppCompatActivity {
     }
 
     public void fetchAttendanceRecord(int userId) {
-        String url = "http://10.0.2.2/worksync/fetch_employee_attendance_records.php"
+        String url = "http://192.168.1.6/worksync/fetch_employee_attendance_records.php"
                 + "?employee_id=" + userId
                 + "&start_date=" + startDate
                 + "&end_date=" + endDate;
@@ -151,50 +151,30 @@ public class ShowAttendanceRecord extends AppCompatActivity {
                         if ("success".equals(jo.optString("status"))) {
                             JSONArray arr = jo.optJSONArray("data");
                             attendanceList.clear();
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date start, end;
-                            try {
-                                start = sdf.parse(startDate);
-                                end = sdf.parse(endDate);
 
-                                HashMap<String, AttendanceRecord> recordMap = new HashMap<>();
-                                if (arr != null) {
-                                    for (int i = 0; i < arr.length(); i++) {
-                                        JSONObject r = arr.getJSONObject(i);
-                                        AttendanceRecord rec = new AttendanceRecord(
-                                                r.getInt("id"),
-                                                r.getInt("user_id"),
-                                                r.getString("date"),
-                                                r.getString("start_time"),
-                                                r.getString("end_time")
-                                        );
-                                        recordMap.put(rec.getDate(), rec);
-                                    }
+                            if (arr != null) {
+                                for (int i = 0; i < arr.length(); i++) {
+                                    JSONObject r = arr.getJSONObject(i);
+                                    String date = r.getString("date");
+                                    String startTime = r.getString("start_time");
+                                    String endTime = r.getString("end_time");
+                                    String status = r.getString("status");
+
+                                    AttendanceRecord record = new AttendanceRecord(
+                                            0,
+                                            userId,
+                                            date,
+                                            startTime,
+                                            endTime,
+                                            status
+                                    );
+
+                                    attendanceList.add(record);
                                 }
-
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTime(start);
-                                while (!cal.getTime().after(end)) {
-                                    String dateStr = sdf.format(cal.getTime());
-                                    if (recordMap.containsKey(dateStr)) {
-                                        attendanceList.add(recordMap.get(dateStr));
-                                    } else {
-                                        attendanceList.add(new AttendanceRecord(
-                                                0,
-                                                userId,
-                                                dateStr,
-                                                "",
-                                                ""
-                                        ));
-                                    }
-                                    cal.add(Calendar.DAY_OF_MONTH, 1);
-                                }
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
                             }
-
-                            adapter.notifyDataSetChanged();
 
                         } else {
                             Toast.makeText(this, jo.optString("message"), Toast.LENGTH_SHORT).show();

@@ -60,7 +60,7 @@ public class LeaveOverview extends AppCompatActivity {
     }
 
     private void loadLeaveDetailsFromServer(String leaveRequestId) {
-        String url = "http://10.0.2.2/worksync/get_leave_request.php?id=" + leaveRequestId;
+        String url = "http://192.168.1.6/worksync/get_leave_request.php?id=" + leaveRequestId;
 
         // إرسال طلب GET باستخدام Volley
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

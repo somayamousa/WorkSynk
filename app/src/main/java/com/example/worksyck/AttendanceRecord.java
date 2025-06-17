@@ -11,15 +11,40 @@ public class AttendanceRecord {
     private String date;       // بالشكل "yyyy-MM-dd"
     private String startTime;  // بالشكل "HH:mm:ss"
     private String endTime;    // بالشكل "HH:mm:ss"
-
-    public AttendanceRecord(int id, int userId, String date, String startTime, String endTime) {
+    private String status; // NEW
+    public AttendanceRecord(int id, int userId, String date, String startTime, String endTime, String status) {
         this.id = id;
         this.userId = userId;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.status = status;
+    }  public AttendanceRecord(int id, int userId, String date, String startTime, String endTime) {
+        this.id = id;
+        this.userId = userId;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+
     }
 
+    public String getDayAndDate() {
+        // ترجع مثلاً: "03 Tue" مثل ما في الصورة
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd EEE", Locale.US);
+        try {
+            Date date = inputFormat.parse(this.date);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            return this.date;
+        }
+    }
+
+
+    // Getters...
+    public String getStatus() {
+        return status;
+    }
     public int getId() { return id; }
     public int getUserId() { return userId; }
     public String getDate() { return date; }
@@ -27,23 +52,16 @@ public class AttendanceRecord {
     public String getEndTime() { return endTime; }
 
     public double getWorkedHours() {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.US);
-        try {
-            Date start = format.parse(startTime);
-            Date end = format.parse(endTime);
+        if (startTime == null || endTime == null || startTime.trim().isEmpty() || endTime.trim().isEmpty())
+            return 0;
 
-            if (end == null || endTime.equals("00:00:00")) {
-                long diffMillis = (24 * 60 * 60 * 1000) - start.getTime();
-                return diffMillis / (1000.0 * 60 * 60);
-            } else {
-                long diffMillis = end.getTime() - start.getTime();
-                if (diffMillis < 0) {
-                    diffMillis += 24 * 60 * 60 * 1000;
-                }
-                return diffMillis / (1000.0 * 60 * 60);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
+            Date start = sdf.parse(startTime.trim());
+            Date end = sdf.parse(endTime.trim());
+            long diffMs = end.getTime() - start.getTime();
+            return diffMs / (1000.0 * 60 * 60);
+        } catch (Exception e) {
             return 0;
         }
     }

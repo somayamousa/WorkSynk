@@ -568,6 +568,17 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="@drawable/selector"/>
+            <Button
+                android:id="@+id/buttonLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#B00020"
+                android:padding="12dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"/>
+
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
