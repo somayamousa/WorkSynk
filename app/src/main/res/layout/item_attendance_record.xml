@@ -12,11 +12,12 @@
         android:id="@+id/dayTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.2"
+        android:layout_weight="1"
         android:text="Mon 2025-05-29"
         android:textColor="#4A148C"
         android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:gravity="center" />
 
     <!-- Check In -->
     <TextView
@@ -25,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="08:30 am"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 
     <!-- Check Out -->
     <TextView
@@ -34,7 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="08:30 am"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 
     <!-- Total Hrs -->
     <TextView
@@ -43,7 +46,17 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="9 Hrs"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 
+    <!-- Status -->
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Present"
+        android:textSize="14sp"
+        android:gravity="center" />
 
 </LinearLayout>

@@ -1,17 +1,13 @@
 package com.example.worksyck;
+
 import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -74,17 +70,17 @@ public class attendance extends AppCompatActivity {
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
     private static final String ATTENDANCE_PREFS = "AttendancePrefs";
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
     // UI Components
     private Button startButton, stopButton;
     private TextView currentDateText, checkInTimeText, checkOutTimeText;
     private LinearLayout homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
     // Authentication state
     private boolean isWorking = false;
     private long startTime = 0;
-    private int userId,company_id;
+    private int userId, company_id;
     private String email, fullname, role;
     private int biometricAttempts = 0;
     private boolean isAuthenticationInProgress = false;
@@ -101,179 +97,13 @@ public class attendance extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> qrLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             this::handleQrScanResult);
-    private void requestLocationPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                LOCATION_PERMISSION_REQUEST_CODE);
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, retry the original action
-                if (isWorking) {
-                    verifyDeviceAndProceed(true, () -> checkBiometricSupport(true));
-                } else {
-                    verifyDeviceAndProceed(false, () -> checkBiometricSupport(false));
-                }
-            } else {
-                showToast("Location permission denied");
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Location Permission Needed")
-                            .setMessage("This app needs location access to verify you're in the correct work area")
-                            .setPositiveButton("Try Again", (dialog, which) ->
-                                    requestLocationPermission())
-                            .setNegativeButton("Cancel", null)
-                            .show();
-                }
-            }
-        }
-    }
-    private void checkLocationAndProceed(boolean isVerification, Runnable onSuccess) {
-        Log.d(TAG, "Checking location permission");
-
-        // Check location permission first
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermission();
-            return;
-        }
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        // Check if GPS is enabled
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            new AlertDialog.Builder(this)
-                    .setTitle("GPS Required")
-                    .setMessage("Please enable GPS to verify your location")
-                    .setPositiveButton("Settings", (dialog, which) -> {
-                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .show();
-            return;
-        }
-
-        final Handler handler = new Handler(Looper.getMainLooper());
-        final Runnable timeoutRunnable = () -> {
-            Log.w(TAG, "Location timeout - proceeding with last known location");
-            // Fallback to last known location
-            try {
-                Location lastKnown = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (lastKnown != null) {
-                    Log.d(TAG, "Using last known location: " + lastKnown);
-                    verifyLocationWithServer(lastKnown, isVerification, onSuccess);
-                } else {
-                    // If no location available, proceed anyway with a warning
-                    showToast("Couldn't get current location - using approximate");
-                    if (onSuccess != null) onSuccess.run();
-                }
-            } catch (SecurityException e) {
-                Log.e(TAG, "Location permission error in timeout", e);
-                showToast("Location permission required");
-            }
-        };
-
-        try {
-            Log.d(TAG, "Requesting location update");
-            // Set 10 second timeout
-            handler.postDelayed(timeoutRunnable, 10000);
-
-            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    handler.removeCallbacks(timeoutRunnable);
-                    Log.d(TAG, "Location received: " + location);
-                    locationManager.removeUpdates(this);
-                    verifyLocationWithServer(location, isVerification, onSuccess);
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                    Log.d(TAG, "Location status changed: " + status);
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-                    Log.d(TAG, "Location provider enabled: " + provider);
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-                    handler.removeCallbacks(timeoutRunnable);
-                    Log.d(TAG, "Location provider disabled: " + provider);
-                    showToast("Location provider disabled");
-                    locationManager.removeUpdates(this);
-                }
-            }, Looper.getMainLooper());
-
-        } catch (SecurityException e) {
-            handler.removeCallbacks(timeoutRunnable);
-            Log.e(TAG, "Location permission not granted", e);
-            showToast("Location permission required");
-        }
-    }
-    private void verifyLocationWithServer(Location location, boolean isVerification, Runnable onSuccess) {
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-
-        JSONObject locationRequestBody = new JSONObject();
-        try {
-            locationRequestBody.put("company_id", company_id);
-            locationRequestBody.put("latitude", latitude);
-            locationRequestBody.put("longitude", longitude);
-        } catch (JSONException e) {
-            Log.e(TAG, "Error creating location verification JSON", e);
-            showToast("Location verification failed");
-            return;
-        }
-
-        JsonObjectRequest locationRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                "http://10.0.2.2/worksync/verify_location.php",
-                locationRequestBody,
-                response -> {
-                    try {
-                        boolean isInArea = response.getBoolean("is_in_area");
-                        if (isInArea) {
-                            // Location verified, proceed with next step
-                            if (onSuccess != null) {
-                                onSuccess.run();
-                            }
-                        } else {
-                            // Provide detailed feedback about why location failed
-                            if (response.has("distance") && response.has("radius")) {
-                                double distance = response.getDouble("distance");
-                                double radius = response.getDouble("radius");
-                                showToast(String.format("You're %.0fm outside the allowed area (radius: %.0fm)",
-                                        distance - radius, radius));
-                            } else {
-                                showToast("You're not in the allowed work area");
-                            }
-                        }
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Error parsing location verification response", e);
-                        showToast("Location verification error");
-                    }
-                },
-                error -> {
-                    Log.e(TAG, "Network error during location verification", error);
-                    showToast("Location verification failed");
-                });
-
-        requestQueue.add(locationRequest);
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance);
 
-
+        // Retrieve intent extras
         email = getIntent().getStringExtra("email");
         fullname = getIntent().getStringExtra("fullname");
         role = getIntent().getStringExtra("role");
@@ -289,14 +119,14 @@ public class attendance extends AppCompatActivity {
         navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, attendanceLayout);
 
 
-        initializeViews();
+
+        // Setup remaining components
         setupUserData();
         initializeNetworkQueue();
         initializeBiometricComponents();
         loadSavedState();
-        checkCurrentAttendanceStatus(); // Add this line
+        checkCurrentAttendanceStatus();
         updateUI();
-
     }
 
     private void initializeViews() {
@@ -314,15 +144,6 @@ public class attendance extends AppCompatActivity {
         // Set current date
         currentDateText.setText(new SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(new Date()));
 
-        homeLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(attendance.this, MainActivity.class);
-            intent.putExtra("user_id", userId);
-            intent.putExtra("email", email);
-            intent.putExtra("fullname", fullname);
-            intent.putExtra("role", role);
-            startActivity(intent);
-        });
-
         startButton.setOnClickListener(v -> {
             if (!isWorking && !isAuthenticationInProgress) {
                 verifyDeviceAndProceed(false, () -> checkBiometricSupport(false));
@@ -337,12 +158,6 @@ public class attendance extends AppCompatActivity {
     }
 
     private void setupUserData() {
-        email = getIntent().getStringExtra("email");
-        fullname = getIntent().getStringExtra("fullname");
-        role = getIntent().getStringExtra("role");
-        userId = getIntent().getIntExtra("user_id", 0);
-        company_id = getIntent().getIntExtra("company_id", 0);
-
         if (email == null || userId == 0) {
             showToast("Invalid user credentials");
             finish();
@@ -388,17 +203,171 @@ public class attendance extends AppCompatActivity {
             }
         });
     }
+
+    private void requestLocationPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                LOCATION_PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (isWorking) {
+                    verifyDeviceAndProceed(true, () -> checkBiometricSupport(true));
+                } else {
+                    verifyDeviceAndProceed(false, () -> checkBiometricSupport(false));
+                }
+            } else {
+                showToast("Location permission denied");
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Location Permission Needed")
+                            .setMessage("This app needs location access to verify you're in the correct work area")
+                            .setPositiveButton("Try Again", (dialog, which) -> requestLocationPermission())
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                }
+            }
+        }
+    }
+
+    private void checkLocationAndProceed(boolean isVerification, Runnable onSuccess) {
+        Log.d(TAG, "Checking location permission");
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+            return;
+        }
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("GPS Required")
+                    .setMessage("Please enable GPS to verify your location")
+                    .setPositiveButton("Settings", (dialog, which) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            return;
+        }
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final Runnable timeoutRunnable = () -> {
+            Log.w(TAG, "Location timeout - proceeding with last known location");
+            try {
+                Location lastKnown = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (lastKnown != null) {
+                    Log.d(TAG, "Using last known location: " + lastKnown);
+                    verifyLocationWithServer(lastKnown, isVerification, onSuccess);
+                } else {
+                    showToast("Couldn't get current location - using approximate");
+                    if (onSuccess != null) onSuccess.run();
+                }
+            } catch (SecurityException e) {
+                Log.e(TAG, "Location permission error in timeout", e);
+                showToast("Location permission required");
+            }
+        };
+
+        try {
+            Log.d(TAG, "Requesting location update");
+            handler.postDelayed(timeoutRunnable, 10000);
+
+            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    handler.removeCallbacks(timeoutRunnable);
+                    Log.d(TAG, "Location received: " + location);
+                    locationManager.removeUpdates(this);
+                    verifyLocationWithServer(location, isVerification, onSuccess);
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                    Log.d(TAG, "Location status changed: " + status);
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                    Log.d(TAG, "Location provider enabled: " + provider);
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    handler.removeCallbacks(timeoutRunnable);
+                    Log.d(TAG, "Location provider disabled: " + provider);
+                    showToast("Location provider disabled");
+                    locationManager.removeUpdates(this);
+                }
+            }, Looper.getMainLooper());
+
+        } catch (SecurityException e) {
+            handler.removeCallbacks(timeoutRunnable);
+            Log.e(TAG, "Location permission not granted", e);
+            showToast("Location permission required");
+        }
+    }
+
+    private void verifyLocationWithServer(Location location, boolean isVerification, Runnable onSuccess) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        JSONObject locationRequestBody = new JSONObject();
+        try {
+            locationRequestBody.put("company_id", company_id);
+            locationRequestBody.put("latitude", latitude);
+            locationRequestBody.put("longitude", longitude);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating location verification JSON", e);
+            showToast("Location verification failed");
+            return;
+        }
+
+        JsonObjectRequest locationRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                "http://10.0.2.2/worksync/verify_location.php",
+                locationRequestBody,
+                response -> {
+                    try {
+                        boolean isInArea = response.getBoolean("is_in_area");
+                        if (isInArea) {
+                            if (onSuccess != null) onSuccess.run();
+                        } else {
+                            if (response.has("distance") && response.has("radius")) {
+                                double distance = response.getDouble("distance");
+                                double radius = response.getDouble("radius");
+                                showToast(String.format("You're %.0fm outside the allowed area (radius: %.0fm)",
+                                        distance - radius, radius));
+                            } else {
+                                showToast("You're not in the allowed work area");
+                            }
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Error parsing location verification response", e);
+                        showToast("Location verification error");
+                    }
+                },
+                error -> {
+                    Log.e(TAG, "Network error during location verification", error);
+                    showToast("Location verification failed");
+                });
+
+        requestQueue.add(locationRequest);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         checkCurrentAttendanceStatus();
     }
+
     private String getAndroidId() {
         try {
-            String androidId = Settings.Secure.getString(
-                    getContentResolver(),
-                    Settings.Secure.ANDROID_ID
-            );
+            String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
             return !TextUtils.isEmpty(androidId) ? androidId : "unknown";
         } catch (Exception e) {
             Log.e(TAG, "Error getting Android ID", e);
@@ -434,7 +403,6 @@ public class attendance extends AppCompatActivity {
 
     private void verifyDeviceAndProceed(boolean isVerification, Runnable onSuccess) {
         String androidId = getAndroidId();
-
         showToast("Verifying device...");
 
         JSONObject requestBody = new JSONObject();
@@ -456,11 +424,7 @@ public class attendance extends AppCompatActivity {
                     try {
                         String status = response.getString("status");
                         if ("success".equals(status)) {
-                            // Device verified, now check location
-                            Log.d("tag"," location verfication");
                             checkLocationAndProceed(isVerification, onSuccess);
-                            Log.d("tag"," location verfication Done");
-
                         } else {
                             String message = response.optString("message", "Device verification failed");
                             showToast(message);
@@ -486,8 +450,6 @@ public class attendance extends AppCompatActivity {
 
     private void checkBiometricSupport(boolean isVerification) {
         if (hasFingerprintChanged()) {
-            Log.d("tag"," biometric verfication");
-
             showFingerprintChangedDialog();
             return;
         }
@@ -505,9 +467,6 @@ public class attendance extends AppCompatActivity {
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
                 showToast("No fingerprints enrolled");
                 promptFingerprintEnrollment();
-                title = isVerification ? "Verify Identity" : "Authenticate to Continue";
-                subtitle = isVerification ? "Authenticate to stop work" : "Authenticate to start work";
-                showBiometricPrompt(title, subtitle);
                 break;
 
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
@@ -627,17 +586,15 @@ public class attendance extends AppCompatActivity {
     }
 
     private void handleAuthSuccess() {
-        // First verify with server before proceeding
         checkCurrentAttendanceStatus();
 
-        // Use a handler or callback to proceed after status is verified
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isWorking) {
                 stopWork();
             } else {
                 startWork();
             }
-        }, 500); // Small delay to ensure status is updated
+        }, 500);
     }
 
     private void startWork() {
@@ -659,6 +616,7 @@ public class attendance extends AppCompatActivity {
         showToast("" + formatTime(endTime));
         checkOutTimeText.setText(formatTime(endTime));
     }
+
     private void checkCurrentAttendanceStatus() {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
@@ -681,16 +639,10 @@ public class attendance extends AppCompatActivity {
                         boolean hasStarted = response.getBoolean("has_started");
                         boolean hasEnded = response.getBoolean("has_ended");
 
-                        // Update UI based on actual database state
-                        if(hasStarted && !hasEnded)
-                            this.isWorking =true;
-                        else
-                            this.isWorking=false;
-                        Log.d("tag",isWorking+" working !?");
+                        this.isWorking = hasStarted && !hasEnded;
+                        Log.d(TAG, "Attendance status - Started: " + hasStarted + ", Ended: " + hasEnded + ", Working: " + this.isWorking);
                         saveState();
                         updateUI();
-
-                        Log.d(TAG, "Attendance status - Started: " + hasStarted + ", Ended: " + hasEnded + ", Working: " + this.isWorking);
                     } catch (JSONException e) {
                         Log.e(TAG, "Error parsing status response", e);
                     }
@@ -699,6 +651,7 @@ public class attendance extends AppCompatActivity {
 
         requestQueue.add(request);
     }
+
     private void sendAttendanceRecord(String action) {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
@@ -726,9 +679,8 @@ public class attendance extends AppCompatActivity {
                         if (!response.getString("status").equals("success")) {
                             String message = response.optString("message", "Error saving attendance");
                             showToast(message);
-                            // Reset state if ending failed
                             if (action.equals("end")) {
-                                isWorking = true; // Keep in working state
+                                isWorking = true;
                                 saveState();
                                 updateUI();
                             }
@@ -750,12 +702,9 @@ public class attendance extends AppCompatActivity {
                         }
                     }
                     Log.e(TAG, errorMessage);
-
                     showToast(errorMessage);
-
-                    // Reset state if ending failed
                     if (action.equals("end")) {
-                        isWorking = true; // Keep in working state
+                        isWorking = true;
                         saveState();
                         updateUI();
                     }
