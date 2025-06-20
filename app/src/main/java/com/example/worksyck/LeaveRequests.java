@@ -271,20 +271,58 @@ public class LeaveRequests extends AppCompatActivity {
     }
 
     private boolean validateForm() {
+        String reason = reasonTextView.getText().toString().trim();
+
         if (leaveTypeSpinner.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "Please select a leave type", Toast.LENGTH_SHORT).show();
+            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
             return false;
+        } else {
+            leaveTypeSpinner.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
+
         if (startDate.isEmpty() || endDate.isEmpty()) {
-            Toast.makeText(this, "Please select start and end dates", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select a valid date range", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            return false;
+        } else {
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.black));
+        }
+
+        Calendar today = Calendar.getInstance();
+        if (calendar.before(today)) {
+            Toast.makeText(this, "Start date cannot be in the past", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
         }
-        if (reasonTextView.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Please enter a reason", Toast.LENGTH_SHORT).show();
+
+        if (endCalendar.compareTo(calendar) < 0 || endCalendar.before(calendar)) {
+            Toast.makeText(this, "End date must be after start date", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
             return false;
         }
+
+        long diff = endCalendar.getTimeInMillis() - calendar.getTimeInMillis();
+        if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) > 30) {
+            Toast.makeText(this, "Leave duration must be less than 30 days", Toast.LENGTH_SHORT).show();
+            selectDateButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            return false;
+        }
+
+        if (reason.isEmpty()) {
+            Toast.makeText(this, "Please provide a reason for leave", Toast.LENGTH_SHORT).show();
+            reasonTextView.setError("This field is required");
+            reasonTextView.setBackgroundResource(R.drawable.edittext_error_border);
+            return false;
+        } else {
+            reasonTextView.setError(null);
+            reasonTextView.setBackgroundResource(R.drawable.edittext_normal_border);
+        }
+
         return true;
     }
+
+
 
     private void clearFields() {
         leaveTypeSpinner.setSelection(0);

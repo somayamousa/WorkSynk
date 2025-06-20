@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NumberPickerTheme">
+        <item name="android:textColorPrimary">#4A148C</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:colorControlNormal">#4A148C</item>
+    </style>
+</resources>

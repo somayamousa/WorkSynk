@@ -35,13 +35,6 @@
             android:textSize="26sp"
             android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:contentDescription="Filter Icon"
-                android:src="@drawable/hre"
-                app:tint="#000000" />
         </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
