@@ -851,21 +851,18 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
         for (SalaryIncrease increase : originalIncreaseList) {
             boolean matches = true;
 
-            // تصفية حسب نوع الزيادة
             if (!filterIncreaseType.isEmpty()) {
                 if (!increase.getIncreaseType().toLowerCase().contains(filterIncreaseType)) {
                     matches = false;
                 }
             }
 
-            // تصفية حسب نوع المدة
             if (!filterDurationType.equals("All")) {
                 if (!increase.getDurationType().equalsIgnoreCase(filterDurationType)) {
                     matches = false;
                 }
             }
 
-            // تصفية حسب تاريخ البدء
             if (!filterStartDate.isEmpty()) {
                 if (!increase.getStartDate().equals(filterStartDate)) {
                     matches = false;
@@ -877,11 +874,9 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
             }
         }
 
-        // تحديث RecyclerView
         adapter.setList(filteredList);
         adapter.notifyDataSetChanged();
 
-        // تحديث واجهة المستخدم بناءً على النتائج
         if (filteredList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             emptyLayout.setVisibility(View.VISIBLE);
@@ -893,16 +888,13 @@ public class AdditionalSalaryActivity extends AppCompatActivity {
     }
 
     private void resetFilter() {
-        // إعادة تعيين الحقول
         editFilterIncreaseType.setText("");
         spinnerFilterDurationType.setSelection(0);
         editFilterStartDate.setText("");
 
-        // إعادة تعيين القائمة الأصلية
         adapter.setList(originalIncreaseList);
         adapter.notifyDataSetChanged();
 
-        // تحديث واجهة المستخدم
         if (originalIncreaseList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             emptyLayout.setVisibility(View.VISIBLE);

@@ -13,7 +13,14 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="textColor">#333333</color> <!-- Dark gray text color -->
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="text_white">#FFFFFF</color>
 
+    <!-- ألوان خاصة بالحضور -->
+    <color name="holiday_color">#4CAF50</color>  <!-- أخضر للإجازات -->
+    <color name="absent_color">#F44336</color>   <!-- أحمر للغياب -->
+    <color name="present_color">#2196F3</color>  <!-- أزرق للحضور -->
         <color name="status_accepted">#2ED934</color>   <!-- أخضر -->
         <color name="status_rejected">#FF3828</color>   <!-- أحمر -->
         <color name="status_pending">#757575</color>    <!-- رمادي -->

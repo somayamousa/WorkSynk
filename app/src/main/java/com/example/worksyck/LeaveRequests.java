@@ -113,7 +113,7 @@ public class LeaveRequests extends AppCompatActivity {
     }
 
     private void checkUsedDaysAndSubmit(String leaveType, long daysRequested, int maxDays, String reason) {
-        String url = "http://10.0.2.2/worksync/get_total_leave_days.php";
+        String url = "http://192.168.1.6/worksync/get_total_leave_days.php";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
@@ -145,7 +145,7 @@ public class LeaveRequests extends AppCompatActivity {
     }
 
     private void submitLeaveRequestToServer(String leaveType, String reason) {
-        String url = "http://10.0.2.2/worksync/insert_leave_request.php";
+        String url = "http://192.168.1.6/worksync/insert_leave_request.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {

@@ -3,6 +3,8 @@ package com.example.worksyck;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +36,14 @@ public class ShowAttendanceRecord extends AppCompatActivity {
     private String startDate = "", endDate = "";
     private TextView startDateText, endDateText;
     private Button searchBtn;
-    private int loggedInUserId;
+    private int loggedInUserId, company_id;
+    private String email, fullname, role;
     private RecyclerView recyclerView;
     private AttendanceAdapter adapter;
     private List<AttendanceRecord> attendanceList;
+    private NavigationHelper navigationHelper;
+    private ImageView backButton;
+    private LinearLayout checkInLayout, salaryLayout, homeLayout, attendanceLayout, requestsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +51,35 @@ public class ShowAttendanceRecord extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_show_attendance_record);
 
+        // Retrieve intent extras
         loggedInUserId = getIntent().getIntExtra("user_id", -1);
+        company_id = getIntent().getIntExtra("company_id", 0);
+        email = getIntent().getStringExtra("email");
+        fullname = getIntent().getStringExtra("fullname");
+        role = getIntent().getStringExtra("role");
+
         if (loggedInUserId == -1) {
             Toast.makeText(this, "User ID not found!", Toast.LENGTH_SHORT).show();
-            finish(); return;
+            finish();
+            return;
         }
+
+        // Initialize NavigationHelper
+        navigationHelper = new NavigationHelper(this, loggedInUserId, email, fullname, role, company_id);
+        navigationHelper.enableBackButton();
+
+        // Initialize views
+        initializeViews();
+
+        // Set up Bottom Navigation
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout);
 
         requestQueue = Volley.newRequestQueue(this);
         startDateText = findViewById(R.id.startDateText1);
         endDateText = findViewById(R.id.endDateText1);
         searchBtn = findViewById(R.id.showAttendanceBtn);
         recyclerView = findViewById(R.id.attendanceRecyclerView);
-
         attendanceList = new ArrayList<>();
         adapter = new AttendanceAdapter(attendanceList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -64,7 +87,6 @@ public class ShowAttendanceRecord extends AppCompatActivity {
 
         startDateText.setOnClickListener(v -> showDatePicker(true));
         endDateText.setOnClickListener(v -> showDatePicker(false));
-
         searchBtn.setOnClickListener(v -> {
             if (startDate.isEmpty() || endDate.isEmpty()) {
                 Toast.makeText(this, "Please select both dates", Toast.LENGTH_SHORT).show();
@@ -78,15 +100,28 @@ public class ShowAttendanceRecord extends AppCompatActivity {
         });
     }
 
+    private void initializeViews() {
+        backButton = findViewById(R.id.backButton);
+        checkInLayout = findViewById(R.id.checkInLayout);
+        salaryLayout = findViewById(R.id.salaryLayout);
+        homeLayout = findViewById(R.id.homeLayout);
+        attendanceLayout = findViewById(R.id.attendanceLayout);
+        requestsLayout = findViewById(R.id.requestsLayout);
+
+        navigationHelper.setBackButtonListener(backButton);
+    }
+
     private void showDatePicker(boolean isStart) {
         Calendar cal = Calendar.getInstance();
         new DatePickerDialog(this,
                 (view, y, m, d) -> {
                     String ds = String.format(Locale.US, "%04d-%02d-%02d", y, m + 1, d);
                     if (isStart) {
-                        startDate = ds; startDateText.setText(ds);
+                        startDate = ds;
+                        startDateText.setText(ds);
                     } else {
-                        endDate = ds; endDateText.setText(ds);
+                        endDate = ds;
+                        endDateText.setText(ds);
                     }
                 },
                 cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)
@@ -104,7 +139,7 @@ public class ShowAttendanceRecord extends AppCompatActivity {
     }
 
     public void fetchAttendanceRecord(int userId) {
-        String url = "http://10.0.2.2/worksync/fetch_employee_attendance_records.php"
+        String url = "http://192.168.1.6/worksync/fetch_employee_attendance_records.php"
                 + "?employee_id=" + userId
                 + "&start_date=" + startDate
                 + "&end_date=" + endDate;
@@ -116,50 +151,30 @@ public class ShowAttendanceRecord extends AppCompatActivity {
                         if ("success".equals(jo.optString("status"))) {
                             JSONArray arr = jo.optJSONArray("data");
                             attendanceList.clear();
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date start, end;
-                            try {
-                                start = sdf.parse(startDate);
-                                end = sdf.parse(endDate);
 
-                                HashMap<String, AttendanceRecord> recordMap = new HashMap<>();
-                                if (arr != null) {
-                                    for (int i = 0; i < arr.length(); i++) {
-                                        JSONObject r = arr.getJSONObject(i);
-                                        AttendanceRecord rec = new AttendanceRecord(
-                                                r.getInt("id"),
-                                                r.getInt("user_id"),
-                                                r.getString("date"),
-                                                r.getString("start_time"),
-                                                r.getString("end_time")
-                                        );
-                                        recordMap.put(rec.getDate(), rec);
-                                    }
+                            if (arr != null) {
+                                for (int i = 0; i < arr.length(); i++) {
+                                    JSONObject r = arr.getJSONObject(i);
+                                    String date = r.getString("date");
+                                    String startTime = r.getString("start_time");
+                                    String endTime = r.getString("end_time");
+                                    String status = r.getString("status");
+
+                                    AttendanceRecord record = new AttendanceRecord(
+                                            0,
+                                            userId,
+                                            date,
+                                            startTime,
+                                            endTime,
+                                            status
+                                    );
+
+                                    attendanceList.add(record);
                                 }
-
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTime(start);
-                                while (!cal.getTime().after(end)) {
-                                    String dateStr = sdf.format(cal.getTime());
-                                    if (recordMap.containsKey(dateStr)) {
-                                        attendanceList.add(recordMap.get(dateStr));
-                                    } else {
-                                        attendanceList.add(new AttendanceRecord(
-                                                0,
-                                                userId,
-                                                dateStr,
-                                                "",
-                                                ""
-                                        ));
-                                    }
-                                    cal.add(Calendar.DAY_OF_MONTH, 1);
-                                }
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
                             }
-
-                            adapter.notifyDataSetChanged();
 
                         } else {
                             Toast.makeText(this, jo.optString("message"), Toast.LENGTH_SHORT).show();

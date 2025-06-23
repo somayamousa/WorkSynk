@@ -60,4 +60,25 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+
+    <string name="employee_name_placeholder">Employee Name</string>
+    <string name="employee_code_placeholder">Employee Code</string>
+    <string name="department_placeholder">Department</string>
+    <string name="designation_placeholder">Designation</string>
+    <string name="salary_structure_type_placeholder">Salary Structure Type</string>
+    <string name="period_placeholder">Period</string>
+    <string name="net_salary_placeholder">Net Salary</string>
+    <string name="base_salary_placeholder">Base Salary</string>
+    <string name="regular_hours_placeholder">Regular Hours</string>
+    <string name="regular_hour_rate_placeholder">Regular Hour Rate</string>
+    <string name="regular_salary_placeholder">Regular Salary</string>
+    <string name="overtime_hours_placeholder">Overtime Hours</string>
+    <string name="overtime_hour_rate_placeholder">Overtime Hour Rate</string>
+    <string name="overtime_salary_placeholder">Overtime Salary</string>
+    <string name="bonus_placeholder">Bonus</string>
+    <string name="salary_increment_placeholder">Salary Increment</string>
+    <string name="expected_working_days_placeholder">Expected Working Days</string>
+    <string name="absent_days_placeholder">Absent Days</string>
+    <string name="status_placeholder">Status</string>
+
 </resources>
