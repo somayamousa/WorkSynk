@@ -55,7 +55,7 @@ public class NavigationHelper {
         if (item == homeLayout) return MainActivity.class;
         if (item == requestsLayout) return RequestsActivity.class;
         if (item == checkInLayout) return attendance.class; // Ensure this class exists
-      //  if (item == salaryLayout) return SalaryActivity.class;
+        if (item == salaryLayout) return SalaryActivity.class;
         if (item == attendanceLayout) return ShowAttendanceRecord.class; // Adjust if AttendanceActivity has a different name
         return null;
     }
