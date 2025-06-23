@@ -103,7 +103,7 @@ public class LeaveRequest extends AppCompatActivity {
     }
 
     private void fetchLeaveDataFromServer() {
-        String url = "http://192.168.1.6/worksync/get_leave_request.php?user_id=" + userId;
+        String url = "http://10.0.2.2/worksync/get_leave_request.php?user_id=" + userId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
