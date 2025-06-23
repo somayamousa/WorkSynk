@@ -30,25 +30,25 @@ public class RequestsActivity extends AppCompatActivity {
         userId = getIntent().getIntExtra("user_id", 0);
         company_id = getIntent().getIntExtra("company_id", 0);
 
-        // Initialize NavigationHelper and set back button functionality
+        // Initialize NavigationHelper
         navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
         navigationHelper.enableBackButton();
 
         // Initialize views
         initializeViews();
 
-        // إعداد Bottom Navigation باستخدام الـ Helper
-        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, attendanceLayout};
-        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, attendanceLayout);
+        // Set up Bottom Navigation
+        LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
+        navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout);
 
-
-        // تفعيل النقر على CardView للانتقال إلى الأنشطة المناسبة
+        // Set up CardView click listeners
         leaveRequestCardView.setOnClickListener(v -> navigateToActivity(LeaveRequest.class));
         overtimeRequestCardView.setOnClickListener(v -> navigateToActivity(OvertimeRequest.class));
+
+
     }
 
     private void initializeViews() {
-        // ربط العناصر في XML بالكود
         backButton = findViewById(R.id.backButton);
         checkInLayout = findViewById(R.id.checkInLayout);
         salaryLayout = findViewById(R.id.salaryLayout);
@@ -58,8 +58,7 @@ public class RequestsActivity extends AppCompatActivity {
         leaveRequestCardView = findViewById(R.id.leaveRequestCardView);
         overtimeRequestCardView = findViewById(R.id.overtimeRequestCardView);
 
-        // تفعيل زر الرجوع باستخدام الـ Helper
-        navigationHelper.setBackButtonListener(backButton);  // استدعاء زر الرجوع
+        navigationHelper.setBackButtonListener(backButton);
     }
 
     private void navigateToActivity(Class<?> activityClass) {
