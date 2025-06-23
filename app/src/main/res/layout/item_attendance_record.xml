@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:background="@android:color/white"
+    android:background="#EDE7F6"
     android:gravity="center_vertical">
 
     <!-- Day -->

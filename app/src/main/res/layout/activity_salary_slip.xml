@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All Employees"
-                 />
+                />
 
         </RadioGroup>
         <!-- Holiday Hourly Rate Label -->
@@ -78,6 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Generate Salary Slips" />
+            android:text="Calculate Payroll" />
     </LinearLayout>
 </ScrollView>

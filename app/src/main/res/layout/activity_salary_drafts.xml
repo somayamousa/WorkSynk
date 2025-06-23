@@ -1,48 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp"
+    android:background="#EDE7F6">
 
-    <EditText
-        android:id="@+id/searchEmployeeInput"
+    <!-- Search and Select Month Card -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search Employee"
-        android:inputType="textPersonName"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FFFFFF">
 
-    <Button
-        android:id="@+id/selectMonthBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Month"
-        android:layout_marginBottom="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp">
 
-    <Button
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/searchEmployeeInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Employee"
+                app:startIconTint="#673AB7"
+                android:layout_marginBottom="18dp">
+                <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchEmployeeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:padding="18dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/selectMonthBtn"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Select Month"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:paddingVertical="12dp"
+                app:backgroundTint="#4A148C"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="12dp"
+                app:rippleColor="#33FFFFFF"
+                app:elevation="4dp"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Delete All Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteAllBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete All Drafts"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="#FF0000"
-        android:textColor="#FFFFFF"/>
-
-    <TextView
-        android:id="@+id/noDraftsText"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No salary drafts found"
-        android:textSize="16sp"
-        android:visibility="gone"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"/>
+        android:text="Delete All Drafts"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:paddingVertical="14dp"
+        android:backgroundTint="#E8EAF6"
+        android:textColor="#4A148C"
+        app:rippleColor="#B39DDB"
+        app:strokeColor="#512DA8"
+        app:strokeWidth="2dp"
+        android:layout_marginBottom="16dp"
+        app:cornerRadius="12dp"
+        app:elevation="4dp"/>
 
+    <!-- No Drafts Section -->
+    <LinearLayout
+        android:id="@+id/noDraftsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/noDraftsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No salary drafts found"
+            android:textSize="20sp"
+            android:textColor="#546E7A"
+            android:gravity="center"
+            android:alpha="0.9"/>
+    </LinearLayout>
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/draftsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
-
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 </LinearLayout>

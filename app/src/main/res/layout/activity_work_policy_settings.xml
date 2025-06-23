@@ -8,6 +8,22 @@
     android:background="#EDE7F6"
     android:padding="16dp">
 
+    <!-- Back Button -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="?attr/actionModeCloseDrawable"
+        android:contentDescription="Back"
+        app:tint="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
     <TextView
         android:id="@+id/holidayPolicyTitle"
         android:layout_width="0dp"
@@ -19,9 +35,9 @@
         android:gravity="center"
         android:text="Holiday Work Policy"
         android:textColor="#000000"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,71 +59,62 @@
         app:layout_constraintWidth_percent="0.9" >
 
         <RadioGroup
-        android:id="@+id/holidayPolicyGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <RadioButton
-        android:id="@+id/holiday_normal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-            android:buttonTint="#000000"
-        android:paddingStart="16dp"
-            android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="14dp"
-            android:fontFamily="@font/poppins_italic"
-        android:text="Regular Hour Rate"
-        android:textColor="#212121"
-        android:textSize="16sp"  />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp" android:background="#E0E0E0" />
-
-        <RadioButton
-            android:id="@+id/holiday_overtime"
+            android:id="@+id/holidayPolicyGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:buttonTint="#000000"
-            android:paddingStart="16dp"
-            android:paddingTop="14dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="14dp"
-            android:fontFamily="@font/poppins_italic"
-            android:text="Overtime Hour Rate"
-            android:textColor="#212121"
-            android:textSize="16sp" />
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
-            android:background="#E0E0E0" />
+            <RadioButton
+                android:id="@+id/holiday_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:buttonTint="#AB47BC"
+                android:padding="16dp"
+                android:text="Regular Hour Rate"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <RadioButton
-            android:id="@+id/holiday_special"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:buttonTint="#000000"
-            android:paddingStart="16dp"
-            android:paddingTop="14dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="14dp"
-            android:text="Special Holiday Rate"
-            android:textColor="#212121"
-            android:textSize="16sp"
-            android:fontFamily="@font/poppins_italic" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="12dp" android:background="#E0E0E0" />
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/holiday_overtime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:buttonTint="#AB47BC"
+                android:padding="16dp"
+                android:text="Overtime Hour Rate"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="12dp"
+                android:background="#E0E0E0" />
+
+            <RadioButton
+                android:id="@+id/holiday_special"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="#AB47BC"
+                android:padding="16dp"
+                android:text="Special Holiday Rate"
+                android:textColor="#212121"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RadioGroup>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
