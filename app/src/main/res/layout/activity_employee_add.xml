@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:text="Add Employee"
         android:textColor="#000000"
-        android:textSize="28sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
@@ -31,12 +32,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="#FFFFFF"
+            card_view:cardCornerRadius="16dp"
+            card_view:cardElevation="6dp"
+            card_view:cardBackgroundColor="#FFFFFF"
             android:layout_margin="12dp">
 
             <LinearLayout
@@ -46,267 +47,179 @@
                 android:padding="16dp">
 
                 <!-- Full Name Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/editTextFullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextFullName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Full Name"
-                        android:inputType="textPersonName"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Full Name"
+                    android:inputType="textPersonName"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Email Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Email"
-                        android:inputType="textEmailAddress"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Password Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/editTextPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Password"
-                        android:inputType="textPassword"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Phone Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/editTextPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Phone Number"
-                        android:inputType="phone"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Phone Number"
+                    android:inputType="phone"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Department Spinner -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <Spinner
+                    android:id="@+id/departments_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:hint="Select Department"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <Spinner
-                        android:id="@+id/departments_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:spinnerMode="dropdown" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:padding="12dp"
+                    android:spinnerMode="dropdown"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Designation Spinner -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <Spinner
+                    android:id="@+id/designations_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:hint="Select Designation"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <Spinner
-                        android:id="@+id/designations_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:spinnerMode="dropdown" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:padding="12dp"
+                    android:spinnerMode="dropdown"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Salary Structure Spinner -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <Spinner
+                    android:id="@+id/salary_structure_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:hint="Select Salary Structure"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <Spinner
-                        android:id="@+id/salary_structure_spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:spinnerMode="dropdown" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:padding="12dp"
+                    android:spinnerMode="dropdown"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
+                    android:layout_marginBottom="8dp" />
 
                 <!-- Base Salary Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/baseSalaryEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Base Salary"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/baseSalaryEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Base Salary"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone" />
 
                 <!-- Hour Deduction Cost Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/detectionHourCostEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Hour Deduction Cost"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/detectionHourCostEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Hour Deduction Cost"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone" />
 
                 <!-- Normal Hour Rate Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/normalHourCostEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Normal Hour Rate"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/normalHourCostEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Normal Hour Rate"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone" />
 
                 <!-- Overtime Hour Rate Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/overTimeHourCostEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Overtime Hour Rate"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/overTimeHourCostEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Overtime Hour Rate"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone" />
 
                 <!-- Expected Hours Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/expectedHoursEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Expected Hours Per Day"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/expectedHoursEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Expected Hours Per Day"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone" />
 
                 <!-- Working Days Per Week Input -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/workingDaysPerWeekEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Working Days Per Week"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:background="@android:drawable/edit_text"
+                    android:textColor="#000000"
+                    android:textColorHint="#B0BEC5"
                     android:layout_marginBottom="8dp"
-                    android:visibility="gone"
-                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
-                    app:boxStrokeColor="#4A148C"
-                    app:hintTextColor="#4A148C">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/workingDaysPerWeekEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Working Days Per Week"
-                        android:inputType="number"
-                        android:padding="12dp"
-                        android:textColor="#000000" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:visibility="gone" />
 
                 <!-- Working Days Section -->
                 <TextView
@@ -432,6 +345,6 @@
                     app:elevation="4dp"
                     app:rippleColor="#FFFFFF" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

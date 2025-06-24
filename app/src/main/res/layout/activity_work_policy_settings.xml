@@ -1,4 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -70,11 +70,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:buttonTint="#AB47BC"
                 android:padding="16dp"
                 android:text="Regular Hour Rate"
                 android:textColor="#212121"
                 android:textSize="18sp"
+                app:buttonTint="#4A148C"
                 android:textStyle="bold" />
 
             <View
@@ -89,7 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:buttonTint="#AB47BC"
+                app:buttonTint="#4A148C"
                 android:padding="16dp"
                 android:text="Overtime Hour Rate"
                 android:textColor="#212121"
@@ -108,7 +108,7 @@
                 android:id="@+id/holiday_special"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:buttonTint="#AB47BC"
+                app:buttonTint="#4A148C"
                 android:padding="16dp"
                 android:text="Special Holiday Rate"
                 android:textColor="#212121"
