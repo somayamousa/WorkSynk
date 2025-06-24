@@ -110,16 +110,14 @@ public class attendance extends AppCompatActivity {
         userId = getIntent().getIntExtra("user_id", 0);
         company_id = getIntent().getIntExtra("company_id", 0);
 
-        // Initialize NavigationHelper
         navigationHelper = new NavigationHelper(this, userId, email, fullname, role, company_id);
         navigationHelper.enableBackButton();
 
-        // Initialize views
         initializeViews();
 
-        // Set up Bottom Navigation
         LinearLayout[] bottomNavItems = {homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout};
         navigationHelper.setBottomNavigationListeners(bottomNavItems, homeLayout, requestsLayout, checkInLayout, salaryLayout, attendanceLayout);
+
 
         // Setup remaining components
         setupUserData();

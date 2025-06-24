@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchAttendanceData() {
-        String url = "http://192.168.1.6/worksync/get_attendance_summary.php";
+        String url = "http://10.0.2.2/worksync/get_attendance_summary.php";
 
         JSONObject requestBody = new JSONObject();
         try {
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     private void logout() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://192.168.1.6/worksync/logout.php");
+                URL url = new URL("http://10.0.2.2/worksync/logout.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);

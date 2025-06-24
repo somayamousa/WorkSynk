@@ -16,406 +16,416 @@
         <!-- Leave Requests List Title -->
         <LinearLayout
             android:layout_width="match_parent"
-        android:layout_height="93dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <!-- Page Title -->
-        <TextView
-            android:id="@+id/page_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="sans-serif-medium"
-            android:padding="12dp"
-            android:text="HR Dashboard"
-            android:textColor="#000000"
-            android:textSize="26sp"
-            android:textStyle="bold" />
+            android:layout_height="93dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <!-- Page Title -->
+            <TextView
+                android:id="@+id/page_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="24dp"
+                android:fontFamily="sans-serif-medium"
+                android:padding="12dp"
+                android:text="HR Dashboard"
+                android:textColor="#000000"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"> <!-- تغيير إلى wrap_content للسماح بالتمدد -->
-
-        <!-- Employee Management Header -->
-        <TextView
-            android:id="@+id/employee_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Employee Management"
-            android:textColor="#4A148C"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Add Employee and Employee Buttons -->
-        <Button
-            android:id="@+id/btnAddEmployee"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Add Employee"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/Employee"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/employee_header" />
-
-        <Button
-            android:id="@+id/Employee"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Employees"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/btnAddEmployee"
-            app:layout_constraintTop_toBottomOf="@id/employee_header" />
-
-        <!-- Department and Job Title Buttons -->
-        <Button
-            android:id="@+id/departmentBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Manage Departments"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/jobTitleBtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnAddEmployee" />
-
-        <Button
-            android:id="@+id/jobTitleBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Manage Designations"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/departmentBtn"
-            app:layout_constraintTop_toBottomOf="@id/Employee" />
-
-        <!-- Payroll Divider -->
-        <View
-            android:id="@+id/payroll_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="#D1C4E9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/departmentBtn" />
-
-        <!-- Payroll Header -->
-        <TextView
-            android:id="@+id/payroll_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Payroll Management"
-            android:textColor="#4A148C"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/payroll_divider" />
-
-        <!-- Payroll Entry and Salary Slip Buttons -->
-        <Button
-            android:id="@+id/Additional_Salary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Additional Salary"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/salary_slip"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/payroll_header" />
-
-        <Button
-            android:id="@+id/salary_slip"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Payroll Generation"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/Additional_Salary"
-            app:layout_constraintTop_toBottomOf="@id/payroll_header" />
-
-        <!-- Holiday Divider -->
-
-        <!-- Holiday Header -->
-
-        <Button
-            android:id="@+id/workPolicy"
-            android:layout_width="127dp"
-            android:layout_height="63dp"
-            android:layout_marginStart="113dp"
-            android:layout_marginEnd="140dp"
-            android:layout_marginBottom="48dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Work Policy"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/cont_holidays"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.44"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="@+id/Additional_Salary" />
-
-        <View
-            android:id="@+id/holiday_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="64dp"
-            android:background="#D1C4E9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Additional_Salary" />
-
-        <TextView
-            android:id="@+id/holiday_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Holiday Management"
-            android:textColor="#4A148C"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/holiday_divider" />
-
-        <!-- Add Holiday and Manage Holidays Buttons -->
-        <Button
-            android:id="@+id/add_holiday"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Add Holiday"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/cont_holidays"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/holiday_header" />
-
-        <Button
-            android:id="@+id/cont_holidays"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Manage Holidays"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/add_holiday"
-            app:layout_constraintTop_toBottomOf="@id/holiday_header" />
-
-        <!-- Requests Divider -->
-        <View
-            android:id="@+id/requests_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="#D1C4E9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_holiday" />
-
-        <!-- Requests Header -->
-        <TextView
-            android:id="@+id/requests_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Requests"
-            android:textColor="#4A148C"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/requests_divider" />
-
-        <!-- Leave Request and Overtime Request Buttons -->
-        <Button
-            android:id="@+id/HrLeaveRequest"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Leave Request"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/HrOverRequest"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/requests_header" />
-
-        <Button
-            android:id="@+id/HrOverRequest"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Overtime Request"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/HrLeaveRequest"
-            app:layout_constraintTop_toBottomOf="@id/requests_header" />
-
-        <!-- Miscellaneous Divider -->
-        <View
-            android:id="@+id/misc_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="#D1C4E9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/HrLeaveRequest" />
-
-        <!-- Miscellaneous Header -->
-        <TextView
-            android:id="@+id/misc_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Others"
-            android:textColor="#4A148C"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/misc_divider" />
-
-        <!-- QR and GPS Buttons -->
-        <Button
-            android:id="@+id/btnQr"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="Scan QR Code"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/gps"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/misc_header" />
-
-        <Button
-            android:id="@+id/gps"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="#4A148C"
-            android:padding="16dp"
-            android:text="GPS Tracking"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/btnQr"
-            app:layout_constraintTop_toBottomOf="@id/misc_header" />
-        <Button
-            android:id="@+id/buttonLogout"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#B00020"
-            android:padding="12dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"
-            tools:ignore="MissingConstraints" />
+            android:layout_height="wrap_content"> <!-- تغيير إلى wrap_content للسماح بالتمدد -->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
-    </ScrollView>
+            <!-- Employee Management Header -->
+            <TextView
+                android:id="@+id/employee_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Employee Management"
+                android:textColor="#4A148C"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Add Employee and Employee Buttons -->
+            <Button
+                android:id="@+id/btnAddEmployee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Add Employee"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/Employee"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/employee_header" />
+
+            <Button
+                android:id="@+id/Employee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Employees"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/btnAddEmployee"
+                app:layout_constraintTop_toBottomOf="@id/employee_header" />
+
+            <!-- Department and Job Title Buttons -->
+            <Button
+                android:id="@+id/departmentBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Manage Departments"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/jobTitleBtn"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnAddEmployee" />
+
+            <Button
+                android:id="@+id/jobTitleBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Manage Designations"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/departmentBtn"
+                app:layout_constraintTop_toBottomOf="@id/Employee" />
+
+            <!-- Payroll Divider -->
+            <View
+                android:id="@+id/payroll_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#D1C4E9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/departmentBtn" />
+
+            <!-- Payroll Header -->
+            <TextView
+                android:id="@+id/payroll_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Payroll Management"
+                android:textColor="#4A148C"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/payroll_divider" />
+
+            <!-- Payroll Entry and Salary Slip Buttons -->
+            <Button
+                android:id="@+id/Additional_Salary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Additional Salary"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/salary_slip"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/payroll_header" />
+
+            <Button
+                android:id="@+id/salary_slip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Payroll Generation"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/Additional_Salary"
+                app:layout_constraintTop_toBottomOf="@id/payroll_header" />
+
+            <!-- Holiday Divider -->
+
+            <!-- Holiday Header -->
+
+            <Button
+                android:id="@+id/workPolicy"
+                android:layout_width="146dp"
+                android:layout_height="60dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Work Policy"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+
+                app:layout_constraintEnd_toStartOf="@+id/salary_drafts"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Additional_Salary" />
+
+            <Button
+                android:id="@+id/salary_drafts"
+                android:layout_width="146dp"
+                android:layout_height="60dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="salary drafts"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintTop_toBottomOf="@+id/salary_slip" />
+
+            <View
+                android:id="@+id/holiday_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="64dp"
+                android:background="#D1C4E9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Additional_Salary" />
+
+            <TextView
+                android:id="@+id/holiday_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Holiday Management"
+                android:textColor="#4A148C"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/holiday_divider" />
+
+            <!-- Add Holiday and Manage Holidays Buttons -->
+            <Button
+                android:id="@+id/add_holiday"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Add Holiday"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/cont_holidays"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/holiday_header" />
+
+            <Button
+                android:id="@+id/cont_holidays"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Manage Holidays"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/add_holiday"
+                app:layout_constraintTop_toBottomOf="@id/holiday_header" />
+
+            <!-- Requests Divider -->
+            <View
+                android:id="@+id/requests_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#D1C4E9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_holiday" />
+
+            <!-- Requests Header -->
+            <TextView
+                android:id="@+id/requests_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Requests"
+                android:textColor="#4A148C"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/requests_divider" />
+
+            <!-- Leave Request and Overtime Request Buttons -->
+            <Button
+                android:id="@+id/HrLeaveRequest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Leave Request"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/HrOverRequest"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/requests_header" />
+
+            <Button
+                android:id="@+id/HrOverRequest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Overtime Request"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/HrLeaveRequest"
+                app:layout_constraintTop_toBottomOf="@id/requests_header" />
+
+            <!-- Miscellaneous Divider -->
+            <View
+                android:id="@+id/misc_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#D1C4E9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/HrLeaveRequest" />
+
+            <!-- Miscellaneous Header -->
+            <TextView
+                android:id="@+id/misc_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Others"
+                android:textColor="#4A148C"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/misc_divider" />
+
+            <!-- QR and GPS Buttons -->
+            <Button
+                android:id="@+id/btnQr"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="Scan QR Code"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/gps"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/misc_header" />
+
+            <Button
+                android:id="@+id/gps"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#4A148C"
+                android:padding="16dp"
+                android:text="GPS Tracking"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/btnQr"
+                app:layout_constraintTop_toBottomOf="@id/misc_header" />
+            <Button
+                android:id="@+id/buttonLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#B00020"
+                android:padding="12dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>
