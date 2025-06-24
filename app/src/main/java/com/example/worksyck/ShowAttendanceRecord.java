@@ -139,7 +139,7 @@ public class ShowAttendanceRecord extends AppCompatActivity {
     }
 
     public void fetchAttendanceRecord(int userId) {
-        String url = "http://192.168.1.6/worksync/fetch_employee_attendance_records.php"
+        String url = "http://10.0.2.2/worksync/fetch_employee_attendance_records.php"
                 + "?employee_id=" + userId
                 + "&start_date=" + startDate
                 + "&end_date=" + endDate;
