@@ -49,9 +49,9 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private static final String SAVE_LOCATION_URL = "http://192.168.1.6/worksync/save_location.php";
-    private static final String GET_LOCATIONS_URL = "http://192.168.1.6/worksync/get_locations.php";
-    private static final String DELETE_LOCATION_URL = "http://192.168.1.6/worksync/delete_location.php";
+    private static final String SAVE_LOCATION_URL = "http://10.0.2.2/worksync/save_location.php";
+    private static final String GET_LOCATIONS_URL = "http://10.0.2.2/worksync/get_locations.php";
+    private static final String DELETE_LOCATION_URL = "http://10.0.2.2/worksync/delete_location.php";
     private static final String TAG = "MapsActivity";
 
     private MapView map;

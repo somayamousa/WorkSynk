@@ -1,186 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="30dp"
-    android:padding="16dp">
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_margin="30dp"
+android:padding="16dp">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Header: Back Button and Title -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
 
-        <!-- Header: Back Button and Title -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
-
-            <ImageButton
-                android:id="@+id/backButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_revert"
-                android:contentDescription="Back"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginEnd="16dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Employee"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#000000" />
-
-        </LinearLayout>
-
-        <!-- Form Fields -->
-        <EditText
-            android:id="@+id/editTextFullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Full Name"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/editTextPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Phone Number"
-            android:inputType="phone"
-            android:layout_marginTop="8dp" />
-
-        <Spinner
-            android:id="@+id/departments_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
-
-        <Spinner
-            android:id="@+id/designations_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
-
-        <Spinner
-            android:id="@+id/salary_structure_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/baseSalaryEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Base Salary"
-            android:inputType="numberDecimal"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/detectionHourCostEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Hour Deduction Cost"
-            android:inputType="numberDecimal"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/normalHourCostEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Normal Hour Rate"
-            android:inputType="numberDecimal"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/overTimeHourCostEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Overtime Hour Rate"
-            android:inputType="numberDecimal"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/expectedHoursEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Expected Hours Per Day"
-            android:inputType="numberDecimal"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/workingDaysPerWeekEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Working Days Per Week"
-            android:inputType="number"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Working Days"
-            android:visibility="gone"
-            android:layout_marginTop="8dp" />
-        <Button
-            android:id="@+id/btnSelectHolidays"
+        <ImageButton
+            android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Holidays"
-            android:visibility="gone" />
+            android:src="@android:drawable/ic_menu_revert"
+            android:contentDescription="Back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginEnd="16dp" />
 
-        <RadioGroup
-            android:id="@+id/radioGroupStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
-
-            <RadioButton
-                android:id="@+id/radioActive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Active" />
-
-            <RadioButton
-                android:id="@+id/radioInactive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Inactive" />
-
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/btnAddEmployee"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Employee"
-            android:layout_marginTop="16dp" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
 
     </LinearLayout>
+
+    <!-- Form Fields -->
+    <EditText
+        android:id="@+id/editTextFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Full Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number"
+        android:inputType="phone"
+        android:layout_marginTop="8dp" />
+
+    <Spinner
+        android:id="@+id/departments_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+    <Spinner
+        android:id="@+id/designations_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+    <Spinner
+        android:id="@+id/salary_structure_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+
+    <EditText
+        android:id="@+id/baseSalaryEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Base Salary"
+        android:inputType="numberDecimal"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/detectionHourCostEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hour Deduction Cost"
+        android:inputType="numberDecimal"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/normalHourCostEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Normal Hour Rate"
+        android:inputType="numberDecimal"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/overTimeHourCostEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Overtime Hour Rate"
+        android:inputType="numberDecimal"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/expectedHoursEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Expected Hours Per Day"
+        android:inputType="numberDecimal"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/workingDaysPerWeekEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Working Days Per Week"
+        android:inputType="number"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
+
+
+    <Button
+        android:id="@+id/btnSelectHolidays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Holidays"
+        android:visibility="gone" />
+
+
+    <RadioGroup
+        android:id="@+id/radioGroupStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/radioActive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active" />
+
+        <RadioButton
+            android:id="@+id/radioInactive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inactive" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnAddEmployee"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Employee"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
 </ScrollView>
