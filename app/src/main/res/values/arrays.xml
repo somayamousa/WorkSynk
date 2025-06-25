@@ -2,4 +2,11 @@
 <resources>
     <string-array name="status_array">
         <![CDATA[```xml <?xml version="1.0" encoding="utf-8"?> <resources>     <array name="status_array">         <item>pending</item>         <item>approved</item>         <item>rejected</item>     </array> </resources> ```]]></string-array>
+
+    <!-- res/values/arrays.xml -->
+
+
+
+
 </resources>
+

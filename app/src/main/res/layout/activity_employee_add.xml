@@ -10,6 +10,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Header: Back Button and Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_revert"
+                android:contentDescription="Back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginEnd="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Employee"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+
+        </LinearLayout>
+
+        <!-- Form Fields -->
         <EditText
             android:id="@+id/editTextFullName"
             android:layout_width="match_parent"
@@ -119,54 +147,11 @@
             android:text="Working Days"
             android:visibility="gone"
             android:layout_marginTop="8dp" />
-
-        <CheckBox
-            android:id="@+id/cbMonday"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnSelectHolidays"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Monday"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/cbTuesday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tuesday"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/cbWednesday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Wednesday"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/cbThursday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Thursday"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/cbFriday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Friday"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/cbSaturday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Saturday"
-            android:visibility="gone" />
-
-        <CheckBox
-            android:id="@+id/cbSunday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sunday"
+            android:text="Select Holidays"
             android:visibility="gone" />
 
         <RadioGroup
