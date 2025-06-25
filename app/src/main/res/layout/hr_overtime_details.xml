@@ -13,6 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="#F5F5F5"
         android:paddingStart="12dp"
+        android:layout_marginTop="50dp"
         android:paddingEnd="12dp">
 
         <!-- Back Button -->

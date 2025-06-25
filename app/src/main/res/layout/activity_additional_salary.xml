@@ -9,26 +9,45 @@
     android:padding="16dp"
     android:background="#EDE7F6">
 
+    <!-- Back Button -->
+
     <!-- Page Title -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:padding="8dp"
+        android:src="?attr/actionModeCloseDrawable"
+        app:layout_constraintBottom_toBottomOf="@id/pageTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:tint="#000000" />
+
     <TextView
         android:id="@+id/pageTitle"
-        android:layout_width="166dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Salary Increases"
         android:textColor="#000000"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Filter Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/topFilters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         card_view:cardCornerRadius="20dp"
         card_view:cardElevation="8dp"
         card_view:cardBackgroundColor="#E6FFFFFF"
@@ -149,8 +168,8 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
                     android:text="Reset Filter"
                     android:textColor="#4A148C"
                     app:strokeColor="#4A148C"

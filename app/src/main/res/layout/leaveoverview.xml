@@ -13,6 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="#F5F5F5"
         android:paddingStart="12dp"
+        android:layout_marginTop="50dp"
         android:paddingEnd="12dp">
 
         <!-- Back Button -->
@@ -21,7 +22,6 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
             android:padding="12dp"
@@ -38,11 +38,12 @@
             android:fontFamily="@font/font1"
             android:text="Leave Overview"
             android:textColor="#212121"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.323"
+            app:layout_constraintVertical_bias="0.218"
             app:layout_constraintStart_toEndOf="@+id/backButton"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
