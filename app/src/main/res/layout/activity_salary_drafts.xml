@@ -7,12 +7,45 @@
     android:padding="12dp"
     android:background="#EDE7F6">
 
-    <!-- CardView بدل MaterialCardView -->
+    <!-- Horizontal layout for back button and title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="50dp"
+        android:padding="16dp">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="?attr/actionModeCloseDrawable"
+            android:contentDescription="Back"
+            app:tint="#000000" />
+
+        <!-- Title for the page -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Salary Drafts Management"
+            android:textSize="22sp"
+            android:textColor="#000000"
+            android:gravity="start"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- CardView for search and month selection -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="16dp"
         android:elevation="6dp"
         app:cardCornerRadius="16dp"
         app:cardBackgroundColor="#FFFFFF">
@@ -23,7 +56,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Search EditText عادي لكن منسق -->
+            <!-- Search EditText -->
             <EditText
                 android:id="@+id/searchEmployeeInput"
                 android:layout_width="match_parent"
@@ -37,7 +70,7 @@
                 android:textColorHint="#888888"
                 android:layout_marginBottom="18dp"/>
 
-            <!-- زر اختيار الشهر (MaterialButton) -->
+            <!-- Month selection button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/selectMonthBtn"
                 android:layout_width="wrap_content"
@@ -55,7 +88,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- زر حذف الكل -->
+    <!-- Delete all drafts button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/deleteAllBtn"
         android:layout_width="wrap_content"
@@ -74,7 +107,7 @@
         app:cornerRadius="12dp"
         app:elevation="4dp"/>
 
-    <!-- لا توجد مسودات -->
+    <!-- No drafts layout -->
     <LinearLayout
         android:id="@+id/noDraftsLayout"
         android:layout_width="match_parent"
@@ -95,7 +128,7 @@
             android:alpha="0.9"/>
     </LinearLayout>
 
-    <!-- قائمة المسودات -->
+    <!-- Drafts RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/draftsRecyclerView"
         android:layout_width="match_parent"

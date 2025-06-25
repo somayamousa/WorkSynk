@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="12dp"
+            android:layout_marginTop="50dp"
             android:gravity="center_vertical">
 
             <!-- Back Button -->
@@ -38,7 +39,7 @@
                 android:gravity="center"
                 android:text="Notifications"
                 android:textColor="#020202"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
