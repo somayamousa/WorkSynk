@@ -97,7 +97,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/startDateLabel" />
 
-                <!-- Employee Type Label -->
+                <!-- Select Employees Label -->
                 <TextView
                     android:id="@+id/employeeTypeLabel"
                     android:layout_width="wrap_content"
@@ -105,31 +105,27 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="8dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Select Employee Type"
+                    android:text="Select Employees"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/startDateText" />
 
-                <!-- Employee Type Radio Group -->
-                <RadioGroup
-                    android:id="@+id/employeeTypeGroup"
+                <!-- Employee Selection Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/selectEmployeesBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Select Employees"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    app:backgroundTint="#4A148C"
+                    app:cornerRadius="12dp"
+                    app:rippleColor="#B388FF"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/employeeTypeLabel">
-
-                    <RadioButton
-                        android:id="@+id/radioAllEmployees"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="All Employees"
-                        android:textColor="#000000"
-                        app:buttonTint="#4A148C" />
-                </RadioGroup>
+                    app:layout_constraintTop_toBottomOf="@id/employeeTypeLabel" />
 
                 <!-- Holiday Hourly Rate Label -->
                 <TextView
@@ -144,7 +140,7 @@
                     android:textSize="16sp"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/employeeTypeGroup" />
+                    app:layout_constraintTop_toBottomOf="@id/selectEmployeesBtn" />
 
                 <!-- Holiday Hourly Rate Input -->
                 <EditText

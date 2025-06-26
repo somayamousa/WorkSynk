@@ -63,8 +63,8 @@ import javax.crypto.KeyGenerator;
 
 public class attendance extends AppCompatActivity {
     private static final String TAG = "AttendanceApp";
-    private static final String ATTENDANCE_API_URL = "http://10.0.2.2/worksync/attendence.php";
-    private static final String DEVICE_VERIFICATION_URL = "http://10.0.2.2/worksync/device_verification.php";
+    private static final String ATTENDANCE_API_URL = "http://192.168.1.100/worksync/attendence.php";
+    private static final String DEVICE_VERIFICATION_URL = "http://192.168.1.100/worksync/device_verification.php";
     private static final int MAX_BIOMETRIC_ATTEMPTS = 3;
     private static final int REQUEST_TIMEOUT_MS = 15000;
     private static final String KEYSTORE_ALIAS = "biometric_encryption_key";
@@ -172,35 +172,34 @@ public class attendance extends AppCompatActivity {
             keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
             keyStore.load(null);
 
+            Executor executor = ContextCompat.getMainExecutor(this);
+            biometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
+                @Override
+                public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                    handleBiometricSuccess(result);
+                }
+
+                @Override
+                public void onAuthenticationFailed() {
+                    handleBiometricFailure();
+                }
+
+                @Override
+                public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                    handleBiometricError(errorCode, errString);
+                }
+            });
+
+            // Check if we can authenticate
             BiometricManager biometricManager = BiometricManager.from(this);
             int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG);
 
             if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
                 generateSecretKey();
-            } else {
-                Log.w(TAG, "Biometrics not enrolled, skipping key generation");
             }
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize biometric components", e);
         }
-
-        Executor executor = ContextCompat.getMainExecutor(this);
-        biometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                handleBiometricSuccess(result);
-            }
-
-            @Override
-            public void onAuthenticationFailed() {
-                handleBiometricFailure();
-            }
-
-            @Override
-            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                handleBiometricError(errorCode, errString);
-            }
-        });
     }
 
     private void requestLocationPermission() {
@@ -328,7 +327,7 @@ public class attendance extends AppCompatActivity {
 
         JsonObjectRequest locationRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://10.0.2.2/worksync/verify_location.php",
+                "http://192.168.1.100/worksync/verify_location.php",
                 locationRequestBody,
                 response -> {
                     try {
@@ -465,22 +464,14 @@ public class attendance extends AppCompatActivity {
 
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
                 showToast("No fingerprints enrolled");
+                // Show enrollment prompt but fall back to QR
                 promptFingerprintEnrollment();
                 break;
 
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                showToast("Biometrics currently unavailable");
-                fallbackToQR();
-                break;
-
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                showToast("Device doesn't support biometrics");
-                fallbackToQR();
-                break;
-
             default:
-                showToast("Unknown biometric error");
+                showToast("Biometrics unavailable");
                 fallbackToQR();
+                break;
         }
     }
 
@@ -498,7 +489,7 @@ public class attendance extends AppCompatActivity {
                         startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
                     }
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> fallbackToQR())
+                .setNegativeButton("Switch to QR", (dialog, which) -> fallbackToQR())
                 .setCancelable(false)
                 .show();
     }
@@ -507,14 +498,14 @@ public class attendance extends AppCompatActivity {
         if (isAuthenticationInProgress) return;
         isAuthenticationInProgress = true;
 
-        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle(title)
-                .setSubtitle(subtitle)
-                .setNegativeButtonText("Use QR Code")
-                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-                .build();
-
         try {
+            BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(title)
+                    .setSubtitle(subtitle)
+                    .setNegativeButtonText("Cancel") // Keep a cancel button
+                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                    .build();
+
             biometricPrompt.authenticate(promptInfo);
         } catch (Exception e) {
             Log.e(TAG, "Biometric authentication error", e);
@@ -574,13 +565,21 @@ public class attendance extends AppCompatActivity {
             fallbackToQR();
         } else {
             showToast("Try again. Attempt " + biometricAttempts + "/" + MAX_BIOMETRIC_ATTEMPTS);
+            // Optionally, you could automatically show the prompt again here
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                checkBiometricSupport(isWorking);
+            }, 500);
         }
     }
 
-    private void handleBiometricError(int errorCode, CharSequence errString) {
+    private void handleBiometricError(int errorCode, @NonNull CharSequence errString) {
         isAuthenticationInProgress = false;
         if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
             showToast("Biometric error: " + errString);
+            // Automatically fall back to QR after showing the error
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                fallbackToQR();
+            }, 1000);
         }
     }
 
@@ -631,14 +630,16 @@ public class attendance extends AppCompatActivity {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                "http://10.0.2.2/worksync/check_attendance_status.php",
+                "http://192.168.1.100/worksync/check_attendance_status.php",
                 requestBody,
                 response -> {
                     try {
                         boolean hasStarted = response.getBoolean("has_started");
                         boolean hasEnded = response.getBoolean("has_ended");
-
-                        this.isWorking = hasStarted && !hasEnded;
+                        if(hasStarted && !hasEnded)
+                            this.isWorking=true;
+                        else
+                            this.isWorking=false;
                         Log.d(TAG, "Attendance status - Started: " + hasStarted + ", Ended: " + hasEnded + ", Working: " + this.isWorking);
                         saveState();
                         updateUI();
@@ -796,13 +797,17 @@ public class attendance extends AppCompatActivity {
 
     private void updateUI() {
         runOnUiThread(() -> {
-            startButton.setEnabled(!isWorking);
-            stopButton.setEnabled(isWorking);
+            if(isWorking) {
+                startButton.setEnabled(false);
+                stopButton.setEnabled(true);
+            }else {
+                startButton.setEnabled(true);
+                stopButton.setEnabled(false);
 
+            }
             if (isWorking) {
-                checkInTimeText.setText("" + formatTime(startTime));
+                checkInTimeText.setText( formatTime(startTime));
             } else {
-                checkInTimeText.setText("check in");
                 checkOutTimeText.setText("");
             }
         });

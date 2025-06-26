@@ -34,6 +34,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".EmployeeProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShowAttendanceRecordManagerSide"
+            android:exported="false" />
+        <activity
             android:name=".EmployeeAddedSuccessActivity"
             android:exported="false" />
         <activity

@@ -57,9 +57,9 @@ public class QrDisplayActivity extends AppCompatActivity {
 
     private void generateAndShowQRCode() {
         try {
-            String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-            // Make sure this format matches what you're checking for in verification
-            String rawData = companyName + "_" + date; // Ensure the format starts with "WorkSync"
+            long timestamp = System.currentTimeMillis();
+            String rawData = "WorkSync_" + timestamp + "_" + companyName;
+
             String encrypted = QRUtils.encrypt(rawData);
             qrBitmap = QRUtils.generateQRCodeBitmap(encrypted, 500, 500);
             qrImageView.setImageBitmap(qrBitmap);
@@ -68,7 +68,6 @@ public class QrDisplayActivity extends AppCompatActivity {
             Toast.makeText(this, "QR Generation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
     private void saveQrImage() {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String fileName = "QR_" + companyName + "_" + date + ".png";

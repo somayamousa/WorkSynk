@@ -86,27 +86,11 @@ public class show_holidays extends AppCompatActivity {
         });
 
     }
-    public static class Holiday {
-        private int id;
-        private String name;
-        private String date;
-        private String description;
 
-        public Holiday(int id, String name, String date, String description) {
-            this.id = id;
-            this.name = name;
-            this.date = date;
-            this.description = description;
-        }
-
-        public int getId() { return id; }
-        public String getName() { return name; }
-        public String getDate() { return date; }
-        public String getDescription() { return description; }
-
-        public void setName(String name) { this.name = name; }
-        public void setDate(String date) { this.date = date; }
-        public void setDescription(String description) { this.description = description; }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchDataFromServer();
     }
 
     private void fetchDataFromServer() {

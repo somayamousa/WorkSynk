@@ -112,11 +112,11 @@ public class MainActivity2 extends AppCompatActivity {
         });
         // Add Employee Button Click
         btnAddEmployee.setOnClickListener(v -> {
-//            Intent addIntent = new Intent(MainActivity2.this, EmployeeAddActivity.class);
-//            addIntent.putExtra("company_id",company_id);
-//            startActivity(addIntent);
+            Intent addIntent = new Intent(MainActivity2.this, EmployeesActivity.class);
+            addIntent.putExtra("company_id",company_id);
+            startActivity(addIntent);
         });Employee.setOnClickListener(v -> {
-            Intent addIntent = new Intent(MainActivity2.this, EmployeesListActivity.class);
+            Intent addIntent = new Intent(MainActivity2.this, EmployeesActivity.class);
             startActivity(addIntent);
         });gps.setOnClickListener(v -> {
             Intent addIntent = new Intent(MainActivity2.this, MapsActivity.class);

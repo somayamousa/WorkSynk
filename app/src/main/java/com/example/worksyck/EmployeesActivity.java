@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,7 +51,7 @@ public class EmployeesActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         companyId = intent.getStringExtra("company_id");
-
+        Log.d("", companyId);
         addEmployeeButton.setOnClickListener(v -> {
             Intent addIntent = new Intent(EmployeesActivity.this, EmployeeAddActivity.class);
             addIntent.putExtra("company_id", companyId);
@@ -82,9 +83,15 @@ public class EmployeesActivity extends AppCompatActivity {
         });
 
         bottomSheetView.findViewById(R.id.delete_employee).setOnClickListener(v -> {
-            Toast.makeText(this, "Delete " + employee.getFullname(), Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
-            // Implement delete employee logic here
+            new AlertDialog.Builder(this)
+                    .setTitle("Deactivate Employee")
+                    .setMessage("Are you sure you want to deactivate " + employee.getFullname() + "?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        deactivateEmployee(employee.getId());
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         });
 
         bottomSheetView.findViewById(R.id.calculate_salary).setOnClickListener(v -> {
@@ -96,7 +103,12 @@ public class EmployeesActivity extends AppCompatActivity {
         bottomSheetView.findViewById(R.id.attendance_records).setOnClickListener(v -> {
             Toast.makeText(this, "View Attendance Records for " + employee.getFullname(), Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
-            // Implement attendance records logic here
+            Intent intent = new Intent(this, ShowAttendanceRecordManagerSide.class);
+            intent.putExtra("user_id", employee.getId());
+            intent.putExtra("email", employee.getEmail());
+            intent.putExtra("fullname", employee.getFullname());
+            intent.putExtra("company_id", employee.getCompanyId());
+            startActivity(intent);
         });
 
         bottomSheetView.findViewById(R.id.add_extra_salary).setOnClickListener(v -> {
@@ -106,10 +118,21 @@ public class EmployeesActivity extends AppCompatActivity {
         });
 
         bottomSheetView.findViewById(R.id.view_profile).setOnClickListener(v -> {
-            Toast.makeText(this, "View Profile for " + employee.getFullname(), Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
-            // Implement view profile logic here
+            Intent intent = new Intent(this, EmployeeProfileActivity.class);
+            intent.putExtra("id", employee.getId());
+            intent.putExtra("fullname", employee.getFullname());
+            intent.putExtra("email", employee.getEmail());
+            intent.putExtra("phone", employee.getPhone());
+            intent.putExtra("department", employee.getDepartment_name());
+            intent.putExtra("designation", employee.getDesignation_name());
+            intent.putExtra("employee_code", employee.getEmployee_code());
+            intent.putExtra("status", employee.getStatus());
+            intent.putExtra("mac_address", employee.getMacAddress());
+            intent.putExtra("base_salary", employee.getBaseSalary());
+            startActivity(intent);
         });
+
 
         bottomSheetDialog.show();
     }
@@ -154,7 +177,7 @@ public class EmployeesActivity extends AppCompatActivity {
     }
 
     private void resetPassword(String employeeId, String newPassword, Dialog dialog) {
-        String url = "http://10.0.2.2/worksync/reset_employee_password.php";
+        String url = "http://192.168.1.100/worksync/reset_employee_password.php";
 
         Map<String, String> params = new HashMap<>();
         params.put("employee_id", employeeId);
@@ -178,12 +201,11 @@ public class EmployeesActivity extends AppCompatActivity {
                     Toast.makeText(this, "Error resetting password: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjectRequest);
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
 
     private void resetDeviceId(String employeeId, Dialog dialog) {
-        String url = "http://10.0.2.2/worksync/reset_employee_device.php";
+        String url = "http://192.168.1.100/worksync/reset_employee_device.php";
 
         Map<String, String> params = new HashMap<>();
         params.put("employee_id", employeeId);
@@ -195,7 +217,6 @@ public class EmployeesActivity extends AppCompatActivity {
                         String message = response.getString("message");
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                         if (status.equals("success")) {
-                            // Update the local employee list
                             for (Employee emp : employeeList) {
                                 if (emp.getId().equals(employeeId)) {
                                     emp.setMacAddress("N/A");
@@ -205,7 +226,6 @@ public class EmployeesActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
                             dialog.dismiss();
                         } else if (status.equals("info")) {
-                            // Device ID is already unassigned
                             dialog.dismiss();
                         }
                     } catch (Exception e) {
@@ -217,8 +237,41 @@ public class EmployeesActivity extends AppCompatActivity {
                     Toast.makeText(this, "Error resetting device ID: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjectRequest);
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
+    }
+
+    private void deactivateEmployee(String employeeId) {
+        String url = "http://192.168.1.100/worksync/deactivate_employee.php";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("employee_id", employeeId);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params),
+                response -> {
+                    try {
+                        String status = response.getString("status");
+                        String message = response.getString("message");
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                        if (status.equals("success")) {
+                            for (int i = 0; i < employeeList.size(); i++) {
+                                if (employeeList.get(i).getId().equals(employeeId)) {
+                                    employeeList.remove(i);
+                                    break;
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            employeeNumberTextView.setText("Employee Number: " + employeeList.size());
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Parsing error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+
+        Volley.newRequestQueue(this).add(request);
     }
 
     private void fetchEmployees() {
@@ -228,7 +281,7 @@ public class EmployeesActivity extends AppCompatActivity {
             return;
         }
 
-        String url = "http://10.0.2.2/worksync/fetch_all_employees.php?company_id=" + companyId;
+        String url = "http://192.168.1.100/worksync/fetch_all_employees.php?company_id=" + companyId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
@@ -250,19 +303,19 @@ public class EmployeesActivity extends AppCompatActivity {
                                         employee.getString("employee_code")
                                 );
                                 emp.setPhone(employee.getString("phone"));
-                                emp.setMacAddress(employee.has("android_id") && !employee.isNull("android_id") ? employee.getString("android_id") : "N/A");
+                                emp.setMacAddress(employee.optString("android_id", "N/A"));
                                 emp.setStatus(employee.getString("status"));
-                                if (employee.has("base_salary") && !employee.isNull("base_salary")) {
-                                    emp.setBaseSalary(employee.getDouble("base_salary"));
-                                } else {
-                                    emp.setBaseSalary(0.0);
-                                }
+                                emp.setBaseSalary(employee.optDouble("base_salary", 0.0));
                                 emp.setSalaryStructureType(employee.getString("salary_structure_type"));
                                 emp.setNormalHourRate(employee.getDouble("normal_hour_rate"));
                                 emp.setOvertimeHourRate(employee.getDouble("overtime_hour_rate"));
                                 emp.setRegularWorkingHour(employee.getDouble("expected_hours_per_day"));
                                 emp.setWorkingDaysPerWeek(employee.getInt("working_day_per_week"));
-                                employeeList.add(emp);
+
+                                // Only add active employees
+                                if (emp.getStatus().equals("active")) {
+                                    employeeList.add(emp);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                             employeeNumberTextView.setText("Employee Number: " + employeeList.size());
@@ -283,8 +336,7 @@ public class EmployeesActivity extends AppCompatActivity {
                     employeeNumberTextView.setText("Employee Number: 0");
                 });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 
     @Override

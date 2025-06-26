@@ -47,7 +47,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SalarySlip extends AppCompatActivity {
-    private Button createSalarySlipBtn;
+    private Button createSalarySlipBtn ,selectEmployeesBtn;
     private String startDate, endDate;
     private RequestQueue requestQueue;
     private String specialDayPolicy;
@@ -79,8 +79,8 @@ public class SalarySlip extends AppCompatActivity {
         createSalarySlipBtn = findViewById(R.id.createSalarySlipBtn);
         holidayHourRateInput = findViewById(R.id.holidayHourRateInput);
         holidayHourRateLabel = findViewById(R.id.holidayHourRateLabel);
-        employeeTypeGroup = findViewById(R.id.employeeTypeGroup);
-        radioAllEmployees = findViewById(R.id.radioAllEmployees);
+        selectEmployeesBtn = findViewById(R.id.selectEmployeesBtn);
+
 
         selectedIds = new HashSet<Integer>();
         /** initialized Parameters**/
@@ -160,6 +160,10 @@ public class SalarySlip extends AppCompatActivity {
         } else {
             Log.d("Error", "No Company Id assigned For The Hr");
         }
+        // Select Employees Button Listener
+        selectEmployeesBtn.setOnClickListener(v -> {
+            fetchEmployees(null, String.valueOf(company_id));
+        });
 
 
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
@@ -183,12 +187,7 @@ public class SalarySlip extends AppCompatActivity {
 //            );
 //            datePickerDialog.show();
 //        });
-        employeeTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.radioAllEmployees) {
-                fetchEmployees(null, String.valueOf(company_id));
-                // Hide department/employee filters
-            }
-        });
+
         createSalarySlipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -896,7 +895,7 @@ public class SalarySlip extends AppCompatActivity {
                                                         normalHourRate,
                                                         totalOvertimeRate, // overtimeSalary
                                                         overtimeHourRate,
-                                                        salaryStructureType
+                                                        salaryStructureType ,totalOvertimeHours
                                                 );
 
                                                 break;
@@ -1013,7 +1012,11 @@ public class SalarySlip extends AppCompatActivity {
             return 0;
         }
     }
-    private void StoreSalaryInDataBase_base_salary(Context context, int employeeId, double netSalary, double baseSalary, String startDate, String endDate, double finalTotalPermanentIncrease, double finalTotalTemporaryIncrease, int expectedWorkingDays, int absentDays, double normalHourRate, double overtimeSalary, double overtimeHourRate, String salaryStructureType) {
+
+
+
+
+    private void StoreSalaryInDataBase_base_salary(Context context, int employeeId, double netSalary, double baseSalary, String startDate, String endDate, double finalTotalPermanentIncrease, double finalTotalTemporaryIncrease, int expectedWorkingDays, int absentDays, double normalHourRate, double overtimeSalary, double overtimeHourRate, String salaryStructureType , double overtimeHours) {
         LocalDate end = LocalDate.parse(endDate);
         int month = end.getMonthValue();
         int year = end.getYear();
@@ -1031,10 +1034,10 @@ public class SalarySlip extends AppCompatActivity {
         params.put("salary_structure_type", salaryStructureType);
         params.put("regular_hour_rate", String.valueOf(normalHourRate)); // Regular hour rate
         params.put("overtime_salary", String.valueOf(overtimeSalary)); // Overtime salary
+        params.put("overtime_hours", String.valueOf(overtimeHours)); // عدد ساعات العمل الإضافية
         params.put("overtime_hour_rate", String.valueOf(overtimeHourRate)); // Overtime hour rate
         params.put("expected_working_days", String.valueOf(expectedWorkingDays)); // Expected working days
         params.put("absent_days", String.valueOf(absentDays)); // Absent days
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     Log.d("Response salary", response);
