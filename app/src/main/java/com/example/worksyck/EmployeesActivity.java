@@ -13,6 +13,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -21,7 +23,10 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +84,10 @@ public class EmployeesActivity extends AppCompatActivity {
         bottomSheetView.findViewById(R.id.edit_employee).setOnClickListener(v -> {
             Toast.makeText(this, "Edit " + employee.getFullname(), Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
-            // Implement edit employee logic here
+            Intent intent = new Intent(this, activity_update_employee.class);
+            intent.putExtra("user_id", employee.getId());
+
+            startActivity(intent);
         });
 
         bottomSheetView.findViewById(R.id.delete_employee).setOnClickListener(v -> {
@@ -177,7 +185,7 @@ public class EmployeesActivity extends AppCompatActivity {
     }
 
     private void resetPassword(String employeeId, String newPassword, Dialog dialog) {
-        String url = "http://192.168.1.100/worksync/reset_employee_password.php";
+        String url = "http://192.168.1.108/worksync/reset_employee_password.php";
 
         Map<String, String> params = new HashMap<>();
         params.put("employee_id", employeeId);
@@ -205,7 +213,7 @@ public class EmployeesActivity extends AppCompatActivity {
     }
 
     private void resetDeviceId(String employeeId, Dialog dialog) {
-        String url = "http://192.168.1.100/worksync/reset_employee_device.php";
+        String url = "http://192.168.1.108/worksync/reset_employee_device.php";
 
         Map<String, String> params = new HashMap<>();
         params.put("employee_id", employeeId);
@@ -241,38 +249,88 @@ public class EmployeesActivity extends AppCompatActivity {
     }
 
     private void deactivateEmployee(String employeeId) {
-        String url = "http://192.168.1.100/worksync/deactivate_employee.php";
+        String url = "http://192.168.1.108/worksync/deactivate_employee.php";
 
-        Map<String, String> params = new HashMap<>();
-        params.put("employee_id", employeeId);
+        // Debug logging
+        Log.d("DeactivateEmployee", "Starting deactivation for employee ID: " + employeeId);
+        Log.d("DeactivateEmployee", "URL: " + url);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params),
+        // Create JSON body
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("employee_id", employeeId);
+            Log.d("DeactivateEmployee", "JSON Body: " + jsonBody.toString());
+        } catch (JSONException e) {
+            Log.e("DeactivateEmployee", "JSON creation error: " + e.getMessage());
+            Toast.makeText(this, "Error creating request: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
+                    Log.d("DeactivateEmployee", "Raw response: " + response);
                     try {
-                        String status = response.getString("status");
-                        String message = response.getString("message");
+                        JSONObject jsonResponse = new JSONObject(response);
+                        String status = jsonResponse.getString("status");
+                        String message = jsonResponse.getString("message");
+                        Log.d("DeactivateEmployee", "Status: " + status + ", Message: " + message);
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
                         if (status.equals("success")) {
+                            // Remove employee from list
                             for (int i = 0; i < employeeList.size(); i++) {
                                 if (employeeList.get(i).getId().equals(employeeId)) {
                                     employeeList.remove(i);
+                                    Log.d("DeactivateEmployee", "Employee removed from list");
                                     break;
                                 }
                             }
                             adapter.notifyDataSetChanged();
                             employeeNumberTextView.setText("Employee Number: " + employeeList.size());
                         }
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Parsing error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        Log.e("DeactivateEmployee", "JSON parsing error: " + e.getMessage());
+                        Toast.makeText(this, "Invalid response format", Toast.LENGTH_LONG).show();
                     }
                 },
                 error -> {
-                    Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                    Log.e("DeactivateEmployee", "Network error occurred");
+                    String errorMessage = "Network error";
+                    if (error.networkResponse != null) {
+                        Log.e("DeactivateEmployee", "Status Code: " + error.networkResponse.statusCode);
+                        errorMessage += " (Code: " + error.networkResponse.statusCode + ")";
+                        if (error.networkResponse.data != null) {
+                            try {
+                                String errorBody = new String(error.networkResponse.data, "UTF-8");
+                                Log.e("DeactivateEmployee", "Error Body: " + errorBody);
+                                errorMessage += ": " + errorBody;
+                            } catch (Exception e1) {
+                                Log.e("DeactivateEmployee", "Error reading response: " + e1.getMessage());
+                                errorMessage += ": " + e1.getMessage();
+                            }
+                        }
+                    } else {
+                        Log.e("DeactivateEmployee", "No network response: " + error.getMessage());
+                        errorMessage += ": " + error.getMessage();
+                    }
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+                }
+        ) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return jsonBody.toString().getBytes(StandardCharsets.UTF_8);
+            }
 
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+
+        Log.d("DeactivateEmployee", "Adding request to queue");
         Volley.newRequestQueue(this).add(request);
     }
+
 
     private void fetchEmployees() {
         if (companyId == null) {
@@ -281,7 +339,7 @@ public class EmployeesActivity extends AppCompatActivity {
             return;
         }
 
-        String url = "http://192.168.1.100/worksync/fetch_all_employees.php?company_id=" + companyId;
+        String url = "http://192.168.1.108/worksync/fetch_all_employees.php?company_id=" + companyId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
