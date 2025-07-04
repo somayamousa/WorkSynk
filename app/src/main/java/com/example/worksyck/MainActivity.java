@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -88,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
         hoursProgress = findViewById(R.id.hoursProgress);
         requestQueue = Volley.newRequestQueue(this);
         logoutBtn = findViewById(R.id.buttonLogout); // Make sure you have this button in your layout
+
+        ImageView notificationBell = findViewById(R.id.notificationBell);
+        notificationBell.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void fetchAttendanceData() {
@@ -224,6 +233,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateNotificationDot();
+    }
+
+    private void updateNotificationDot() {
+        View notificationDot = findViewById(R.id.notificationDot);
+        SharedPreferences notifPrefs = getSharedPreferences("notifs", MODE_PRIVATE);
+        boolean hasUnread = notifPrefs.getBoolean("hasUnread", false);
+        notificationDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
+    }
+
 
     @Override
     protected void onDestroy() {
