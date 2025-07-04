@@ -3,9 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EDE7F6"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <!-- User Account Section -->
     <androidx.cardview.widget.CardView
@@ -140,7 +138,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
         app:cardBackgroundColor="#FFFFFF"
         app:cardCornerRadius="16dp"
         app:cardElevation="6dp"
@@ -154,13 +151,15 @@
             android:orientation="vertical"
             android:padding="20dp">
 
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/poppins_semibold"
+                android:fontFamily="@font/font1"
                 android:text="Attendance Summary"
-                android:textColor="#4A148C"
+                android:textColor="#000000"
                 android:textSize="24sp" />
 
             <GridLayout
@@ -351,7 +350,6 @@
                             android:textSize="15sp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -391,6 +389,8 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+
+
     <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
@@ -400,7 +400,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="14dp"
-        android:elevation="8dp"
+        android:elevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -548,6 +548,8 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/poppins_medium"
                 android:textColor="@drawable/selector"/>
+
+
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

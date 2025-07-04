@@ -35,16 +35,10 @@ public class EmployeeAddedSuccessActivity extends AppCompatActivity {
         tvEmployeeId.setText(phone);
 
         // Button and ImageButton listeners
-        ImageButton btnHome = findViewById(R.id.btnHome);
         Button btnViewEmployees = findViewById(R.id.btnViewEmployees);
         Button btnShareData = findViewById(R.id.btnShareData);
 
-        btnHome.setOnClickListener(v -> {
-            Intent intent = new Intent(EmployeeAddedSuccessActivity.this, MainActivity2.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            finish();
-        });
+
 
         btnViewEmployees.setOnClickListener(v -> {
             // Navigate to EmployeesActivity

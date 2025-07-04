@@ -114,8 +114,8 @@
                 <!-- Employee Selection Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/selectEmployeesBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_width="290dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="8dp"
                     android:text="Select Employees"
                     android:textAllCaps="false"
@@ -162,7 +162,7 @@
                 <!-- Calculate Payroll Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/createSalarySlipBtn"
-                    android:layout_width="250dp"
+                    android:layout_width="200dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="24dp"
                     android:padding="12dp"

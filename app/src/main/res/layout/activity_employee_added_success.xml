@@ -2,122 +2,131 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#EDE7F6">
 
-    <!-- Header: Home Icon -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
-
-        <ImageButton
-            android:id="@+id/btnHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_gallery"
-            android:contentDescription="Home"
-            android:background="?attr/selectableItemBackgroundBorderless" />
-
-    </LinearLayout>
-
-    <ImageView
+    <!-- Success Checkmark -->
+    <TextView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@android:drawable/ic_dialog_info"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center" />
+        android:text="✔"
+        android:layout_marginTop="50dp"
+        android:textSize="60sp"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:background="#4A148C"
+        android:layout_marginBottom="24dp"
+        android:padding="10dp"
+        android:elevation="4dp" />
 
+    <!-- Success Message -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="The employee has been added successfully."
+        android:text="Employee Added Successfully!"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#000000"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center" />
+        android:layout_marginBottom="20dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="center"
+        android:elevation="6dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="e-mail: "
-        android:textSize="16sp"
-        android:textColor="#000000"
-        android:layout_gravity="center" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="16sp"
-        android:textColor="#6200EE"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="E-mail:"
+            android:textSize="16sp"
+            android:textColor="#000000" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="password:"
-        android:textSize="16sp"
-        android:textColor="#000000"
-        android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="example@email.com"
+            android:textSize="16sp"
+            android:textColor="#2E7D32"
+            android:layout_marginBottom="12dp" />
 
-    <TextView
-        android:id="@+id/tvPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" "
-        android:textSize="16sp"
-        android:textColor="#6200EE"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password:"
+            android:textSize="16sp"
+            android:textColor="#000000" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="phone number: "
-        android:textSize="16sp"
-        android:textColor="#000000"
-        android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/tvPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="******"
+            android:textSize="16sp"
+            android:textColor="#2E7D32"
+            android:layout_marginBottom="12dp" />
 
-    <TextView
-        android:id="@+id/tvEmployeeId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="123456"
-        android:textSize="16sp"
-        android:textColor="#6200EE"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone number:"
+            android:textSize="16sp"
+            android:textColor="#000000" />
 
+        <TextView
+            android:id="@+id/tvEmployeeId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123456"
+            android:textSize="16sp"
+            android:textColor="#2E7D32"
+            android:layout_marginBottom="8dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
+
+    <!-- Buttons -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnViewEmployees"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="employee page"
-            android:backgroundTint="#6200EE"
-            android:textColor="#FFFFFF"
-            android:layout_marginEnd="8dp" />
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_marginEnd="12dp"
+            android:backgroundTint="#4A148C"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="Employee Page"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/btnShareData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Share data"
-            android:backgroundTint="#6200EE"
-            android:textColor="#FFFFFF"
-            android:layout_marginEnd="8dp" />
-
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:backgroundTint="#4A148C"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="Share Data"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
 </LinearLayout>
