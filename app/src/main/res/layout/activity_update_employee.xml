@@ -7,383 +7,441 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="24dp">
-
-
-    <TextView
-    android:id="@+id/titleText"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Update Employee"
-    android:layout_marginTop="50dp"
-    android:textSize="22sp" android:textStyle="bold"
-    android:textColor="#000000"
-    android:layout_marginBottom="24dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/personalInfoCard"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FFFFFF"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@id/titleText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:padding="24dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:text="Update Employee"
+            android:layout_marginTop="50dp"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Personal Details"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
-                android:id="@+id/emailLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/emailEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Email"
-                android:textColor="#000000"
-                android:inputType="textEmailAddress"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/fullNameLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Full Name"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/fullNameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Full Name"
-                android:textColor="#000000"
-                android:inputType="textPersonName"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/phoneLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Phone"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/phoneEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Phone"
-                android:textColor="#000000"
-                android:inputType="phone"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/employeeCodeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Employee Code"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/employeeCodeEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Employee Code"
-                android:textColor="#000000"
-                android:inputType="text"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/employmentDetailsCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FFFFFF"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@id/personalInfoCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/personalInfoCard"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/titleText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Employment Details"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
-
-            <CheckBox
-                android:id="@+id/statusCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Active"
-                android:textColor="#4A148C" android:buttonTint="#4A148C"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/departmentLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Department ID"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/departmentIdEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Department ID"
-                android:textColor="#000000"
-                android:inputType="number"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <TextView
-                android:id="@+id/designationLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Designation ID"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/designationIdEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Designation ID"
-                android:textColor="#000000"
-                android:inputType="number"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Personal Details"
+                    android:textColor="#4A148C"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
 
-            <TextView
-                android:id="@+id/androidIdLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Android ID"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/androidIdEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Android ID or leave empty"
-                android:textColor="#000000"
-                android:inputType="text"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                <TextView
+                    android:id="@+id/emailLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Email"
+                    android:textColor="#000000"
+                    android:inputType="textEmailAddress"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/fullNameLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Full Name"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/fullNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Full Name"
+                    android:textColor="#000000"
+                    android:inputType="textPersonName"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/salaryWorkDetailsCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FFFFFF"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@id/employmentDetailsCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/phoneLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/phoneEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Phone"
+                    android:textColor="#000000"
+                    android:inputType="phone"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/employmentDetailsCard"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/personalInfoCard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salary &amp; Work Structure"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
-                android:id="@+id/salaryStructureLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salary Structure Type"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <Spinner
-                android:id="@+id/salaryStructureSpinner"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp" android:backgroundTint="#D1C4E9"
-                android:layout_marginBottom="8dp"/>
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <TextView
-                android:id="@+id/baseSalaryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Base Salary"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/baseSalaryEditText"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employment Details"
+                    android:textColor="#4A148C"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <CheckBox
+                    android:id="@+id/statusCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active"
+                    android:textColor="#4A148C"
+                    android:buttonTint="#4A148C"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/departmentLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Department ID"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/departmentIdEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Department ID"
+                    android:textColor="#000000"
+                    android:inputType="number"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/designationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Designation ID"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/designationIdEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Designation ID"
+                    android:textColor="#000000"
+                    android:inputType="number"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/androidIdLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Android ID"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/androidIdEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Android ID or leave empty"
+                    android:textColor="#000000"
+                    android:inputType="text"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/salaryWorkDetailsCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintTop_toBottomOf="@id/employmentDetailsCard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Base Salary"
-                android:textColor="#000000"
-                android:inputType="numberDecimal"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <TextView
-                android:id="@+id/normalHourRateLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Normal Hour Rate"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/normalHourRateEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Normal Hour Rate"
-                android:textColor="#000000"
-                android:inputType="numberDecimal"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Salary &amp; Work Structure"
+                    android:textColor="#4A148C"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
 
-            <TextView
-                android:id="@+id/overtimeHourRateLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Overtime Hour Rate"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/overtimeHourRateEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Overtime Hour Rate"
-                android:textColor="#000000"
-                android:inputType="numberDecimal"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
+                <TextView
+                    android:id="@+id/salaryStructureLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Salary Structure Type"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <Spinner
+                    android:id="@+id/salaryStructureSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:backgroundTint="#D1C4E9"
+                    android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/expectedHoursLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Expected Hours per Day"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/expectedHoursPerDayEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Expected Hours"
-                android:textColor="#000000"
-                android:inputType="numberDecimal"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_marginBottom="8dp"/>
+                <TextView
+                    android:id="@+id/baseSalaryLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Base Salary"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/baseSalaryEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Base Salary"
+                    android:textColor="#000000"
+                    android:inputType="numberDecimal"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/workingDaysLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Working Days per Week"
-                android:textColor="#6A1B9A"
-                android:textSize="14sp" />
-            <EditText
-                android:id="@+id/workingDaysPerWeekEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Working Days"
-                android:textColor="#000000"
-                android:inputType="number"
-                android:backgroundTint="#D1C4E9"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"/>
+                <TextView
+                    android:id="@+id/normalHourRateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Normal Hour Rate"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/normalHourRateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Normal Hour Rate"
+                    android:textColor="#000000"
+                    android:inputType="numberDecimal"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/overtimeHourRateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overtime Hour Rate"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/overtimeHourRateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Overtime Hour Rate"
+                    android:textColor="#000000"
+                    android:inputType="numberDecimal"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
 
-    <Button
-        android:id="@+id/updateButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Update Employee"
-        android:backgroundTint="#4A148C"
-        android:textColor="#FFFFFF"
-        android:padding="16dp"
-        app:cornerRadius="12dp" android:layout_marginTop="32dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintTop_toBottomOf="@id/salaryWorkDetailsCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+                <TextView
+                    android:id="@+id/expectedHoursLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expected Hours per Day"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/expectedHoursPerDayEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Expected Hours"
+                    android:textColor="#000000"
+                    android:inputType="numberDecimal"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Working Days per Week Label -->
+                <TextView
+                    android:id="@+id/workingDaysLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Working Days per Week"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp" />
+                <EditText
+                    android:id="@+id/workingDaysPerWeekEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Working Days"
+                    android:textColor="#000000"
+                    android:inputType="number"
+                    android:backgroundTint="#D1C4E9"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Working Days of Week Label -->
+                <TextView
+                    android:id="@+id/workingDaysOfWeekLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Working Days"
+                    android:textColor="#6A1B9A"
+                    android:textSize="14sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Days of Week Checkboxes -->
+                <LinearLayout
+                    android:id="@+id/daysOfWeekLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <CheckBox
+                        android:id="@+id/sundayCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sunday"
+                        android:textColor="#4A148C"
+                        android:buttonTint="#4A148C"/>
+                    <CheckBox
+                        android:id="@+id/mondayCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monday"
+                        android:textColor="#4A148C"
+                        android:buttonTint="#4A148C"/>
+                    <CheckBox
+                        android:id="@+id/tuesdayCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tuesday"
+                        android:textColor="#4A148C"
+                        android:buttonTint="#4A148C"/>
+                    <CheckBox
+                        android:id="@+id/wednesdayCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wednesday"
+                        android:textColor="#4A148C"
+                        android:buttonTint="#4A148C"/>
+                    <CheckBox
+                        android:id="@+id/thursdayCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thursday"
+                        android:textColor="#4A148C"
+                        android:buttonTint="#4A148C"/>
+                    <CheckBox
+                        android:id="@+id/fridayCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Friday"
+                        android:textColor="#4A148C"
+                        android:buttonTint="#4A148C"/>
+                    <CheckBox
+                        android:id="@+id/saturdayCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Saturday"
+                        android:textColor="#4A148C"
+                        android:buttonTint="#4A148C"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Update Employee"
+            android:backgroundTint="#4A148C"
+            android:textColor="#FFFFFF"
+            android:padding="16dp"
+            app:cornerRadius="12dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toBottomOf="@id/salaryWorkDetailsCard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
