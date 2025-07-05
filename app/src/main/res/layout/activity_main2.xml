@@ -1,431 +1,667 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EDE7F6"
-    tools:context=".MainActivity2">
+    android:id="@+id/main"
+    android:background="#EDE7F6">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="24dp">
 
-        <!-- Leave Requests List Title -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="93dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <!-- Page Title -->
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="32dp">
+
             <TextView
                 android:id="@+id/page_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="sans-serif-medium"
-                android:padding="12dp"
                 android:text="HR Dashboard"
+                android:fontFamily="@font/font1"
                 android:textColor="#000000"
-                android:textSize="26sp"
-                android:textStyle="bold" />
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/see_all_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textColor="#4A148C"
+                android:textSize="18sp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground" />
+        </RelativeLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"> <!-- تغيير إلى wrap_content للسماح بالتمدد -->
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="18dp"
+            card_view:cardElevation="8dp"
+            card_view:cardBackgroundColor="#FFFFFF"
+            android:layout_marginBottom="28dp">
 
-            <!-- Employee Management Header -->
-            <TextView
-                android:id="@+id/employee_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Employee Management"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Add Employee and Employee Buttons -->
-            <Button
-                android:id="@+id/btnAddEmployee"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Add Employee"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@id/Employee"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/employee_header" />
-
-            <Button
-                android:id="@+id/Employee"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Employees"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/btnAddEmployee"
-                app:layout_constraintTop_toBottomOf="@id/employee_header" />
-
-            <!-- Department and Job Title Buttons -->
-            <Button
-                android:id="@+id/departmentBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Manage Departments"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@id/jobTitleBtn"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnAddEmployee" />
-
-            <Button
-                android:id="@+id/jobTitleBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Manage Designations"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/departmentBtn"
-                app:layout_constraintTop_toBottomOf="@id/Employee" />
-
-            <!-- Payroll Divider -->
-            <View
-                android:id="@+id/payroll_divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#D1C4E9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/departmentBtn" />
-
-            <!-- Payroll Header -->
-            <TextView
-                android:id="@+id/payroll_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Payroll Management"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/payroll_divider" />
-
-            <!-- Payroll Entry and Salary Slip Buttons -->
-            <Button
-                android:id="@+id/Additional_Salary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Additional Salary"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@id/salary_slip"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/payroll_header" />
-
-            <Button
-                android:id="@+id/salary_slip"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Payroll Generation"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/Additional_Salary"
-                app:layout_constraintTop_toBottomOf="@id/payroll_header" />
-
-            <!-- Holiday Divider -->
-
-            <!-- Holiday Header -->
-
-            <Button
-                android:id="@+id/workPolicy"
-                android:layout_width="146dp"
-                android:layout_height="60dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Work Policy"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-
-                app:layout_constraintEnd_toStartOf="@+id/salary_drafts"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Additional_Salary" />
-
-            <Button
-                android:id="@+id/salary_drafts"
-                android:layout_width="146dp"
-                android:layout_height="60dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="salary drafts"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintTop_toBottomOf="@+id/salary_slip" />
-
-            <View
-                android:id="@+id/holiday_divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="64dp"
-                android:background="#D1C4E9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/Additional_Salary" />
-
-            <TextView
-                android:id="@+id/holiday_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Holiday Management"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/holiday_divider" />
-
-            <!-- Add Holiday and Manage Holidays Buttons -->
-            <Button
-                android:id="@+id/add_holiday"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Add Holiday"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@id/cont_holidays"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/holiday_header" />
-
-            <Button
-                android:id="@+id/cont_holidays"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Manage Holidays"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/add_holiday"
-                app:layout_constraintTop_toBottomOf="@id/holiday_header" />
-
-            <!-- Requests Divider -->
-            <View
-                android:id="@+id/requests_divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#D1C4E9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_holiday" />
-
-            <!-- Requests Header -->
-            <TextView
-                android:id="@+id/requests_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Requests"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/requests_divider" />
-
-            <!-- Leave Request and Overtime Request Buttons -->
-            <Button
-                android:id="@+id/HrLeaveRequest"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Leave Request"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@id/HrOverRequest"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/requests_header" />
-
-            <Button
-                android:id="@+id/HrOverRequest"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Overtime Request"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/HrLeaveRequest"
-                app:layout_constraintTop_toBottomOf="@id/requests_header" />
-
-            <!-- Miscellaneous Divider -->
-            <View
-                android:id="@+id/misc_divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="#D1C4E9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/HrLeaveRequest" />
-
-            <!-- Miscellaneous Header -->
-            <TextView
-                android:id="@+id/misc_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Others"
-                android:textColor="#4A148C"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/misc_divider" />
-
-            <!-- QR and GPS Buttons -->
-            <Button
-                android:id="@+id/btnQr"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="Scan QR Code"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@id/gps"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/misc_header" />
-
-            <Button
-                android:id="@+id/gps"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="#4A148C"
-                android:padding="16dp"
-                android:text="GPS Tracking"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/btnQr"
-                app:layout_constraintTop_toBottomOf="@id/misc_header" />
-            <Button
-                android:id="@+id/buttonLogout"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Logout"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#B00020"
-                android:padding="12dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"
-                tools:ignore="MissingConstraints" />
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Employee Management"
+                    android:textSize="22sp"
+                    android:textColor="#4A148C"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="20dp" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="2"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnAddEmployee"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_add_employee"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Add Employee"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/Employee"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_employee_lis"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Employee List"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/departmentBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_departments"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Departments"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/jobTitleBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_designations"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Designations"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </GridLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="18dp"
+            card_view:cardElevation="8dp"
+            card_view:cardBackgroundColor="#FFFFFF"
+            android:layout_marginBottom="28dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payroll Management"
+                    android:textSize="22sp"
+                    android:textColor="#4A148C"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="20dp" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="2"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/Additional_Salary"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_additional_salary"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Additional Salary"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/salary_slip"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_payroll"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Salary Slips"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/workPolicy"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_policy"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Policies"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/salary_drafts"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_drafts"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Salary Drafts"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </GridLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="18dp"
+            card_view:cardElevation="8dp"
+            card_view:cardBackgroundColor="#FFFFFF"
+            android:layout_marginBottom="28dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time and Leave Management"
+                    android:textSize="22sp"
+                    android:textColor="#4A148C"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="20dp" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="3"
+                    android:rowCount="1"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/HrLeaveRequest"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="12dp">
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/leave"
+                                    android:layout_marginBottom="8dp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Leave Requests"
+                                    android:textColor="#4A148C"
+                                    android:textSize="15sp"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                            <TextView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:text="6"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16sp"
+                                android:background="#4A148C"
+                                android:gravity="center"
+                                android:layout_gravity="end|top"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="16dp" />
+                        </FrameLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/HrOverRequest"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/overtime"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Overtime Requests"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cont_holidays"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/holiday"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Manage Holidays"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </GridLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="18dp"
+            card_view:cardElevation="8dp"
+            card_view:cardBackgroundColor="#FFFFFF"
+            android:layout_marginBottom="40dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HR Services for Employees"
+                    android:textSize="22sp"
+                    android:textColor="#4A148C"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="20dp" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="2"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btnQr"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/qr"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Scan QR"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/gps"
+                        android:layout_width="0dp"
+                        android:layout_height="140dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        card_view:cardCornerRadius="16dp"
+                        card_view:cardElevation="6dp"
+                        card_view:cardBackgroundColor="#FFFFFF"
+                        android:layout_margin="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="12dp">
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/gps"
+                                android:layout_marginBottom="8dp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="GPS Tracking"
+                                android:textColor="#4A148C"
+                                android:textSize="15sp"
+                                android:textAlignment="center"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </GridLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonLogout"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:text="Logout"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#4A148C"
+            android:padding="8dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"
+            android:layout_gravity="center" />
+
     </LinearLayout>
 </ScrollView>

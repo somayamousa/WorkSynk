@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -26,20 +27,20 @@ public class MainActivity2 extends AppCompatActivity {
         });
 
         // Buttons
-        Button btnQr = findViewById(R.id.btnQr);
-        Button btnAddEmployee = findViewById(R.id.btnAddEmployee);
-        Button   Employee= findViewById(R.id.Employee);
-        Button   Additional_Salary= findViewById(R.id.Additional_Salary);
-        Button   add_holiday= findViewById(R.id.add_holiday);
-        Button   cont_holiday= findViewById(R.id.cont_holidays);
-        Button       btnDepartment= findViewById(R.id.departmentBtn);
-        Button      btnDesignations= findViewById(R.id.jobTitleBtn);
-        Button  createSalarySlip=findViewById(R.id.salary_slip);
-        Button  gps=findViewById(R.id.gps);
-        Button  workPolicy=findViewById(R.id.workPolicy);
-        Button  salary_drafts=findViewById(R.id.salary_drafts);
-        Button btnLeaveRequest = findViewById(R.id.HrLeaveRequest);
-        Button btnOverRequest = findViewById(R.id.HrOverRequest);
+        CardView btnQr = findViewById(R.id.btnQr);
+        CardView btnAddEmployee = findViewById(R.id.btnAddEmployee);
+        CardView Employee = findViewById(R.id.Employee);
+        CardView Additional_Salary = findViewById(R.id.Additional_Salary);
+        CardView cont_holiday = findViewById(R.id.cont_holidays);
+        CardView btnDepartment = findViewById(R.id.departmentBtn);
+        CardView btnDesignations = findViewById(R.id.jobTitleBtn);
+        CardView createSalarySlip = findViewById(R.id.salary_slip);
+        CardView gps = findViewById(R.id.gps);
+        CardView workPolicy = findViewById(R.id.workPolicy);
+        CardView salary_drafts = findViewById(R.id.salary_drafts);
+        CardView btnLeaveRequest = findViewById(R.id.HrLeaveRequest);
+        CardView btnOverRequest = findViewById(R.id.HrOverRequest);
+
         Intent intent = getIntent();
 
         email = getIntent().getStringExtra("email");
@@ -73,10 +74,10 @@ public class MainActivity2 extends AppCompatActivity {
             workPolicy_Intent.putExtra("user_id",userId);
             startActivity( workPolicy_Intent);
         });
-        add_holiday.setOnClickListener(v -> {
-            Intent     Add_holiday_Intent = new Intent(MainActivity2.this, AddHoliday.class);
-            startActivity(Add_holiday_Intent);
-        });
+      //  add_holiday.setOnClickListener(v -> {
+         //   Intent     Add_holiday_Intent = new Intent(MainActivity2.this, AddHoliday.class);
+         //   startActivity(Add_holiday_Intent);
+      //  });
         cont_holiday.setOnClickListener(v -> {
 
             Intent     cont_holiday_Intent = new Intent(MainActivity2.this, show_holidays.class);
