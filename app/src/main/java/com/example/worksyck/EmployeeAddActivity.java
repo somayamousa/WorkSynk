@@ -65,7 +65,7 @@ public class EmployeeAddActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextFullName = findViewById(R.id.editTextFullName);
         editTextPhone = findViewById(R.id.editTextPhone);
-        backeEmployeeButton = findViewById(R.id.backButton);
+        //backeEmployeeButton = findViewById(R.id.backButton);
         normalHourCostEditText = findViewById(R.id.normalHourCostEditText);
         overTimeHourCostEditText = findViewById(R.id.overTimeHourCostEditText);
         baseSalaryEditText = findViewById(R.id.baseSalaryEditText);
@@ -87,7 +87,7 @@ public class EmployeeAddActivity extends AppCompatActivity {
         designationsId = new ArrayList<>();
         workingDays = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(this);
-        backeEmployeeButton.setOnClickListener(v -> finish());
+      //  backeEmployeeButton.setOnClickListener(v -> finish());
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Saving employee");
         progressDialog.setCancelable(false);
