@@ -106,7 +106,7 @@ public class activity_update_employee extends AppCompatActivity {
     }
 
     private void fetchEmployeeData() {
-        String url = "http://192.168.1.108/worksync/fetch_employee_data.php";
+        String url = "http://10.0.2.2/worksync/fetch_employee_data.php";
 
         try {
             JSONObject requestBody = new JSONObject();
@@ -173,7 +173,7 @@ public class activity_update_employee extends AppCompatActivity {
     }
 
     private void updateEmployeeData() {
-        String url = "http://192.168.1.108/worksync/update_employee_data.php";
+        String url = "http://10.0.2.2/worksync/update_employee_data.php";
 
         try {
             JSONObject body = new JSONObject();
