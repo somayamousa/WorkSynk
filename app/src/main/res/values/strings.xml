@@ -22,6 +22,29 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!-- res/values/strings.xml -->
+    <string name="expected_hours_per_day">Expected Hour Per Day: %s</string>
+    <string name="employee_name">Employee Name: %s</string>
+    <string name="employee_code">Employee Code: %s</string>
+    <string name="department">Department: %s</string>
+    <string name="job_title">Job Title: %s</string>
+    <string name="company_name">Company Name: %s</string>
+    <string name="start_date">Start Date: %s</string>
+    <string name="end_date">End Date: %s</string>
+    <string name="working_days">Working Days: %d</string>
+    <string name="regular_hourly_rate">Regular Hourly Rate: ₪%s</string>
+    <string name="overtime_rate">Overtime Rate: ₪%s</string>
+    <string name="days_of_absence">Days of Absence: %d</string>
+    <string name="currency_value">₪%s</string>
+    <string name="salary_slip_number">Salary Slip Number: %s</string>
+    <string name="work_type">Work Type: %s</string>
+    <string name="base_salary">Base Salary: ₪%s</string>
+    <string name="regular_work_hours">Regular Work Hours: %s</string>
+    <string name="regular_salary">Regular Salary: ₪%s</string>
+    <string name="overtime_hours">Overtime Hours: %s</string>
+    <string name="overtime_pay">Overtime Pay: ₪%s</string>
+    <string name="no_salary_slip">No salary slip yet</string>
+
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

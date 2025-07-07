@@ -14,7 +14,6 @@ public class SalaryIncreaseAdapter extends RecyclerView.Adapter<SalaryIncreaseAd
     private Context context;
     private List<SalaryIncrease> increaseList;
     private LayoutInflater inflater;
-
     private OnSalaryIncreaseActionListener actionListener;
     public SalaryIncreaseAdapter(Context context, List<SalaryIncrease> increaseList, OnSalaryIncreaseActionListener listener) {
         this.context = context;

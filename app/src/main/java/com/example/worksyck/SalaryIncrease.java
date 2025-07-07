@@ -3,6 +3,8 @@ package com.example.worksyck;
 import java.time.LocalDate;
 
 public class SalaryIncrease {
+
+
     private int id;
     private int employeeId;
     private double increaseAmount;
@@ -139,5 +141,18 @@ public class SalaryIncrease {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+    @Override
+    public String toString() {
+        return "SalaryIncrease{" +
+                "increaseAmount=" + increaseAmount +
+                ", id=" + id +
+                ", employeeId=" + employeeId +
+                ", increaseType='" + increaseType + '\'' +
+                ", durationType='" + durationType + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
     }
 }

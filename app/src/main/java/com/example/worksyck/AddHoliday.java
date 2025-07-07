@@ -31,10 +31,9 @@ public class AddHoliday extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_holidays_settings);
-
-        backButton = findViewById(R.id.backButton);  // ربط الـ ImageView بالكود
+        backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
-            finish(); // هذا يغلق النشاط ويرجع للنشاط السابق
+            finish();
         });
 
         editTextName = findViewById(R.id.editTextName);

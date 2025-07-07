@@ -8,10 +8,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
@@ -23,6 +23,7 @@
     </queries>
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -48,9 +49,7 @@
         <activity
             android:name=".EmployeesActivity"
             android:exported="false" />
-        <activity
-            android:name=".AddEmployee"
-            android:exported="false" />
+
         <activity
             android:name=".SalaryActivity"
             android:exported="false" />
@@ -92,9 +91,7 @@
         <activity
             android:name=".EmployeeDetailsActivity"
             android:exported="false" />
-        <activity
-            android:name=".EmployeesListActivity"
-            android:exported="false" />
+
         <activity
             android:name=".EmployeeAddActivity"
             android:exported="false" />
