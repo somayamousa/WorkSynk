@@ -29,7 +29,7 @@ public class MainActivity2 extends AppCompatActivity {
         // Buttons
         CardView btnQr = findViewById(R.id.btnQr);
         CardView btnAddEmployee = findViewById(R.id.btnAddEmployee);
-        CardView Employee = findViewById(R.id.Employee);
+     //   CardView Employee = findViewById(R.id.Employee);
         CardView Additional_Salary = findViewById(R.id.Additional_Salary);
         CardView cont_holiday = findViewById(R.id.cont_holidays);
         CardView btnDepartment = findViewById(R.id.departmentBtn);
@@ -116,10 +116,11 @@ public class MainActivity2 extends AppCompatActivity {
             Intent addIntent = new Intent(MainActivity2.this, EmployeesActivity.class);
             addIntent.putExtra("company_id",company_id);
             startActivity(addIntent);
-        });Employee.setOnClickListener(v -> {
-            Intent addIntent = new Intent(MainActivity2.this, EmployeesActivity.class);
-            startActivity(addIntent);
-        });gps.setOnClickListener(v -> {
+        });
+        //Employee.setOnClickListener(v -> {
+          //  Intent addIntent = new Intent(MainActivity2.this, EmployeesActivity.class);
+          //  startActivity(addIntent); });
+gps.setOnClickListener(v -> {
             Intent addIntent = new Intent(MainActivity2.this, MapsActivity.class);
             addIntent.putExtra("user_id", userId);
             addIntent.putExtra("email", email);
