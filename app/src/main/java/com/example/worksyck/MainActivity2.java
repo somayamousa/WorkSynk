@@ -1,8 +1,11 @@
 package com.example.worksyck;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,11 +23,8 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main2);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+
 
         // Buttons
         CardView btnQr = findViewById(R.id.btnQr);
@@ -48,6 +48,22 @@ public class MainActivity2 extends AppCompatActivity {
         role=getIntent().getStringExtra("role");
         userId = getIntent().getIntExtra("user_id", 0);
         company_id=getIntent().getStringExtra("company_id");
+        Button buttonLogout = findViewById(R.id.buttonLogout);
+        buttonLogout.setOnClickListener(v -> {
+            ProgressDialog progressDialog = new ProgressDialog(MainActivity2.this);
+            progressDialog.setMessage("Logging out...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                progressDialog.dismiss();
+                Intent loginIntent = new Intent(MainActivity2.this, login.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(loginIntent);
+                finish();
+            }, 1500);
+        });
+
         // Initialize NavigationHelper and set back button functionality
         // QR Button Click
         btnQr.setOnClickListener(v -> {

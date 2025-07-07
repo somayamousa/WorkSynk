@@ -44,6 +44,12 @@ dependencies {
     implementation ("com.itextpdf:itext7-core:7.2.5")
     implementation ("com.google.android.material:material:1.12.0")
     implementation ("androidx.viewpager2:viewpager2:1.1.0")
+    implementation ("com.itextpdf:itext7-core:7.2.5")
+        implementation ("com.itextpdf:itext7-core:7.1.15")
+    implementation ("com.itextpdf:itextpdf:5.5.13.2")
+
+
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

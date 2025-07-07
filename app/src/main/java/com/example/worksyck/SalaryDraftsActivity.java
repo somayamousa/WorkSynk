@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
@@ -58,7 +59,8 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         adapter = new SalaryDraftAdapter(filteredDraftList, this::onViewDetailsClick, this::onApproveClick, this::onCancelClick);
         draftsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         draftsRecyclerView.setAdapter(adapter);
-
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> finish()); // Closes the current activity
         requestQueue = Volley.newRequestQueue(this);
 
         // Setup month selection

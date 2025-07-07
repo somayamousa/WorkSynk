@@ -1,51 +1,198 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/activity_show_attendance_record" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#FFFFFF" tools:context=".ShowAttendanceRecord">
-    <!--  Back Button  -->
-    <ImageView android:id="@+id/backButton" android:layout_width="40dp" android:layout_height="40dp" android:layout_marginStart="16dp" android:layout_marginTop="50dp" android:background="?attr/selectableItemBackgroundBorderless" android:padding="8dp" android:src="?attr/actionModeCloseDrawable" android:contentDescription="Back" app:tint="#000000" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
-    <!--  Title  -->
-    <TextView android:id="@+id/titleText" android:layout_width="153dp" android:layout_height="41dp" android:layout_marginStart="16dp" android:layout_marginTop="50dp" android:layout_marginEnd="16dp" android:fontFamily="sans-serif-medium" android:gravity="center_horizontal" android:text="My Attendance" android:textColor="#000000" android:textSize="22sp" android:textStyle="bold" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
-    <!--  Date Picker Layout  -->
-    <LinearLayout android:id="@+id/datePickerLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp" android:layout_marginTop="10dp" app:layout_constraintTop_toBottomOf="@id/titleText" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="16dp" android:layout_marginEnd="16dp">
-        <TextView android:id="@+id/startDateText1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="From Date" android:fontFamily="@font/poppins_italic" android:textStyle="bold" android:textSize="14sp" android:padding="14dp" android:background="@drawable/rounded_border" android:drawableEnd="@android:drawable/ic_menu_my_calendar" android:gravity="start|center_vertical" android:layout_marginEnd="8dp" android:textColor="@android:color/black" android:elevation="2dp"/>
-        <TextView android:id="@+id/endDateText1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="To Date" android:textStyle="bold" android:textSize="14sp" android:padding="14dp" android:fontFamily="@font/poppins_italic" android:background="@drawable/rounded_border" android:drawableEnd="@android:drawable/ic_menu_my_calendar" android:gravity="start|center_vertical" android:layout_marginStart="8dp" android:textColor="@android:color/black" android:elevation="2dp"/>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_show_attendance_record"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".ShowAttendanceRecord">
+
+    <!-- Back Button -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="?attr/actionModeCloseDrawable"
+        android:contentDescription="Back"
+        app:tint="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="153dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:text="My Attendance"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Date Picker Layout -->
+    <LinearLayout
+        android:id="@+id/datePickerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:id="@+id/startDateText1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="From Date"
+            android:fontFamily="@font/poppins_italic"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:padding="14dp"
+            android:background="@drawable/rounded_border"
+            android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+            android:gravity="start|center_vertical"
+            android:layout_marginEnd="8dp"
+            android:textColor="@android:color/black"
+            android:elevation="2dp"/>
+
+        <TextView
+            android:id="@+id/endDateText1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="To Date"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:padding="14dp"
+            android:fontFamily="@font/poppins_italic"
+            android:background="@drawable/rounded_border"
+            android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+            android:gravity="start|center_vertical"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/black"
+            android:elevation="2dp"/>
     </LinearLayout>
-    <!--  View Records Button  -->
-    <com.google.android.material.button.MaterialButton android:id="@+id/showAttendanceBtn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:layout_marginBottom="34dp" android:backgroundTint="#4A148C" android:elevation="4dp" android:fontFamily="@font/poppins_medium" android:paddingTop="12dp" android:paddingBottom="12dp" android:text="View Records" android:textColor="@android:color/white" android:textSize="14sp" android:textStyle="bold" app:cornerRadius="8dp" app:layout_constraintTop_toBottomOf="@id/datePickerLayout" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
-    <!--  Table Header  -->
-    <LinearLayout android:id="@+id/headerLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingLeft="16dp" android:paddingRight="16dp" android:paddingTop="8dp" android:paddingBottom="8dp" android:background="#FFFFFF" android:layout_marginTop="8dp" android:layout_marginBottom="4dp" app:layout_constraintTop_toBottomOf="@id/showAttendanceBtn" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="16dp" android:layout_marginEnd="16dp">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Day" android:textColor="#333333" android:textSize="14sp" android:textStyle="bold" android:gravity="center"/>
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Check In" android:textColor="#333333" android:textSize="14sp" android:textStyle="bold" android:gravity="center"/>
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Check-out" android:textColor="#333333" android:textSize="14sp" android:textStyle="bold" android:gravity="center"/>
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Total Hrs" android:textColor="#333333" android:textSize="14sp" android:textStyle="bold" android:gravity="center"/>
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Present" android:textColor="#333333" android:textSize="14sp" android:textStyle="bold" android:gravity="center"/>
+
+    <!-- View Records Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/showAttendanceBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="34dp"
+        android:backgroundTint="#4A148C"
+        android:elevation="4dp"
+        android:fontFamily="@font/poppins_medium"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:text="View Records"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/datePickerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Table Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="#FFFFFF"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintTop_toBottomOf="@id/showAttendanceBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Day"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Check In"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Check-out"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Total Hrs"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Present"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
     </LinearLayout>
-    <!--  RecyclerView  -->
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/attendanceRecyclerView" android:layout_width="0dp" android:layout_height="0dp" android:scrollbars="vertical" app:layout_constraintTop_toBottomOf="@id/headerLayout" app:layout_constraintBottom_toTopOf="@id/bottomNavigation" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" android:layout_marginBottom="16dp"/>
-    <!--  Bottom Navigation  -->
-    <LinearLayout android:id="@+id/bottomNavigation" android:layout_width="0dp" android:layout_height="wrap_content" android:background="#FFFFFF" android:gravity="center" android:orientation="horizontal" android:padding="14dp" android:elevation="6dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
-        <!--  Check In  -->
-        <LinearLayout android:id="@+id/checkInLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/checkInIcon" android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/checkin" android:contentDescription="Check In" android:background="?attr/selectableItemBackgroundBorderless" app:tint="@drawable/selector"/>
-            <TextView android:id="@+id/checkInLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Check In" android:textSize="13sp" android:textStyle="bold" android:fontFamily="@font/poppins_medium" android:textColor="@drawable/selector"/>
-        </LinearLayout>
-        <!--  Salary  -->
-        <LinearLayout android:id="@+id/salaryLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/salaryIcon" android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/salary" android:contentDescription="Salary" android:background="?attr/selectableItemBackgroundBorderless" app:tint="@drawable/selector"/>
-            <TextView android:id="@+id/salaryLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Salary" android:textSize="13sp" android:textStyle="bold" android:fontFamily="@font/poppins_medium" android:textColor="@drawable/selector"/>
-        </LinearLayout>
-        <!--  Home  -->
-        <LinearLayout android:id="@+id/homeLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/homeIcon" android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/home" android:contentDescription="Home" android:background="?attr/selectableItemBackgroundBorderless" app:tint="@drawable/selector"/>
-            <TextView android:id="@+id/homeLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Home" android:textSize="13sp" android:textStyle="bold" android:fontFamily="@font/poppins_medium" android:textColor="@drawable/selector"/>
-        </LinearLayout>
-        <!--  Attendance  -->
-        <LinearLayout android:id="@+id/attendanceLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/attendanceIcon" android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/attendance" android:contentDescription="Attendance" android:background="?attr/selectableItemBackgroundBorderless" app:tint="@drawable/selector"/>
-            <TextView android:id="@+id/attendanceLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Attendance" android:textSize="12sp" android:textStyle="bold" android:fontFamily="@font/poppins_medium" android:textColor="@drawable/selector"/>
-        </LinearLayout>
-        <!--  Requests  -->
-        <LinearLayout android:id="@+id/requestsLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/requestsIcon" android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/requests" android:contentDescription="Requests" android:background="?attr/selectableItemBackgroundBorderless" app:tint="@drawable/selector"/>
-            <TextView android:id="@+id/requestsLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Requests" android:textSize="13sp" android:textStyle="bold" android:fontFamily="@font/poppins_medium" android:textColor="@drawable/selector"/>
-        </LinearLayout>
-    </LinearLayout>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/attendanceRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

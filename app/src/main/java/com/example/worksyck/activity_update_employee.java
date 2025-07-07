@@ -1,5 +1,6 @@
 package com.example.worksyck;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -40,6 +41,7 @@ public class activity_update_employee extends AppCompatActivity {
 
     int employeeId = -1; // You can replace this with actual ID (e.g., getIntent().getIntExtra)
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,6 @@ public class activity_update_employee extends AppCompatActivity {
         fridayCheckBox = findViewById(R.id.fridayCheckBox);
         saturdayCheckBox = findViewById(R.id.saturdayCheckBox);
         sundayCheckBox = findViewById(R.id.sundayCheckBox);
-
         updateButton = findViewById(R.id.updateButton);
 
         // Spinner setup
@@ -106,7 +107,7 @@ public class activity_update_employee extends AppCompatActivity {
     }
 
     private void fetchEmployeeData() {
-        String url = "http://192.168.1.108/worksync/fetch_employee_data.php";
+        String url = "http://10.0.2.2/worksync/fetch_employee_data.php";
 
         try {
             JSONObject requestBody = new JSONObject();
@@ -173,7 +174,7 @@ public class activity_update_employee extends AppCompatActivity {
     }
 
     private void updateEmployeeData() {
-        String url = "http://192.168.1.108/worksync/update_employee_data.php";
+        String url = "http://10.0.2.2/worksync/update_employee_data.php";
 
         try {
             JSONObject body = new JSONObject();
