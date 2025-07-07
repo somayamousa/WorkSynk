@@ -185,7 +185,7 @@ public class EmployeesActivity extends AppCompatActivity {
     }
 
     private void resetPassword(String employeeId, String newPassword, Dialog dialog) {
-        String url = "http://192.168.1.108/worksync/reset_employee_password.php";
+        String url = "http://10.0.2.2/worksync/reset_employee_password.php";
 
         Map<String, String> params = new HashMap<>();
         params.put("employee_id", employeeId);
@@ -213,7 +213,7 @@ public class EmployeesActivity extends AppCompatActivity {
     }
 
     private void resetDeviceId(String employeeId, Dialog dialog) {
-        String url = "http://192.168.1.108/worksync/reset_employee_device.php";
+        String url = "http://10.0.2.2/worksync/reset_employee_device.php";
 
         Map<String, String> params = new HashMap<>();
         params.put("employee_id", employeeId);
@@ -249,7 +249,7 @@ public class EmployeesActivity extends AppCompatActivity {
     }
 
     private void deactivateEmployee(String employeeId) {
-        String url = "http://192.168.1.108/worksync/deactivate_employee.php";
+        String url = "http://10.0.2.2/worksync/deactivate_employee.php";
 
         // Debug logging
         Log.d("DeactivateEmployee", "Starting deactivation for employee ID: " + employeeId);
@@ -339,7 +339,7 @@ public class EmployeesActivity extends AppCompatActivity {
             return;
         }
 
-        String url = "http://192.168.1.108/worksync/fetch_all_employees.php?company_id=" + companyId;
+        String url = "http://10.0.2.2/worksync/fetch_all_employees.php?company_id=" + companyId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
