@@ -84,11 +84,11 @@ public class HrLeaveRequest extends AppCompatActivity {
                                 JSONObject leaveRequest = jsonArray.getJSONObject(i);
                                 String id = leaveRequest.getString("id");
                                 String leaveType = leaveRequest.getString("leave_type");
-                                String startDate = leaveRequest.getString("start_date");
-                                String endDate = leaveRequest.getString("end_date");
+                                String employeeCode = leaveRequest.getString("employee_code");
+                               // String endDate = leaveRequest.getString("end_date");
 
                                 String status = capitalizeFirstLetter(leaveRequest.optString("status", "Pending"));
-                                leaveRequestList.add(new LeaveRequestModel(id, leaveType, startDate, endDate, status));
+                                leaveRequestList.add(new LeaveRequestModel(id, leaveType, employeeCode , status));
                             }
 
                             leaveRequestAdapter = new LeaveRequestAdapter(leaveRequestList);
@@ -137,7 +137,7 @@ public class HrLeaveRequest extends AppCompatActivity {
         public void onBindViewHolder(LeaveRequestViewHolder holder, int position) {
             LeaveRequestModel leaveRequest = leaveRequests.get(position);
             holder.leaveTypeTextView.setText(leaveRequest.getLeaveType());
-            holder.leaveDatesTextView.setText(leaveRequest.getStartDate() + " to " + leaveRequest.getEndDate());
+            holder.leaveDatesTextView.setText(leaveRequest.getEmployeeCode());
             holder.statusTextView.setText(leaveRequest.getStatus());
             String status = leaveRequest.getStatus().toLowerCase();
 
@@ -184,15 +184,13 @@ public class HrLeaveRequest extends AppCompatActivity {
     class LeaveRequestModel {
         private String id;
         private String leaveType;
-        private String startDate;
-        private String endDate;
+        private String employeeCode;
         private String status;
 
-        public LeaveRequestModel(String id, String leaveType, String startDate, String endDate, String status) {
+        public LeaveRequestModel(String id, String leaveType, String employeeCode, String status) {
             this.id = id;
             this.leaveType = leaveType;
-            this.startDate = startDate;
-            this.endDate = endDate;
+            this.employeeCode = employeeCode;
             this.status = status;
         }
 
@@ -204,13 +202,10 @@ public class HrLeaveRequest extends AppCompatActivity {
             return leaveType;
         }
 
-        public String getStartDate() {
-            return startDate;
+        public String getEmployeeCode() {
+            return employeeCode;
         }
 
-        public String getEndDate() {
-            return endDate;
-        }
 
         public String getStatus() {
             return status;

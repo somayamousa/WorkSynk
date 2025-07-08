@@ -124,10 +124,11 @@ public class OvertimeRequest extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject overtimeRequest = jsonArray.getJSONObject(i);
                             String id = overtimeRequest.optString("id");
-                            String overtimeDate = overtimeRequest.optString("overtime_date");
+                            //  String overtimeDate = overtimeRequest.optString("overtime_date");
+                            String employeeCode = overtimeRequest.getString("employee_code");
                             String reason = overtimeRequest.optString("reason");
                             String status = capitalizeFirstLetter(overtimeRequest.optString("status", "Pending"));
-                            overtimeRequestList.add(new OvertimeRequestModel(id, overtimeDate, reason, status));
+                            overtimeRequestList.add(new OvertimeRequestModel(id, employeeCode, reason, status));
                         }
 
                         if (overtimeRequestAdapter == null) {
@@ -179,7 +180,7 @@ public class OvertimeRequest extends AppCompatActivity {
         @Override
         public void onBindViewHolder(OvertimeRequestViewHolder holder, int position) {
             OvertimeRequestModel overtimeRequest = overtimeRequests.get(position);
-            holder.overtimeDateRange.setText(overtimeRequest.getOvertimeDate());
+            holder.overtimeDateRange.setText(overtimeRequest.getEmployeeCode());
             holder.overtimeReason.setText(overtimeRequest.getReason());
             holder.statusTextView.setText(overtimeRequest.getStatus());
             Log.d("OvertimeRequest", "Status value: " + overtimeRequest.getStatus());
@@ -225,13 +226,13 @@ public class OvertimeRequest extends AppCompatActivity {
 
     class OvertimeRequestModel {
         private String id;
-        private String overtimeDate;
+        private String employeeCode;
         private String reason;
         private String status;
 
-        public OvertimeRequestModel(String id, String overtimeDate, String reason, String status) {
+        public OvertimeRequestModel(String id, String employeeCode, String reason, String status) {
             this.id = id;
-            this.overtimeDate = overtimeDate;
+            this.employeeCode = employeeCode;
             this.reason = reason;
             this.status = status;
         }
@@ -240,8 +241,8 @@ public class OvertimeRequest extends AppCompatActivity {
             return id;
         }
 
-        public String getOvertimeDate() {
-            return overtimeDate;
+        public String getEmployeeCode() {
+            return employeeCode;
         }
 
         public String getReason() {
