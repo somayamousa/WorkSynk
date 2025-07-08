@@ -23,7 +23,7 @@ import org.json.JSONObject;
 public class OvertimeOverview extends AppCompatActivity {
 
     // TextViews for overtime details
-    private TextView overtimeDateRange, overtimeHours, overtimeReason, statusTextView, attachmentTextView;
+    private TextView overtimeDateRange, overtimeHours, overtimeReason, statusTextView, attachmentTextView, employeeidTypeTextView ;
     private ImageView backButton;
     private String overtimeRequestId;
 
@@ -33,6 +33,7 @@ public class OvertimeOverview extends AppCompatActivity {
         setContentView(R.layout.timeoverview); // Make sure to set your layout correctly
 
         // Initialize the views
+        employeeidTypeTextView = findViewById(R.id. employeeidTypeTextView);
         overtimeDateRange = findViewById(R.id.overtimeDateRange);
         overtimeHours = findViewById(R.id.overtimeHours);
         overtimeReason = findViewById(R.id.overtimeReason);
@@ -70,6 +71,7 @@ public class OvertimeOverview extends AppCompatActivity {
                         // Parse the first item of the JSON array
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
                         String overtimeDate = jsonObject.getString("overtime_date");
+                        String employeeId = jsonObject.getString("user_id");
                         String hours = jsonObject.getString("hours");
                         String reason = jsonObject.getString("reason");
                         String attachment = jsonObject.optString("attachment", "No file attachment");
@@ -81,6 +83,7 @@ public class OvertimeOverview extends AppCompatActivity {
 
                         // Display the data in the TextViews
                         overtimeDateRange.setText(overtimeDate);
+                        employeeidTypeTextView.setText("Employee ID: " +employeeId);
                         overtimeHours.setText(hours + " Hours");
                         overtimeReason.setText(reason);
                         attachmentTextView.setText("Attachment: " + attachment);
