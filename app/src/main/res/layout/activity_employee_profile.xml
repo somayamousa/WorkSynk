@@ -31,7 +31,7 @@
             android:text="Full Name Example" /> <TextView
         android:id="@+id/profile_email"
         android:textSize="16sp"
-        android:textColor="#EF282728"
+        android:textColor="#EF333133"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
