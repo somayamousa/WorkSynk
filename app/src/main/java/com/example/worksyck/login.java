@@ -1,6 +1,7 @@
 package com.example.worksyck;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -109,6 +110,14 @@ public class login extends AppCompatActivity {
                 String fullname = user.optString("fullname");
                 String role = user.optString("role");
                 String company_id = user.optString("company_id", "");
+
+                // حفظ user_id في SharedPreferences
+                SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("user_id", id);
+                editor.apply();
+
+
                 Intent intent;
                 if ("hr".equalsIgnoreCase(role)) {
                     intent = new Intent(this, MainActivity2.class);

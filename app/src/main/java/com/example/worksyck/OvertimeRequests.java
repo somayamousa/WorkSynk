@@ -3,6 +3,7 @@ package com.example.worksyck;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -163,6 +164,13 @@ public class OvertimeRequests extends AppCompatActivity {
     }
     // Send the overtime request to the server
     private void sendOvertimeRequestToServer() {
+
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "Please log in again", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String url = "http://10.0.2.2/worksync/insert_overtime_request.php"; // Change the URL to match your server's path
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -177,6 +185,7 @@ public class OvertimeRequests extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId)); // <--- هنا تضيف user_id
                 params.put("overtime_date", overtimeDate);
                 params.put("hours", overtimeHours);
                 params.put("reason", overtimeReason);

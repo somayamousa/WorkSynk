@@ -1,6 +1,7 @@
 package com.example.worksyck;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -103,35 +104,68 @@ public class LeaveRequest extends AppCompatActivity {
     }
 
     private void fetchLeaveDataFromServer() {
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "Please log in again", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String url = "http://10.0.2.2/worksync/get_leave_request.php?user_id=" + userId;
+
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
                         Log.d("Response", response);
-                        leaveRequestList.clear(); // Clear before adding new data
+                        leaveRequestList.clear();
 
-                        JSONArray jsonArray = new JSONArray(response);
+                        if (response.trim().startsWith("[")) {
+                            // الرد عبارة عن مصفوفة JSON
+                            JSONArray jsonArray = new JSONArray(response);
 
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject leaveRequest = jsonArray.getJSONObject(i);
-                            String id = leaveRequest.getString("id");
-                            String leaveType = leaveRequest.getString("leave_type");
-                            String startDate = leaveRequest.getString("start_date");
-                            String endDate = leaveRequest.getString("end_date");
-                            String status = capitalizeFirstLetter(leaveRequest.optString("status", "Pending"));
-                            leaveRequestList.add(new LeaveRequestModel(id, leaveType, startDate, endDate, status));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject leaveRequest = jsonArray.getJSONObject(i);
+                                String id = leaveRequest.getString("id");
+                                String leaveType = leaveRequest.getString("leave_type");
+                                String startDate = leaveRequest.getString("start_date");
+                                String endDate = leaveRequest.getString("end_date");
+                                String status = capitalizeFirstLetter(leaveRequest.optString("status", "Pending"));
+                                leaveRequestList.add(new LeaveRequestModel(id, leaveType, startDate, endDate, status));
+                            }
+
+                            if (leaveRequestAdapter == null) {
+                                leaveRequestAdapter = new LeaveRequestAdapter(leaveRequestList);
+                                leaveRequestsRecyclerView.setAdapter(leaveRequestAdapter);
+                            } else {
+                                leaveRequestAdapter.notifyDataSetChanged();
+                            }
+                        } else if (response.trim().startsWith("{")) {
+                            // الرد عبارة عن كائن JSON (مثلاً رسالة خطأ أو لا يوجد بيانات)
+                            JSONObject jsonObject = new JSONObject(response);
+                            String message = jsonObject.optString("message", "No data found");
+                            Toast.makeText(LeaveRequest.this, message, Toast.LENGTH_SHORT).show();
+
+                            // تفريغ القائمة أو عرض رسالة فارغة UI حسب الحاجة
+                            leaveRequestList.clear();
+                            if (leaveRequestAdapter != null) {
+                                leaveRequestAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Toast.makeText(LeaveRequest.this, "Unexpected response format", Toast.LENGTH_SHORT).show();
                         }
-
-                        leaveRequestAdapter = new LeaveRequestAdapter(leaveRequestList);
-                        leaveRequestsRecyclerView.setAdapter(leaveRequestAdapter);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(LeaveRequest.this, "Error parsing data", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(LeaveRequest.this, "Error fetching data: " + error.toString(), Toast.LENGTH_SHORT).show()
+
+                error -> {
+                    Log.e("VolleyError", error.toString());
+                    Toast.makeText(LeaveRequest.this, "Error fetching data: " + error.toString(), Toast.LENGTH_LONG).show();
+                }
+
         );
 
         Volley.newRequestQueue(this).add(stringRequest);
