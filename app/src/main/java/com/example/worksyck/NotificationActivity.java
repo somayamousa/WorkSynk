@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +32,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     NotificationAdapter adapter;
+    private ImageView backButton;
     List<Notification> notificationsList;
 
     @Override
@@ -39,6 +42,13 @@ public class NotificationActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewNotifications);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         notificationsList = new ArrayList<>();
         adapter = new NotificationAdapter(notificationsList);
@@ -49,11 +59,17 @@ public class NotificationActivity extends AppCompatActivity {
         // ✅ عندما يفتح المستخدم صفحة الإشعارات، نعتبر أنه قرأها
         SharedPreferences prefs = getSharedPreferences("notifs", MODE_PRIVATE);
         prefs.edit().putBoolean("hasUnread", false).apply();
+
+
     }
 
     private void loadNotificationsFromServer() {
-        int userId = 0; // الرقم ثابت كما طلبت
-
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "Please log in again", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String url = "http://10.0.2.2/worksync/get_notifications.php?user_id=" + userId;
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,

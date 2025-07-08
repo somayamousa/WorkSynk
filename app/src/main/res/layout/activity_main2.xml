@@ -625,6 +625,7 @@
             android:padding="8dp"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:fontFamily="@font/font1"
             android:layout_marginBottom="32dp"
             android:layout_gravity="center" />
 

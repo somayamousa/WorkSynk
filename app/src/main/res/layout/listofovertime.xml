@@ -156,14 +156,15 @@
             <!-- New Overtime Request Button -->
             <Button
                 android:id="@+id/newOvertimeRequestButton"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_width="280dp"
+                android:layout_height="56dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
                 android:backgroundTint="#4A148C"
                 android:text="+ New Overtime Request"
                 android:fontFamily="@font/poppins_medium"
+                android:layout_gravity="center_horizontal"
                 android:elevation="6dp"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
@@ -182,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/font1"
-                    android:text="List of My Overtime"
+                    android:text="List of My Overtime Request"
                     android:textColor="#4A148C"
                     android:textSize="18sp"
                     android:paddingHorizontal="12dp"
@@ -191,7 +192,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="0dp"
                     android:contentDescription="Filter Icon"
                     android:src="@drawable/filter"
                     app:tint="#4A148C" />

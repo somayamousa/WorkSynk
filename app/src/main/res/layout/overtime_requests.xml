@@ -169,7 +169,7 @@
                 <!-- Submit Button -->
                 <Button
                     android:id="@+id/submitButton"
-                    android:layout_width="match_parent"
+                    android:layout_width="190dp"
                     android:layout_height="56dp"
                     android:text="✓ Submit"
                     android:textColor="#FFFFFF"
@@ -177,6 +177,7 @@
                     android:fontFamily="@font/poppins_medium"
                     android:backgroundTint="#4A148C"
                     android:textSize="16sp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="48dp"
                     android:layout_marginBottom="24dp" />
             </LinearLayout>
