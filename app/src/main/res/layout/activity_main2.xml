@@ -137,7 +137,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Manage Holidays"
+                                android:text="Holidays"
                                 android:textColor="#4A148C"
                                 android:textSize="15sp"
                                 android:textAlignment="center"
