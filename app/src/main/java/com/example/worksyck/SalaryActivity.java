@@ -39,6 +39,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -549,9 +551,14 @@ public class SalaryActivity extends AppCompatActivity {
 
     private void generateSalarySlipPDF() {
         try {
-            String url = String.format("http://10.0.2.2/worksync/fetch_salary.php?employee_id=%d&month=%d&year=%d",
+            String salaryUrl = String.format("http://10.0.2.2/worksync/fetch_salary.php?employee_id=%d&month=%d&year=%d",
                     userId, selectedMonth, selectedYear);
-            StringRequest request = new StringRequest(Request.Method.GET, url,
+            String increasesUrl = String.format("http://10.0.2.2/worksync/get_increases.php?employee_id=%d&start_date=%s&end_date=%s",
+                    userId, String.format("%d-%02d-01", selectedYear, selectedMonth),
+                    String.format("%d-%02d-%02d", selectedYear, selectedMonth,
+                            LocalDate.of(selectedYear, selectedMonth, 1).lengthOfMonth()));
+
+            StringRequest salaryRequest = new StringRequest(Request.Method.GET, salaryUrl,
                     response -> {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
@@ -561,151 +568,224 @@ public class SalaryActivity extends AppCompatActivity {
                                 return;
                             }
                             JSONObject data = jsonResponse.getJSONObject("data");
-                            Document document = new Document();
-                            String fileName = String.format("Dermadoc_SalarySlip_%d_%02d_%d.pdf", userId, selectedMonth, selectedYear);
-                            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                            File file = new File(downloadsDir, fileName);
-                            PdfWriter.getInstance(document, new FileOutputStream(file));
-                            document.open();
 
-                            String companyName = data.getString("company_name");
-                            String employeeName = data.getString("employee_fullname");
-                            String employeeCode = data.getString("employee_code");
-                            String department = data.getString("department_name");
-                            String designation = data.getString("job_title");
-                            String periodStart = data.getString("period_start");
-                            String periodEnd = data.getString("period_end");
-                            String salaryType = data.getString("salary_structure_type");
-                            double regularHourRate = data.optDouble("regular_hour_rate", 0.0);
-                            double overtimeHourRate = data.optDouble("overtime_hour_rate", 0.0);
-                            double baseSalary = data.optDouble("base_salary", 0.0);
-                            double regularSalary = data.optDouble("regular_salary", 0.0);
-                            double overtimeSalary = data.optDouble("overtime_salary", 0.0);
-                            double overtimeHours = data.optDouble("overtime_hours", 0.0);
-                            double regularHours = data.optDouble("regular_hours", 0.0);
-                            int absentDays = data.optInt("absent_days", 0);
-                            double bonus = data.optDouble("bonus", 0.0);
-                            double salary_increment = data.optDouble("salary_increment", 0.0);
-                            double netSalary = data.optDouble("net_salary", 0.0);
-                            String expectedHoursPerDay = data.getString("expected_hours_per_day");
-                            double hoursPerDay = Double.parseDouble(expectedHoursPerDay);
-                            int expectedWorkingDays = data.optInt("expected_working_days", 0);
-                            double missingHours = data.optDouble("missing_hours", 0.0);
-                            double deductions = missingHours * regularHourRate; // Deductions calculated but not shown for per hour in PDF
-                            double totalEarnings = salaryType.equalsIgnoreCase("per hour") ?
-                                    (regularSalary + overtimeSalary + bonus + salary_increment) :
-                                    (baseSalary + overtimeSalary + bonus + salary_increment);
+                            // جلب بيانات الزيادات
+                            StringRequest increasesRequest = new StringRequest(Request.Method.GET, increasesUrl,
+                                    increasesResponse -> {
+                                        try {
+                                            JSONObject increasesJsonResponse = new JSONObject(increasesResponse);
+                                            String increasesStatus = increasesJsonResponse.getString("status");
+                                            List<JSONObject> permanentIncreases = new ArrayList<>();
+                                            List<JSONObject> temporaryIncreases = new ArrayList<>();
 
-                            String monthName = new SimpleDateFormat("MMMM", Locale.getDefault()).format(
-                                    new SimpleDateFormat("MM").parse(String.valueOf(selectedMonth)));
-                            Paragraph title = new Paragraph(
-                                    String.format("%s\nSalary Slip of %s %d", companyName, monthName, selectedYear),
-                                    new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD)
-                            );
-                            title.setAlignment(Element.ALIGN_CENTER);
-                            document.add(title);
-                            document.add(new Paragraph(" "));
-                            PdfPTable infoTable = new PdfPTable(2);
-                            infoTable.setWidthPercentage(100);
-                            addInfoCell(infoTable, "Name", employeeName);
-                            addInfoCell(infoTable, "Employee Code", employeeCode);
-                            addInfoCell(infoTable, "Department", department);
-                            addInfoCell(infoTable, "Designation", designation);
-                            addInfoCell(infoTable, "Expected Work Hours", expectedHoursPerDay);
-                            addInfoCell(infoTable, "Expected Work Days", String.valueOf(expectedWorkingDays));
-                            addInfoCell(infoTable, "Period", periodStart + " to " + periodEnd);
-                            addInfoCell(infoTable, "Work Type", salaryType);
-                            if (salaryType.equalsIgnoreCase("per hour")) {
-                                addInfoCell(infoTable, "Regular Hour Rate", String.format("₪%.2f", regularHourRate));
-                                addInfoCell(infoTable, "Overtime Hour Rate", String.format("₪%.2f", overtimeHourRate));
-                            }
-                            document.add(infoTable);
-                            document.add(new Paragraph(" "));
+                                            if (increasesStatus.equals("success")) {
+                                                JSONArray increasesArray = increasesJsonResponse.getJSONArray("increases");
+                                                for (int i = 0; i < increasesArray.length(); i++) {
+                                                    JSONObject increase = increasesArray.getJSONObject(i);
+                                                    String type = increase.getString("type");
+                                                    if (type.equalsIgnoreCase("permanent")) {
+                                                        permanentIncreases.add(increase);
+                                                    } else if (type.equalsIgnoreCase("temporary")) {
+                                                        temporaryIncreases.add(increase);
+                                                    }
+                                                }
+                                            }
 
-                            PdfPTable earningsTable = new PdfPTable(new float[]{1, 3, 2});
-                            earningsTable.setWidthPercentage(48);
-                            earningsTable.setHorizontalAlignment(Element.ALIGN_LEFT);
-                            addTableHeader(earningsTable, "Serial No.", "Salary Head", "Amount ₪");
-                            int serialNo = 1;
-                            if (salaryType.equalsIgnoreCase("per hour")) {
-                                if (regularHours > 0) {
-                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Regular Hours", String.format("%.2f", regularHours));
-                                }
-                                if (regularSalary > 0) {
-                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Regular Salary", String.format("%.2f", regularSalary));
-                                }
-                                if (overtimeSalary > 0) {
-                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Hours", String.format("%.2f", overtimeHours));
-                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Salary", String.format("%.2f", overtimeSalary));
-                                }
-                            } else {
-                                if (baseSalary > 0) {
-                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Base Salary", String.format("%.2f", baseSalary));
-                                }
-                                if (overtimeSalary > 0) {
-                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Hours", String.format("%.2f", overtimeHours));
-                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Salary", String.format("%.2f", overtimeSalary));
-                                }
-                            }
-                            if (bonus > 0) {
-                                addTableRow(earningsTable, String.valueOf(serialNo++), "Bonus", String.format("%.2f", bonus));
-                            }
-                            if (salary_increment > 0) {
-                                addTableRow(earningsTable, String.valueOf(serialNo++), "Salary Increment", String.format("%.2f", salary_increment));
-                            }
+                                            // إنشاء PDF
+                                            Document document = new Document();
+                                            String fileName = String.format("Dermadoc_SalarySlip_%d_%02d_%d.pdf", userId, selectedMonth, selectedYear);
+                                            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                            File file = new File(downloadsDir, fileName);
+                                            PdfWriter.getInstance(document, new FileOutputStream(file));
+                                            document.open();
 
-                            if (salaryType.equalsIgnoreCase("base salary")) {
-                                PdfPTable twoTables = new PdfPTable(2);
-                                twoTables.setWidthPercentage(100);
+                                            // بيانات الراتب
+                                            String companyName = data.getString("company_name");
+                                            String employeeName = data.getString("employee_fullname");
+                                            String employeeCode = data.getString("employee_code");
+                                            String department = data.getString("department_name");
+                                            String designation = data.getString("job_title");
+                                            String periodStart = data.getString("period_start");
+                                            String periodEnd = data.getString("period_end");
+                                            String salaryType = data.getString("salary_structure_type");
+                                            double regularHourRate = data.optDouble("regular_hour_rate", 0.0);
+                                            double overtimeHourRate = data.optDouble("overtime_hour_rate", 0.0);
+                                            double baseSalary = data.optDouble("base_salary", 0.0);
+                                            double regularSalary = data.optDouble("regular_salary", 0.0);
+                                            double overtimeSalary = data.optDouble("overtime_salary", 0.0);
+                                            double overtimeHours = data.optDouble("overtime_hours", 0.0);
+                                            double regularHours = data.optDouble("regular_hours", 0.0);
+                                            int absentDays = data.optInt("absent_days", 0);
+                                            double bonus = data.optDouble("bonus", 0.0);
+                                            double salary_increment = data.optDouble("salary_increment", 0.0);
+                                            double netSalary = data.optDouble("net_salary", 0.0);
+                                            String expectedHoursPerDay = data.getString("expected_hours_per_day");
+                                            double hoursPerDay = Double.parseDouble(expectedHoursPerDay);
+                                            int expectedWorkingDays = data.optInt("expected_working_days", 0);
+                                            double missingHours = data.optDouble("missing_hours", 0.0);
+                                            double deductions = missingHours * regularHourRate;
+                                            double totalEarnings = salaryType.equalsIgnoreCase("per hour") ?
+                                                    (regularSalary + overtimeSalary + bonus + salary_increment) :
+                                                    (baseSalary + overtimeSalary + bonus + salary_increment);
 
-                                PdfPTable deductionsTable = new PdfPTable(new float[]{1, 3, 2});
-                                deductionsTable.setWidthPercentage(48);
-                                deductionsTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                                addTableHeader(deductionsTable, "Serial No.", "Salary Head", "Amount (₪)");
-                                serialNo = 1;
-                                if (missingHours > 0) {
-                                    addTableRow(deductionsTable, String.valueOf(serialNo++),
-                                            "Missing Hours (" + String.format("%.2f", missingHours) + ")",
-                                            String.format("%.2f", missingHours * regularHourRate));
-                                }
+                                            String monthName = new SimpleDateFormat("MMMM", Locale.getDefault()).format(
+                                                    new SimpleDateFormat("MM").parse(String.valueOf(selectedMonth)));
+                                            Paragraph title = new Paragraph(
+                                                    String.format("%s\nSalary Slip of %s %d", companyName, monthName, selectedYear),
+                                                    new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD)
+                                            );
+                                            title.setAlignment(Element.ALIGN_CENTER);
+                                            document.add(title);
+                                            document.add(new Paragraph(" "));
 
-                                PdfPCell left = new PdfPCell(earningsTable);
-                                PdfPCell right = new PdfPCell(deductionsTable);
-                                left.setBorder(Rectangle.NO_BORDER);
-                                right.setBorder(Rectangle.NO_BORDER);
-                                twoTables.addCell(left);
-                                twoTables.addCell(right);
-                                document.add(twoTables);
-                            } else {
-                                // For per hour employees, only show earnings table
-                                earningsTable.setWidthPercentage(100); // Full width since no deductions table
-                                document.add(earningsTable);
-                            }
+                                            // جدول المعلومات
+                                            PdfPTable infoTable = new PdfPTable(2);
+                                            infoTable.setWidthPercentage(100);
+                                            addInfoCell(infoTable, "Name", employeeName);
+                                            addInfoCell(infoTable, "Employee Code", employeeCode);
+                                            addInfoCell(infoTable, "Department", department);
+                                            addInfoCell(infoTable, "Designation", designation);
+                                            addInfoCell(infoTable, "Expected Work Hours", expectedHoursPerDay);
+                                            addInfoCell(infoTable, "Expected Work Days", String.valueOf(expectedWorkingDays));
+                                            addInfoCell(infoTable, "Period", periodStart + " to " + periodEnd);
+                                            addInfoCell(infoTable, "Work Type", salaryType);
+                                            if (salaryType.equalsIgnoreCase("per hour")) {
+                                                addInfoCell(infoTable, "Regular Hour Rate", String.format("₪%.2f", regularHourRate));
+                                                addInfoCell(infoTable, "Overtime Hour Rate", String.format("₪%.2f", overtimeHourRate));
+                                            }
+                                            document.add(infoTable);
+                                            document.add(new Paragraph(" "));
 
-                            document.add(new Paragraph(" "));
+                                            // جدول الزيادات الدائمة
+                                            if (!permanentIncreases.isEmpty()) {
+                                                PdfPTable permanentIncreasesTable = new PdfPTable(new float[]{1, 3, 2});
+                                                permanentIncreasesTable.setWidthPercentage(100);
+                                                addTableHeader(permanentIncreasesTable, "Serial No.", "Salary Increment", "Amount ₪");
+                                                int serialNo = 1;
+                                                for (JSONObject increase : permanentIncreases) {
+                                                    double amount = increase.getDouble("amount");
+                                                    String reason = increase.optString("reason", "Permanent Increase");
+                                                    addTableRow(permanentIncreasesTable, String.valueOf(serialNo++), reason, String.format("%.2f", amount));
+                                                }
+                                                document.add(permanentIncreasesTable);
+                                                document.add(new Paragraph(" "));
+                                            }
 
-                            PdfPTable summary = new PdfPTable(2);
-                            summary.setWidthPercentage(100);
-                            addInfoCell(summary, "TOTAL EARNINGS", String.format("%.2f", totalEarnings));
-                            addInfoCell(summary, "NET SALARY", String.format("%.2f", netSalary));
-                            addInfoCell(summary, "NET SALARY IN WORDS", numberToWords(netSalary));
-                            if (salaryType.equalsIgnoreCase("per hour")) {
-                                addInfoCell(summary, "REGULAR HOURS", String.format("%.1f", regularHours));
-                                addInfoCell(summary, "OVERTIME HOURS", String.format("%.1f", overtimeHours));
-                            } else {
-                                addInfoCell(summary, "OVERTIME HOURS", String.format("%.1f", overtimeHours));
-                            }
-                            document.add(summary);
+                                            // جدول الزيادات المؤقتة (البونس)
+                                            if (!temporaryIncreases.isEmpty()) {
+                                                PdfPTable temporaryIncreasesTable = new PdfPTable(new float[]{1, 3, 2});
+                                                temporaryIncreasesTable.setWidthPercentage(100);
+                                                addTableHeader(temporaryIncreasesTable, "Serial No.", "Bonus", "Amount ₪");
+                                                int serialNo = 1;
+                                                for (JSONObject increase : temporaryIncreases) {
+                                                    double amount = increase.getDouble("amount");
+                                                    String reason = increase.optString("reason", "Bonus");
+                                                    String startDate = increase.getString("start_date");
+                                                    String endDate = increase.getString("end_date");
+                                                    double effectiveAmount = calculateIncreaseForMonth(
+                                                            LocalDate.parse(startDate),
+                                                            LocalDate.parse(endDate),
+                                                            periodStart,
+                                                            periodEnd,
+                                                            amount
+                                                    );
+                                                    if (effectiveAmount > 0.0) {
+                                                        addTableRow(temporaryIncreasesTable, String.valueOf(serialNo++), reason, String.format("%.2f", effectiveAmount));
+                                                    }
+                                                }
+                                                if (temporaryIncreasesTable.getRows().size() > 1) { // إذا كان هناك صفوف بعد العنوان
+                                                    document.add(temporaryIncreasesTable);
+                                                    document.add(new Paragraph(" "));
+                                                }
+                                            }
 
-                            document.close();
-                            Toast.makeText(this, "PDF Generated in Downloads: " + fileName, Toast.LENGTH_LONG).show();
+                                            // جدول الأرباح
+                                            PdfPTable earningsTable = new PdfPTable(new float[]{1, 3, 2});
+                                            earningsTable.setWidthPercentage(48);
+                                            earningsTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+                                            addTableHeader(earningsTable, "Serial No.", "Salary Head", "Amount ₪");
+                                            int serialNo = 1;
+                                            if (salaryType.equalsIgnoreCase("per hour")) {
+                                                if (regularHours > 0) {
+                                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Regular Hours", String.format("%.2f", regularHours));
+                                                }
+                                                if (regularSalary > 0) {
+                                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Regular Salary", String.format("%.2f", regularSalary));
+                                                }
+                                                if (overtimeSalary > 0) {
+                                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Hours", String.format("%.2f", overtimeHours));
+                                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Salary", String.format("%.2f", overtimeSalary));
+                                                }
+                                            } else {
+                                                if (baseSalary > 0) {
+                                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Base Salary", String.format("%.2f", baseSalary));
+                                                }
+                                                if (overtimeSalary > 0) {
+                                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Hours", String.format("%.2f", overtimeHours));
+                                                    addTableRow(earningsTable, String.valueOf(serialNo++), "Overtime Salary", String.format("%.2f", overtimeSalary));
+                                                }
+                                            }
+
+                                            if (salaryType.equalsIgnoreCase("base salary")) {
+                                                PdfPTable twoTables = new PdfPTable(2);
+                                                twoTables.setWidthPercentage(100);
+
+                                                PdfPTable deductionsTable = new PdfPTable(new float[]{1, 3, 2});
+                                                deductionsTable.setWidthPercentage(48);
+                                                deductionsTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                                addTableHeader(deductionsTable, "Serial No.", "Salary Head", "Amount (₪)");
+                                                serialNo = 1;
+                                                if (missingHours > 0) {
+                                                    addTableRow(deductionsTable, String.valueOf(serialNo++),
+                                                            "Missing Hours (" + String.format("%.2f", missingHours) + ")",
+                                                            String.format("%.2f", missingHours * regularHourRate));
+                                                }
+
+                                                PdfPCell left = new PdfPCell(earningsTable);
+                                                PdfPCell right = new PdfPCell(deductionsTable);
+                                                left.setBorder(Rectangle.NO_BORDER);
+                                                right.setBorder(Rectangle.NO_BORDER);
+                                                twoTables.addCell(left);
+                                                twoTables.addCell(right);
+                                                document.add(twoTables);
+                                            } else {
+                                                earningsTable.setWidthPercentage(100);
+                                                document.add(earningsTable);
+                                            }
+
+                                            document.add(new Paragraph(" "));
+
+                                            PdfPTable summary = new PdfPTable(2);
+                                            summary.setWidthPercentage(100);
+                                            addInfoCell(summary, "TOTAL EARNINGS", String.format("%.2f", totalEarnings));
+                                            addInfoCell(summary, "NET SALARY", String.format("%.2f", netSalary));
+                                            addInfoCell(summary, "NET SALARY IN WORDS", numberToWords(netSalary));
+                                            if (salaryType.equalsIgnoreCase("per hour")) {
+                                                addInfoCell(summary, "REGULAR HOURS", String.format("%.1f", regularHours));
+                                                addInfoCell(summary, "OVERTIME HOURS", String.format("%.1f", overtimeHours));
+                                            } else {
+                                                addInfoCell(summary, "OVERTIME HOURS", String.format("%.1f", overtimeHours));
+                                            }
+                                            document.add(summary);
+
+                                            document.close();
+                                            Toast.makeText(this, "PDF Generated in Downloads: " + fileName, Toast.LENGTH_LONG).show();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(this, "Error generating PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    },
+                                    error -> Toast.makeText(this, "Error fetching salary increases: " + error.getMessage(), Toast.LENGTH_SHORT).show());
+
+                            requestQueue.add(increasesRequest);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(this, "Error generating PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Error parsing salary data: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     },
                     error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
-            requestQueue.add(request);
+
+            requestQueue.add(salaryRequest);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Error initiating PDF generation: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -868,9 +948,27 @@ public class SalaryActivity extends AppCompatActivity {
                             String type = increase.getString("type");
                             double amount = increase.getDouble("amount");
                             String reason = increase.optString("reason", "");
+                            String startDate = increase.getString("start_date");
+                            String endDate = increase.getString("end_date");
+
+                            // حساب القيمة الفعلية للزيادة المؤقتة
+                            double effectiveAmount = type.equalsIgnoreCase("temporary")
+                                    ? calculateIncreaseForMonth(
+                                    LocalDate.parse(startDate),
+                                    LocalDate.parse(endDate),
+                                    periodStart,
+                                    periodEnd,
+                                    amount)
+                                    : amount;
+
+                            // إذا كانت القيمة الفعلية صفر، تخطى هذه الزيادة
+                            if (effectiveAmount == 0.0) {
+                                continue;
+                            }
+
                             String label = reason.isEmpty()
-                                    ? "₪" + String.format("%.2f", amount)
-                                    : reason + ": ₪" + String.format("%.2f", amount);
+                                    ? "₪" + String.format("%.2f", effectiveAmount)
+                                    : reason + ": ₪" + String.format("%.2f", effectiveAmount);
 
                             if (type.equalsIgnoreCase("permanent")) {
                                 permanentIncreases.add(label);
@@ -1025,5 +1123,46 @@ public class SalaryActivity extends AppCompatActivity {
                     isPermanentIncreasesExpanded = false;
                 });
         requestQueue.add(request);
+    }
+
+
+    private double calculateIncreaseForMonth(
+            LocalDate increaseStart,
+            LocalDate increaseEnd,
+            String salaryMonthStart,
+            String salaryMonthEnd,
+            double totalIncreaseAmount
+    ) {
+        LocalDate salaryStartDate = LocalDate.parse(salaryMonthStart);
+        LocalDate salaryEndDate = LocalDate.parse(salaryMonthEnd);
+
+        // إذا كانت فترة الراتب خارج فترة الزيادة، يتم إرجاع 0
+        if (salaryEndDate.isBefore(increaseStart) || salaryStartDate.isAfter(increaseEnd)) {
+            return 0.0;
+        }
+
+        // حساب عدد الأيام في فترة الراتب
+        long salaryPeriodDays = ChronoUnit.DAYS.between(salaryStartDate, salaryEndDate.plusDays(1));
+
+        // إذا كانت فترة الزيادة تغطي فترة الراتب بالكامل وكانت الفترة بين 28 و31 يومًا
+        if (!salaryStartDate.isBefore(increaseStart) && !salaryEndDate.isAfter(increaseEnd)) {
+            if (salaryPeriodDays >= 28 && salaryPeriodDays <= 31) {
+                return totalIncreaseAmount;
+            }
+        }
+
+        LocalDate effectiveStart = increaseStart.isAfter(salaryStartDate) ? increaseStart : salaryStartDate;
+        LocalDate effectiveEnd = increaseEnd.isBefore(salaryEndDate) ? increaseEnd : salaryEndDate;
+
+        // إذا كان تاريخ البداية بعد تاريخ النهاية، يتم إرجاع 0
+        if (effectiveStart.isAfter(effectiveEnd)) {
+            return 0.0;
+        }
+
+        // حساب عدد الأيام المتداخلة
+        long overlappingDays = ChronoUnit.DAYS.between(effectiveStart, effectiveEnd.plusDays(1));
+
+        // حساب القيمة النسبية للزيادة بناءً على نسبة الأيام المتداخلة
+        return totalIncreaseAmount * ((double) overlappingDays / salaryPeriodDays);
     }
 }

@@ -4,130 +4,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="16dp"
-    android:background="#EDE7F6"
-    app:cardElevation="6dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="194dp"
         android:orientation="vertical"
-        android:background="@android:color/white"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <!-- Name -->
+        <!-- Employee Name -->
         <TextView
             android:id="@+id/employeeNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Employee Name"
             android:fontFamily="sans-serif-medium"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:drawablePadding="6dp" />
+            android:textColor="#212121"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-        <!-- Info Rows -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Net Salary -->
+        <TextView
+            android:id="@+id/netSalaryText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="8dp"
+            android:text="Net Salary: 0.00 ₪"
+            android:textColor="#00695C"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-            <!-- Row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_menu_info_details"
-                    app:tint="#4A148C"/>
-                <TextView
-                    android:id="@+id/employeeCodeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Code:"
-                    android:textSize="15sp"
-                    android:textColor="#424242"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_menu_mapmode"
-                    app:tint="#4A148C"/>
-                <TextView
-                    android:id="@+id/departmentText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Department:"
-                    android:textSize="15sp"
-                    android:textColor="#424242"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_menu_preferences"
-                    app:tint="#4A148C"/>
-                <TextView
-                    android:id="@+id/designationText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Designation:"
-                    android:textSize="15sp"
-                    android:textColor="#424242"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/ic_menu_directions"
-                    app:tint="#4A148C"/>
-                <TextView
-                    android:id="@+id/netSalaryText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Net Salary: $0.00"
-                    android:textSize="15sp"
-                    android:textColor="#424242"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
-        </LinearLayout>
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            android:background="#DDD" />
 
         <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="16dp"
             android:gravity="center"
+            android:orientation="horizontal"
             android:weightSum="3">
 
             <com.google.android.material.button.MaterialButton
@@ -135,43 +58,40 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
                 android:layout_weight="1"
                 android:text="Details"
                 android:textColor="#4A148C"
-                app:iconTint="#4A148C"
-                app:iconPadding="6dp"
+                app:rippleColor="#EDE7F6"
                 app:strokeColor="#4A148C"
-                app:strokeWidth="1dp"
-                android:layout_marginEnd="6dp"
-                app:rippleColor="#EDE7F6"/>
-
+                app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/approveBtn"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
                 android:layout_weight="1"
                 android:text="Approve"
                 android:textColor="#FFFFFF"
-                app:backgroundTint="#4A148C"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"/>
+                android:textSize="12sp"
+                app:backgroundTint="#4A148C" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancelBtn"
-                style="@style/Widget.MaterialComponents.Button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:text="Cancel"
-                android:backgroundTint="#E8EAF6"
                 android:textColor="#4A148C"
-                app:rippleColor="#B39DDB"
-                app:strokeColor="#512DA8"
-                app:strokeWidth="2dp"
-                android:layout_marginStart="6dp"/>
+                app:rippleColor="#D1C4E9"
+                app:strokeColor="#4A148C"
+                app:strokeWidth="1.5dp" />
         </LinearLayout>
+
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -47,10 +47,7 @@ public class SalaryDraftAdapter extends RecyclerView.Adapter<SalaryDraftAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SalaryDraft draft = draftList.get(position);
         holder.employeeNameText.setText(draft.getEmployeeName());
-        holder.employeeCodeText.setText("Code: " + draft.getEmployeeCode());
-        holder.departmentText.setText("Department: " + draft.getDepartmentName());
-        holder.designationText.setText("Designation: " + draft.getDesignationName());
-        holder.netSalaryText.setText("Net Salary: $" + String.format("%.2f", draft.getNetSalary()));
+        holder.netSalaryText.setText("Net Salary: " + String.format("%.2f", draft.getNetSalary()) + " ₪");
 
         holder.viewDetailsBtn.setOnClickListener(v -> viewDetailsListener.onViewDetailsClick(draft));
         holder.approveBtn.setOnClickListener(v -> approveListener.onApproveClick(draft));

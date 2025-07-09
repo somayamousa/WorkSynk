@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/card_background">
+
+    <!-- Duration Type -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Filter by Duration Type">
+
+        <Spinner
+            android:id="@+id/spinnerFilterDurationType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#4A148C"
+            android:spinnerMode="dropdown"
+            android:padding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Start Date -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Filter by Start Date (yyyy-MM-dd)">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editFilterStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#4A148C"
+            android:drawableEnd="@android:drawable/ic_menu_today"
+            android:drawableTint="#B0BEC5"
+            android:fontFamily="sans-serif"
+            android:inputType="date"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#B0BEC5" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- End Date -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:id="@+id/layoutFilterEndDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Filter by End Date (yyyy-MM-dd)"
+        android:visibility="gone">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editFilterEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#4A148C"
+            android:drawableEnd="@android:drawable/ic_menu_today"
+            android:drawableTint="#B0BEC5"
+            android:fontFamily="sans-serif"
+            android:inputType="date"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#B0BEC5" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Filter Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnApplyFilter"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Apply Filter"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="#4A148C"
+            app:cornerRadius="12dp"
+            app:rippleColor="#B388FF" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResetFilter"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Reset Filter"
+            android:textColor="#4A148C"
+            app:cornerRadius="12dp"
+            app:rippleColor="#B388FF"
+            app:strokeColor="#4A148C" />
+    </LinearLayout>
+</LinearLayout>

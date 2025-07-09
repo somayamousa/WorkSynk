@@ -50,7 +50,6 @@ public class SalaryIncrease {
         this.increaseType=type;
         this.startDate=increasestartDate;
     }
-
     public SalaryIncrease(String type, String durationType, double applicableAmount, String s, String s1) {
 
         this.increaseAmount=applicableAmount;
@@ -59,46 +58,34 @@ public class SalaryIncrease {
         this.startDate=s;
         this.endDate=s1;
     }
-
     // Getters and Setters
-
-
     public String getUpdated_at() {
         return updated_at;
     }
-
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public int getEmployeeId() {
         return employeeId;
     }
-
     public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
-
     public double getIncreaseAmount() {
         return increaseAmount;
     }
-
     public void setIncreaseAmount(double increaseAmount) {
         this.increaseAmount = increaseAmount;
     }
-
     public String getIncreaseType() {
         return increaseType;
     }
-
     public void setIncreaseType(String increaseType) {
         this.increaseType = increaseType;
     }

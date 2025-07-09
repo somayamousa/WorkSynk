@@ -5,223 +5,120 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#EDE7F6">
+    android:background="#EDE7F6"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:paddingTop="48dp"
+    android:paddingBottom="24dp"
+    tools:context=".AdditionalSalaryActivity">
 
-    <!-- Page Title -->
+    <!-- Back Button -->
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Back"
         android:padding="8dp"
         android:src="?attr/actionModeCloseDrawable"
-        app:layout_constraintBottom_toBottomOf="@id/pageTitle"
-        app:layout_constraintStart_toStartOf="parent"
+        app:tint="#000000"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:tint="#000000" />
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Title Centered -->
     <TextView
-        android:id="@+id/pageTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Salary Increases"
-        android:textColor="#000000"
-        android:textSize="22sp"
+        android:text="Salary Increase"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="16dp"
+        android:textColor="#000000"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
 
-    <!-- Filter Card (Replaced CardView with LinearLayout) -->
-    <LinearLayout
-        android:id="@+id/topFilters"
-        android:layout_width="match_parent"
+    <!-- Department AutoComplete -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/departmentInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="Select Department"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="#3F51B5"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/autocompleteDepartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:padding="14dp"
+           />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Employee AutoComplete -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/employeeInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Select Employee"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="#3F51B5"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:boxBackgroundColor="#FFFFFF"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:layout_constraintTop_toBottomOf="@id/departmentInputLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/autocompleteEmployee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:padding="14dp"
+          />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!-- View Increases Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnProceed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="VIEW INCREASES"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="19sp"
         android:layout_marginTop="40dp"
-        android:layout_marginHorizontal="8dp"
-        android:background="@drawable/card_background"
-        android:elevation="8dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/pageTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Department Spinner -->
-        <Spinner
-            android:id="@+id/spinnerDepartment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:spinnerMode="dropdown" />
-
-        <!-- Employees Spinner -->
-        <Spinner
-            android:id="@+id/spinnerEmployees"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="12dp"
-            android:spinnerMode="dropdown" />
-
-        <!-- Search by Name -->
-        <EditText
-            android:id="@+id/editSearchEmployee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Search by name"
-            android:inputType="text"
-            android:padding="12dp"
-            android:backgroundTint="#4A148C"
-            android:textColor="#000000"
-            android:textColorHint="#B0BEC5"
-            android:fontFamily="sans-serif" />
-
-        <!-- Filter Inputs -->
-        <EditText
-            android:id="@+id/editFilterIncreaseType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Filter by Increase Type"
-            android:inputType="text"
-            android:padding="12dp"
-            android:backgroundTint="#4A148C"
-            android:textColor="#000000"
-            android:textColorHint="#B0BEC5"
-            android:fontFamily="sans-serif" />
-
-        <!-- Duration Type Spinner -->
-        <Spinner
-            android:id="@+id/spinnerFilterDurationType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="12dp"
-            android:spinnerMode="dropdown" />
-
-        <!-- Start Date Filter -->
-        <EditText
-            android:id="@+id/editFilterStartDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Filter by Start Date (yyyy-MM-dd)"
-            android:inputType="date"
-            android:padding="12dp"
-            android:backgroundTint="#4A148C"
-            android:textColor="#000000"
-            android:textColorHint="#B0BEC5"
-            android:fontFamily="sans-serif"
-            android:drawableEnd="@android:drawable/ic_menu_today"
-            android:drawableTint="#B0BEC5" />
-
-        <!-- Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnApplyFilter"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Apply Filter"
-                android:textColor="#FFFFFF"
-                app:backgroundTint="#4A148C"
-                app:cornerRadius="12dp"
-                app:rippleColor="#B388FF" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnResetFilter"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:text="Reset Filter"
-                android:textColor="#4A148C"
-                app:strokeColor="#4A148C"
-                app:cornerRadius="12dp"
-                app:rippleColor="#B388FF" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintTop_toBottomOf="@+id/topFilters"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Empty State (Replaced CardView with LinearLayout) -->
-    <LinearLayout
-        android:id="@+id/emptyLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:background="@drawable/card_background"
-        android:elevation="6dp"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/topFilters"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@android:drawable/ic_menu_info_details"
-            android:contentDescription="Empty State Icon"
-            app:tint="#4A148C" />
-
-        <TextView
-            android:id="@+id/emptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No salary increases to display"
-            android:textSize="18sp"
-            android:textColor="#4A148C"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:padding="16dp" />
-    </LinearLayout>
-
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_input_add"
+        android:paddingVertical="14dp"
         app:backgroundTint="#4A148C"
-        app:tint="#FFFFFF"
-        app:fabSize="normal"
-        app:elevation="12dp"
-        app:rippleColor="#B388FF"
-        android:layout_margin="16dp"
-        android:contentDescription="Add Increase"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:cornerRadius="13dp"
+        app:layout_constraintTop_toBottomOf="@id/employeeInputLayout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

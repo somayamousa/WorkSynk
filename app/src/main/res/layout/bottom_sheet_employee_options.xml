@@ -159,9 +159,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calculate Salary"
-            android:textSize="16sp"
-            android:paddingStart="16dp" />
+            android:paddingStart="16dp"
+            android:text="Salary Slip  "
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout

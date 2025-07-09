@@ -105,7 +105,13 @@ public class EmployeesActivity extends AppCompatActivity {
         bottomSheetView.findViewById(R.id.calculate_salary).setOnClickListener(v -> {
             Toast.makeText(this, "Calculate Salary for " + employee.getFullname(), Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
-            // Implement calculate salary logic here
+            Intent intent = new Intent(this, SalaryActivity.class);
+            intent.putExtra("user_id", Integer.parseInt(employee.getId()));
+            intent.putExtra("email", employee.getEmail());
+            intent.putExtra("fullname", employee.getFullname());
+            intent.putExtra("company_id", String.valueOf(employee.getCompanyId()));
+            startActivity(intent);
+
         });
 
         bottomSheetView.findViewById(R.id.attendance_records).setOnClickListener(v -> {
@@ -113,6 +119,7 @@ public class EmployeesActivity extends AppCompatActivity {
             bottomSheetDialog.dismiss();
             Intent intent = new Intent(this, ShowAttendanceRecordManagerSide.class);
             intent.putExtra("user_id", employee.getId());
+            Log.d("User id " , String.valueOf(employee.getId()));
             intent.putExtra("email", employee.getEmail());
             intent.putExtra("fullname", employee.getFullname());
             intent.putExtra("company_id", employee.getCompanyId());
