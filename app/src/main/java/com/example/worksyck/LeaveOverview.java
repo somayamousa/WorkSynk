@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class LeaveOverview extends AppCompatActivity {
 
     // TextViews for leave details
-    TextView leaveTypeTextView, startDateTextView, endDateTextView, reasonTextView,
+    TextView leaveTypeTextView, startDateTextView, endDateTextView, reasonTextView, employeecodeTypeTextView,
             numberOfDaysTextView, statusTextView, attachmentTextView;
     private ImageView backButton;
 
@@ -36,6 +36,7 @@ public class LeaveOverview extends AppCompatActivity {
 
         // Initialize the views
         leaveTypeTextView = findViewById(R.id.leaveTypeTextView);
+        employeecodeTypeTextView = findViewById(R.id.employeecodeTypeTextView);
         startDateTextView = findViewById(R.id.startDateTextView);
         endDateTextView = findViewById(R.id.endDateTextView);
         reasonTextView = findViewById(R.id.reasonTextView);
@@ -75,6 +76,7 @@ public class LeaveOverview extends AppCompatActivity {
                         // Iterate over the JSON array and parse the first item
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
                         String leaveType = jsonObject.getString("leave_type");
+                        String employeecode = jsonObject.getString("employee_code");
                         String startDate = jsonObject.getString("start_date");
                         String endDate = jsonObject.getString("end_date");
                         String reason = jsonObject.getString("reason");
@@ -90,6 +92,7 @@ public class LeaveOverview extends AppCompatActivity {
                         long numberOfDays = calculateNumberOfDays(startDate, endDate);
                         // عرض البيانات في الـ TextViews
                         leaveTypeTextView.setText("Leave Type: " + leaveType);
+                        employeecodeTypeTextView.setText("Employee Code: " +employeecode);
                         startDateTextView.setText("Start Date: " + startDate);
                         endDateTextView.setText("End Date: " + endDate);
                         reasonTextView.setText("Reason: " + reason);

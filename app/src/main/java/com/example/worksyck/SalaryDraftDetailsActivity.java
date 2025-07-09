@@ -1,21 +1,35 @@
 package com.example.worksyck;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 public class SalaryDraftDetailsActivity extends AppCompatActivity {
+    private LinearLayout employeeContent, salaryContent;
+    private ImageView employeeArrow, salaryArrow;
+    private boolean isEmployeeExpanded = false;
+    private boolean isSalaryExpanded = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salary_draft_details);
-        // Request storage permissions
+
+        // Initialize Views
+        employeeContent = findViewById(R.id.employeeContent);
+        salaryContent = findViewById(R.id.salaryContent);
+        employeeArrow = findViewById(R.id.employeeArrow);
+        salaryArrow = findViewById(R.id.salaryArrow);
+        View employeeToggle = findViewById(R.id.employeeToggle);
+        View salaryToggle = findViewById(R.id.salaryToggle);
+
         // Get the SalaryDraft object from the intent
         SalaryDraft draft = (SalaryDraft) getIntent().getSerializableExtra("salary_draft");
+
         // Initialize TextViews
         TextView employeeNameText = findViewById(R.id.employeeNameText);
         TextView employeeCodeText = findViewById(R.id.employeeCodeText);
@@ -53,15 +67,11 @@ public class SalaryDraftDetailsActivity extends AppCompatActivity {
 
         if (draft.getSalaryStructureType().equalsIgnoreCase("base salary")) {
             baseSalaryText.setText("Base Salary: $" + String.format("%.2f", draft.getBaseSalary()));
-
-
-            // عرض بيانات الساعات الإضافية وسعر الساعة العادية
             regularHourRateText.setText("Regular Hour Rate: $" + String.format("%.2f", draft.getRegularHourRate()));
             overtimeHoursText.setText("Overtime Hours: " + String.format("%.2f", draft.getOvertimeHours()));
             overtimeHourRateText.setText("Overtime Hour Rate: $" + String.format("%.2f", draft.getOvertimeHourRate()));
             overtimeSalaryText.setText("Overtime Salary: $" + String.format("%.2f", draft.getOvertimeSalary()));
 
-            // عرض العناصر
             regularHourRateText.setVisibility(View.VISIBLE);
             overtimeHoursText.setVisibility(View.VISIBLE);
             overtimeHourRateText.setVisibility(View.VISIBLE);
@@ -81,5 +91,21 @@ public class SalaryDraftDetailsActivity extends AppCompatActivity {
             overtimeHourRateText.setVisibility(View.VISIBLE);
             overtimeSalaryText.setVisibility(View.VISIBLE);
         }
+
+        employeeToggle.setOnClickListener(v -> {
+            isEmployeeExpanded = !isEmployeeExpanded;
+            employeeContent.setVisibility(isEmployeeExpanded ? View.VISIBLE : View.GONE);
+            employeeArrow.setImageResource(isEmployeeExpanded ?
+                    android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+            Log.d("DEBUG", "Employee toggle clicked, isExpanded: " + isEmployeeExpanded);
+        });
+
+        // Handle click on salaryToggle to expand/collapse salaryContent
+        salaryToggle.setOnClickListener(v -> {
+            isSalaryExpanded = !isSalaryExpanded;
+            salaryContent.setVisibility(isSalaryExpanded ? View.VISIBLE : View.GONE);
+            salaryArrow.setImageResource(isSalaryExpanded ?
+                    android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float);
+        });
     }
 }

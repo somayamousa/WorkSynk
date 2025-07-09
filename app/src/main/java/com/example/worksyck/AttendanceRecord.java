@@ -50,11 +50,9 @@ public class AttendanceRecord {
     public String getDate() { return date; }
     public String getStartTime() { return startTime; }
     public String getEndTime() { return endTime; }
-
     public double getWorkedHours() {
         if (startTime == null || endTime == null || startTime.trim().isEmpty() || endTime.trim().isEmpty())
             return 0;
-
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
             Date start = sdf.parse(startTime.trim());
@@ -65,7 +63,6 @@ public class AttendanceRecord {
             return 0;
         }
     }
-
     public String getDayAndWeek() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);

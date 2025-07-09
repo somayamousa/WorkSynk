@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -47,7 +48,7 @@ public class EmployeeAddActivity extends AppCompatActivity {
     private List<String> departmentNames, designationsName;
     private List<Integer> departmentIds, designationsId;
     private List<Map<String, Integer>> workingDays; // Represents holidays (is_working_day = 0)
-    private ImageButton backeEmployeeButton;
+    private ImageView backeEmployeeButton;
     private ProgressDialog progressDialog;
     private boolean[] holidaySelections = new boolean[7]; // Track holiday selections
 

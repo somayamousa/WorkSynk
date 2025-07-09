@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/font1"
-                    android:text="List of Overtime"
+                    android:text="List of Overtime Request"
                     android:textColor="#4A148C"
                     android:textSize="18sp"
                     android:paddingHorizontal="12dp"

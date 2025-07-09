@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
+            android:fontFamily="sans-serif-medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,24 +92,52 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Delete all drafts button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/deleteAllBtn"
-        android:layout_width="wrap_content"
+    <!-- Horizontal layout for Delete All and Approve All buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Delete All Drafts"
-        android:textAllCaps="false"
-        android:textSize="14sp"
-        android:paddingVertical="14dp"
-        android:backgroundTint="#E8EAF6"
-        android:textColor="#4A148C"
-        app:rippleColor="#B39DDB"
-        app:strokeColor="#512DA8"
-        app:strokeWidth="2dp"
-        android:layout_marginBottom="16dp"
-        app:cornerRadius="12dp"
-        app:elevation="4dp"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <!-- Delete All Drafts button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteAllBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Delete All Drafts"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:paddingVertical="14dp"
+            android:paddingHorizontal="16dp"
+            android:backgroundTint="#E8EAF6"
+            android:textColor="#4A148C"
+            app:rippleColor="#B39DDB"
+            app:strokeColor="#512DA8"
+            app:strokeWidth="2dp"
+            app:cornerRadius="12dp"
+            app:elevation="4dp"/>
+
+        <!-- Approve All Drafts button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/approveAllBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Approve All Drafts"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:paddingVertical="14dp"
+            android:paddingHorizontal="16dp"
+            android:backgroundTint="#E8EAF6"
+            android:textColor="#4A148C"
+            app:rippleColor="#B39DDB"
+            app:strokeColor="#512DA8"
+            app:strokeWidth="2dp"
+            app:cornerRadius="12dp"
+            app:elevation="4dp"/>
+    </LinearLayout>
 
     <!-- No drafts layout -->
     <LinearLayout

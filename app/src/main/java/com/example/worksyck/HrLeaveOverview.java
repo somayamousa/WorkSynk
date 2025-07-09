@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class HrLeaveOverview extends AppCompatActivity {
 
     // TextViews for leave details
-    TextView leaveTypeTextView, startDateTextView, endDateTextView, reasonTextView,
+    TextView leaveTypeTextView, startDateTextView, endDateTextView, reasonTextView,employeecodeTypeTextView,
             numberOfDaysTextView, statusTextView, attachmentTextView;
     private ImageView backButton;
     private Button acceptButton, rejectButton;
@@ -43,6 +43,7 @@ public class HrLeaveOverview extends AppCompatActivity {
         setContentView(R.layout.hr_leave_details);
 
         // Initialize views
+        employeecodeTypeTextView = findViewById(R.id.employeecodeTypeTextView);
         leaveTypeTextView = findViewById(R.id.leaveTypeTextView);
         startDateTextView = findViewById(R.id.startDateTextView);
         endDateTextView = findViewById(R.id.endDateTextView);
@@ -81,6 +82,7 @@ public class HrLeaveOverview extends AppCompatActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
 
                         String leaveType = jsonObject.getString("leave_type");
+                        String employeecode = jsonObject.getString("employee_code");
                         String startDate = jsonObject.getString("start_date");
                         String endDate = jsonObject.getString("end_date");
                         String reason = jsonObject.getString("reason");
@@ -94,6 +96,7 @@ public class HrLeaveOverview extends AppCompatActivity {
 
 
                         leaveTypeTextView.setText("Leave Type: " + leaveType);
+                        employeecodeTypeTextView.setText("Employee Code: " +employeecode);
                         startDateTextView.setText("Start Date: " + startDate);
                         endDateTextView.setText("End Date: " + endDate);
                         reasonTextView.setText("Reason: " + reason);

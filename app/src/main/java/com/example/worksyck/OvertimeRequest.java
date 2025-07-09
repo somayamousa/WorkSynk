@@ -1,6 +1,7 @@
 package com.example.worksyck;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,6 +106,13 @@ public class OvertimeRequest extends AppCompatActivity {
     }
 
     private void fetchOvertimeDataFromServer() {
+
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "Please log in again", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String url = "http://10.0.2.2/worksync/get_overtime_data.php?user_id=" + userId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -116,10 +124,11 @@ public class OvertimeRequest extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject overtimeRequest = jsonArray.getJSONObject(i);
                             String id = overtimeRequest.optString("id");
-                            String overtimeDate = overtimeRequest.optString("overtime_date");
+                            //  String overtimeDate = overtimeRequest.optString("overtime_date");
+                            String employeeCode = overtimeRequest.getString("employee_code");
                             String reason = overtimeRequest.optString("reason");
                             String status = capitalizeFirstLetter(overtimeRequest.optString("status", "Pending"));
-                            overtimeRequestList.add(new OvertimeRequestModel(id, overtimeDate, reason, status));
+                            overtimeRequestList.add(new OvertimeRequestModel(id, employeeCode, reason, status));
                         }
 
                         if (overtimeRequestAdapter == null) {
@@ -171,7 +180,7 @@ public class OvertimeRequest extends AppCompatActivity {
         @Override
         public void onBindViewHolder(OvertimeRequestViewHolder holder, int position) {
             OvertimeRequestModel overtimeRequest = overtimeRequests.get(position);
-            holder.overtimeDateRange.setText(overtimeRequest.getOvertimeDate());
+            holder.overtimeDateRange.setText(overtimeRequest.getEmployeeCode());
             holder.overtimeReason.setText(overtimeRequest.getReason());
             holder.statusTextView.setText(overtimeRequest.getStatus());
             Log.d("OvertimeRequest", "Status value: " + overtimeRequest.getStatus());
@@ -217,13 +226,13 @@ public class OvertimeRequest extends AppCompatActivity {
 
     class OvertimeRequestModel {
         private String id;
-        private String overtimeDate;
+        private String employeeCode;
         private String reason;
         private String status;
 
-        public OvertimeRequestModel(String id, String overtimeDate, String reason, String status) {
+        public OvertimeRequestModel(String id, String employeeCode, String reason, String status) {
             this.id = id;
-            this.overtimeDate = overtimeDate;
+            this.employeeCode = employeeCode;
             this.reason = reason;
             this.status = status;
         }
@@ -232,8 +241,8 @@ public class OvertimeRequest extends AppCompatActivity {
             return id;
         }
 
-        public String getOvertimeDate() {
-            return overtimeDate;
+        public String getEmployeeCode() {
+            return employeeCode;
         }
 
         public String getReason() {

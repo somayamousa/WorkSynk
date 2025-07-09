@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class HrOvertimeOverview extends AppCompatActivity {
 
-    private TextView overtimeDateRange, overtimeHours, overtimeReason,   statusTextView, attachmentTextView;
+    private TextView overtimeDateRange, overtimeHours, overtimeReason,   statusTextView, attachmentTextView, employeecodeTypeTextView;
     private ImageView backButton;
     private Button acceptButton, rejectButton;
 
@@ -38,6 +38,7 @@ public class HrOvertimeOverview extends AppCompatActivity {
         setContentView(R.layout.hr_overtime_details);
 
         // Initialize views
+        employeecodeTypeTextView = findViewById(R.id.employeecodeTypeTextView);
         overtimeDateRange = findViewById(R.id.overtimeDateRange);
         overtimeHours = findViewById(R.id.overtimeHours);
         overtimeReason = findViewById(R.id.overtimeReason);
@@ -73,6 +74,7 @@ public class HrOvertimeOverview extends AppCompatActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(0);
 
                         String overtimeDate = jsonObject.getString("overtime_date");
+                        String employeecode = jsonObject.getString("employee_code");
                         String hours = jsonObject.getString("hours");
                         String reason = jsonObject.getString("reason");
                         String attachment = jsonObject.optString("attachment", "No file attachment");
@@ -82,6 +84,7 @@ public class HrOvertimeOverview extends AppCompatActivity {
 
 
                         overtimeDateRange.setText(overtimeDate);
+                        employeecodeTypeTextView.setText("Employee Code: " +employeecode);
                         overtimeHours.setText(hours + " Hours");
                         overtimeReason.setText(reason);
                         attachmentTextView.setText("Attachment: " + attachment);

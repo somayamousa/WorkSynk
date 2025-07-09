@@ -36,6 +36,7 @@
             android:text="Select All"
             android:textColor="#4A148C"
             android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
             android:padding="8dp"
             android:gravity="start" />
         <TextView
@@ -44,6 +45,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Unselect All"
+            android:fontFamily="sans-serif-medium"
             android:textColor="@android:color/holo_red_dark"
             android:textStyle="bold"
             android:padding="8dp"

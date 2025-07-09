@@ -23,6 +23,7 @@
             android:textStyle="bold"
             android:textSize="22sp"
             android:padding="8dp"
+            android:fontFamily="sans-serif-medium"
             android:textColor="#000000" android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -30,10 +31,11 @@
             android:text="Full Name Example" /> <TextView
         android:id="@+id/profile_email"
         android:textSize="16sp"
-        android:textColor="#EF282728"
+        android:textColor="#EF333133"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:fontFamily="@font/font1"
         android:layout_marginBottom="16dp"
         android:text="example@company.com" /> </LinearLayout>
 
@@ -54,7 +56,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Phone Number:"
+                android:text="📞 Phone Number:"
                 android:textStyle="bold"
                 android:textColor="#4A148C" android:textSize="14sp" />
             <TextView
@@ -70,12 +72,12 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Department:"
+                android:text="🏢 Department:"
                 android:textStyle="bold"
                 android:textColor="#4A148C" android:textSize="14sp"
                 android:layout_marginTop="8dp" />
@@ -92,12 +94,12 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Designation:"
+                android:text="🧑‍💼 Designation:"
                 android:textStyle="bold"
                 android:textColor="#4A148C" android:textSize="14sp"
                 android:layout_marginTop="8dp" />
@@ -114,12 +116,12 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Employee Code:"
+                android:text="🆔 Employee Code:"
                 android:textStyle="bold"
                 android:textColor="#4A148C" android:textSize="14sp"
                 android:layout_marginTop="8dp" />
@@ -136,12 +138,12 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Status:"
+                android:text="⏳ Status:"
                 android:textStyle="bold"
                 android:textColor="#4A148C" android:textSize="14sp"
                 android:layout_marginTop="8dp" />
@@ -158,12 +160,12 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MAC Address:"
+                android:text="💻 MAC Address:"
                 android:textStyle="bold"
                 android:textColor="#4A148C" android:textSize="14sp"
                 android:layout_marginTop="8dp" />
@@ -180,12 +182,12 @@
                 android:layout_height="1dp"
                 android:background="#E0E0E0"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Salary:"
+                android:text="💰 Salary:"
                 android:textStyle="bold"
                 android:textColor="#4A148C" android:textSize="14sp"
                 android:layout_marginTop="8dp" />

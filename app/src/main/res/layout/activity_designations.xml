@@ -30,9 +30,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Manage Designation"
-            android:textSize="26sp"
+            android:textSize="22sp"
             android:textColor="#000000"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/font1"
             android:textStyle="bold" />
     </LinearLayout>
 

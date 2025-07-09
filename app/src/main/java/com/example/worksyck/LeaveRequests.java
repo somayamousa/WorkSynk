@@ -2,6 +2,7 @@ package com.example.worksyck;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -145,6 +146,13 @@ public class LeaveRequests extends AppCompatActivity {
     }
 
     private void submitLeaveRequestToServer(String leaveType, String reason) {
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+        if (userId == -1) {
+            Toast.makeText(this, "Please log in again", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String url = "http://10.0.2.2/worksync/insert_leave_request.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -158,6 +166,7 @@ public class LeaveRequests extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                params.put("user_id", String.valueOf(userId)); // <--- هنا تضيف user_id
                 params.put("leave_type", leaveType);
                 params.put("start_date", startDate);
                 params.put("end_date", endDate);
@@ -169,6 +178,7 @@ public class LeaveRequests extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
 
     private void openFilePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

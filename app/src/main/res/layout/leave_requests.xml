@@ -9,7 +9,7 @@
     <!-- Title Bar -->
     <TextView
         android:id="@+id/titleTextView"
-        android:text="📝 Create Leave Request"
+        android:text="Create Leave Request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"
@@ -192,12 +192,13 @@
                 <!-- ✅ Submit Button -->
                 <Button
                     android:id="@+id/submitButton"
-                    android:layout_width="match_parent"
+                    android:layout_width="190dp"
                     android:layout_height="56dp"
                     android:text="✓ Submit"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
                     android:fontFamily="@font/poppins_medium"
+                    android:layout_gravity="center_horizontal"
                     android:backgroundTint="#4A148C"
                     android:textSize="16sp"
                     android:layout_marginTop="32dp"/>

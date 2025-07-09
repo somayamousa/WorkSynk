@@ -1,5 +1,6 @@
 package com.example.worksyck;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,9 +41,10 @@ public class SalaryDraftsActivity extends AppCompatActivity {
     private List<SalaryDraft> filteredDraftList;
     private RequestQueue requestQueue;
     private EditText searchEmployeeInput;
-    private Button selectMonthBtn, deleteAllBtn;
+    private Button selectMonthBtn, deleteAllBtn, approveAllBtn; // Added approveAllBtn
     private int selectedMonth = 0, selectedYear = 0;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,13 +56,14 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         searchEmployeeInput = findViewById(R.id.searchEmployeeInput);
         selectMonthBtn = findViewById(R.id.selectMonthBtn);
         deleteAllBtn = findViewById(R.id.deleteAllBtn);
+        approveAllBtn = findViewById(R.id.approveAllBtn); // Initialize new button
         draftList = new ArrayList<>();
         filteredDraftList = new ArrayList<>();
         adapter = new SalaryDraftAdapter(filteredDraftList, this::onViewDetailsClick, this::onApproveClick, this::onCancelClick);
         draftsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         draftsRecyclerView.setAdapter(adapter);
         ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> finish()); // Closes the current activity
+        backButton.setOnClickListener(v -> finish());
         requestQueue = Volley.newRequestQueue(this);
 
         // Setup month selection
@@ -68,6 +71,9 @@ public class SalaryDraftsActivity extends AppCompatActivity {
 
         // Setup delete all button
         deleteAllBtn.setOnClickListener(v -> showDeleteAllConfirmation());
+
+        // Setup approve all button
+        approveAllBtn.setOnClickListener(v -> showApproveAllConfirmation());
 
         // Setup search filter
         searchEmployeeInput.addTextChangedListener(new TextWatcher() {
@@ -85,17 +91,17 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         setDefaultMonth();
         fetchSalaryDrafts();
     }
+
     private void showMonthPickerDialog() {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, month, dayOfMonth) -> {
-                    setDateRange(month + 1, year); // month is 0-based
+                    setDateRange(month + 1, year);
                     fetchSalaryDrafts();
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
-        // Hide day field
         try {
             DatePicker datePicker = datePickerDialog.getDatePicker();
             int dayPickerId = getResources().getIdentifier("day", "id", "android");
@@ -108,14 +114,12 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("DatePicker", "Error hiding day field: " + e.getMessage());
         }
-
         datePickerDialog.show();
     }
 
     private void setDefaultMonth() {
-        // Set default to current month (June 2025)
         Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH) + 1; // 1-based month
+        int month = calendar.get(Calendar.MONTH) + 1;
         int year = calendar.get(Calendar.YEAR);
         setDateRange(month, year);
     }
@@ -123,12 +127,9 @@ public class SalaryDraftsActivity extends AppCompatActivity {
     private void setDateRange(int month, int year) {
         selectedMonth = month;
         selectedYear = year;
-
-        // Calculate start and end dates for display purposes
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, 1); // Month is 0-based in Calendar
+        calendar.set(year, month - 1, 1);
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-
         selectMonthBtn.setText(String.format(Locale.US, "%s %d",
                 new SimpleDateFormat("MMMM", Locale.US).format(calendar.getTime()), year));
     }
@@ -177,8 +178,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                             }
                             filteredDraftList.addAll(draftList);
                             adapter.notifyDataSetChanged();
-
-                            // Show/hide no drafts message
                             if (filteredDraftList.isEmpty()) {
                                 draftsRecyclerView.setVisibility(View.GONE);
                                 noDraftsText.setVisibility(View.VISIBLE);
@@ -206,6 +205,7 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                 });
         requestQueue.add(request);
     }
+
     private void filterDrafts(String query) {
         filteredDraftList.clear();
         if (query.isEmpty()) {
@@ -218,8 +218,6 @@ public class SalaryDraftsActivity extends AppCompatActivity {
             }
         }
         adapter.notifyDataSetChanged();
-
-        // Update visibility based on filter results
         if (filteredDraftList.isEmpty()) {
             draftsRecyclerView.setVisibility(View.GONE);
             noDraftsText.setVisibility(View.VISIBLE);
@@ -259,8 +257,21 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         }
         new AlertDialog.Builder(this)
                 .setTitle("Confirm Delete All")
-                .setMessage("Are you sure you want to delete all salary drafts ")
+                .setMessage("Are you sure you want to delete all salary drafts for the selected period?")
                 .setPositiveButton("Yes", (dialog, which) -> deleteAllSalaryDrafts())
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void showApproveAllConfirmation() {
+        if (filteredDraftList.isEmpty()) {
+            Toast.makeText(this, "No drafts to approve", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Approve All")
+                .setMessage("Are you sure you want to approve all salary drafts for the selected period?")
+                .setPositiveButton("Yes", (dialog, which) -> approveAllSalaryDrafts())
                 .setNegativeButton("No", null)
                 .show();
     }
@@ -274,7 +285,7 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                         if (jsonObject.getString("status").equals("success")) {
                             String payslipNumber = jsonObject.optString("payslip_number", "N/A");
                             Toast.makeText(this, "Salary approved successfully (Payslip: " + payslipNumber + ")", Toast.LENGTH_SHORT).show();
-                            fetchSalaryDrafts(); // Refresh list to remove approved drafts
+                            fetchSalaryDrafts();
                         } else {
                             Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         }
@@ -297,6 +308,42 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         };
         requestQueue.add(request);
     }
+
+    private void approveAllSalaryDrafts() {
+        if (filteredDraftList.isEmpty()) {
+            return;
+        }
+        String url = "http://10.0.2.2/worksync/approve_all_salary_drafts.php";
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getString("status").equals("success")) {
+                            Toast.makeText(this, "All salary drafts approved successfully", Toast.LENGTH_SHORT).show();
+                            fetchSalaryDrafts();
+                        } else {
+                            Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        Log.e("JSON Error", e.getMessage());
+                        Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Log.e("Volley Error", error.getMessage());
+                    Toast.makeText(this, "Error approving drafts", Toast.LENGTH_SHORT).show();
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("month", String.valueOf(selectedMonth));
+                params.put("year", String.valueOf(selectedYear));
+                return params;
+            }
+        };
+        requestQueue.add(request);
+    }
+
     private void deleteSalaryDraft(int draftId, int employeeId) {
         String url = "http://10.0.2.2/worksync/delete_salary_draft.php";
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -305,7 +352,7 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.getString("status").equals("success")) {
                             Toast.makeText(this, "Salary draft deleted successfully", Toast.LENGTH_SHORT).show();
-                            fetchSalaryDrafts(); // Refresh list to remove deleted draft
+                            fetchSalaryDrafts();
                         } else {
                             Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         }
@@ -337,7 +384,7 @@ public class SalaryDraftsActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.getString("status").equals("success")) {
                             Toast.makeText(this, "All salary drafts deleted successfully", Toast.LENGTH_SHORT).show();
-                            fetchSalaryDrafts(); // Refresh list to clear all drafts
+                            fetchSalaryDrafts();
                         } else {
                             Toast.makeText(this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         }
@@ -360,6 +407,4 @@ public class SalaryDraftsActivity extends AppCompatActivity {
         };
         requestQueue.add(request);
     }
-
-
 }
