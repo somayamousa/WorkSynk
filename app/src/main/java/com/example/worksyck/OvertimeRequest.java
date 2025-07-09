@@ -126,7 +126,7 @@ public class OvertimeRequest extends AppCompatActivity {
                             String id = overtimeRequest.optString("id");
                             //  String overtimeDate = overtimeRequest.optString("overtime_date");
                             String employeeCode = overtimeRequest.getString("employee_code");
-                            String reason = overtimeRequest.optString("reason");
+                            String reason = overtimeRequest.optString("fullname");
                             String status = capitalizeFirstLetter(overtimeRequest.optString("status", "Pending"));
                             overtimeRequestList.add(new OvertimeRequestModel(id, employeeCode, reason, status));
                         }

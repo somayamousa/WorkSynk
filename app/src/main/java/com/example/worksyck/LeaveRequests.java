@@ -172,6 +172,7 @@ public class LeaveRequests extends AppCompatActivity {
                 params.put("end_date", endDate);
                 params.put("reason", reason);
                 params.put("status", status);
+                params.put("is_paid", leaveType.equals("Unpaid Leave") ? "0" : "1");
                 return params;
             }
         };

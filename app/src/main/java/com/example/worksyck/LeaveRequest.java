@@ -127,7 +127,7 @@ public class LeaveRequest extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject leaveRequest = jsonArray.getJSONObject(i);
                                 String id = leaveRequest.getString("id");
-                                String leaveType = leaveRequest.getString("leave_type");
+                                String leaveType = leaveRequest.getString("fullname");
                                 String employeeCode = leaveRequest.getString("employee_code");
                                // String endDate = leaveRequest.getString("end_date");
                                 String status = capitalizeFirstLetter(leaveRequest.optString("status", "Pending"));
