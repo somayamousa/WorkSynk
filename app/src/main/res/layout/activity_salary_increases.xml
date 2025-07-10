@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -32,9 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Employee Salary Increases"
+            android:text="  Employee Salary Increases"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -155,7 +155,7 @@
             android:layout_marginEnd="8dp"
             android:contentDescription="Open Filters"
             android:src="@android:drawable/ic_menu_search"
-            app:backgroundTint="#673AB7"
+            app:backgroundTint="#4A148C"
             app:elevation="6dp"
             app:fabSize="mini"
             app:rippleColor="#A799BD"
@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="Add Increase"
             android:src="@android:drawable/ic_input_add"
-            app:backgroundTint="#673AB7"
+            app:backgroundTint="#4A148C"
             app:backgroundTintMode="src_over"
             app:elevation="12dp"
             app:fabSize="normal"
